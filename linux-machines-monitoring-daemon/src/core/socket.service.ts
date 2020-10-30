@@ -10,6 +10,7 @@ export class SocketService {
      
    
    this.getSocket();
+
    this.getSocket().on('connect_error', (err) => {
       console.error('error in connection ', err);
     });
@@ -28,6 +29,7 @@ export class SocketService {
     this.getSocket().on('disconnect', (reason) => {
       console.info('disconnected',reason)
     });
+    
   }
 
   public getSocket(){
@@ -38,8 +40,10 @@ export class SocketService {
       
     }
     this.socket =  io(`${process.env.SOCKET_SERVER}`,{
-      reconnection: false
+      reconnection: false,
+      timeout:50000
     });
+    this.socket.connect()
     return this.socket;
   }
 
