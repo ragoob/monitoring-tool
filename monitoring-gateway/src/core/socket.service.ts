@@ -2,12 +2,19 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { observable, Observable } from "rxjs";
 import * as socket from 'socket.io';
 import { Events } from "./events";
+import * as http from 'http';
+
 @Injectable()
 export class SocketService  {
     private io: socket.Server;
     constructor() {
         // Socket Server
-        this.io = socket(4001);
+      
+
+       const server = http.createServer();
+       server.listen(4001,'192.168.1.7');
+
+        this.io = socket.listen(server);
         console.log('listing')
     }
    

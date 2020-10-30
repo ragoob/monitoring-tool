@@ -8,7 +8,7 @@ export class SocketService {
   private socket: SocketIOClient.Socket;
   constructor() {
      
-   
+   console.log('start socket')
    this.getSocket();
 
    this.getSocket().on('connect_error', (err) => {
