@@ -4,7 +4,7 @@ import { SwaggerModule } from '@nestjs/swagger/dist/swagger-module';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT;
   const app = await NestFactory.create(AppModule);
   const options = new DocumentBuilder()
     .setTitle('Docker monitoring')
