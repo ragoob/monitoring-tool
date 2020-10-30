@@ -31,7 +31,6 @@ set -x
 # Install dependencies
 sudo npm i -g @nestjs/cli
 sudo npm install --production
-sudo npm prune --production
 sudo npm run build
 
 
