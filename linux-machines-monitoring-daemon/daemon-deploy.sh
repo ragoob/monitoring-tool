@@ -41,7 +41,8 @@ sudo npm run build
 
 
 ## create systemd service ####
-
+sudo rm -rf /lib/systemd/system/linux-machines-monitoring-daemon.service
+sudo touch  /lib/systemd/system/linux-machines-monitoring-daemon.service
 sudo cat > /lib/systemd/system/linux-machines-monitoring-daemon.service << EOF
 [Unit]
 Description=montoring tool agent to send data to dashboard
