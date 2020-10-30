@@ -30,11 +30,11 @@ set -x
 
 # Install dependencies
 sudo npm install -g typescript
-sudo npm install -g @nestjs/cli
+sudo npm install @types/node
 sudo npm install -g rimraf
 sudo npm install -g copyfiles
 sudo npm install -g prettier
-
+sudo npm install -g @nestjs/cli
 # Install application
 sudo npm install --production
 sudo npm run build
