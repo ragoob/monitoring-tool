@@ -5,11 +5,9 @@ import { URL } from 'url';
 import { Events } from './events';
 @Injectable()
 export class SocketService {
-  private socket: SocketIOClient.Socket;
+  //private socket: SocketIOClient.Socket;
   constructor() {
-     
-   console.log('start socket')
-   this.getSocket();
+   //this.getSocket();
 
    this.getSocket().on('connect_error', (err) => {
       console.error('error in connection ', err);
@@ -33,18 +31,11 @@ export class SocketService {
   }
 
   public getSocket(){
-    try {
-      this.socket.disconnect();
-      this.socket.close();
-    } catch (error) {
-      
-    }
-    this.socket =  io(`${process.env.SOCKET_SERVER}`,{
-      reconnection: false,
-      timeout:50000
-    });
-    this.socket.connect()
-    return this.socket;
+    
+  const socket =   io.connect('http://192.168.1.7:4001',{
+    reconnection: true
+  });
+    return socket;
   }
 
   public emitEvent(event: string, data: any): any {
