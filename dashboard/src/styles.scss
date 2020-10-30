@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('../node_modules/primeicons/primeicons.css');
+@import url('../node_modules/primeng/resources/themes/saga-blue/theme.css');
+@import url('../node_modules/primeng/resources/primeng.min.css');
+@import "~bootstrap/dist/css/bootstrap.css";
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#docker-info p{
+    text-align:left;
+}
+
+
+#docker-info .p-title{
+    font-weight: bold;
+    color: #3f51b5;
+}
+
+#docker-info .p-content{
+    margin-left: 5px;
+    color: #000;
+    font-weight: bold;
+}
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

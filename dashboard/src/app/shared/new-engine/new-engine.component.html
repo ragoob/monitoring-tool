@@ -1,0 +1,14 @@
+
+
+<div class="form-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Enter name</mat-label>
+    <input matInput placeholder="Enter daemon name" [(ngModel)]="model"   required>
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button (click)="addNew()" mat-button color="primary">Save</button>
+    <button (click)="close()" mat-button  cdkFocusInitial>cancel</button>
+  </div>
+   
+  </div>

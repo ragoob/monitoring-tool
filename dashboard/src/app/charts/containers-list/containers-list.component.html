@@ -1,0 +1,39 @@
+<p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="Create new container" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="new()"></button>
+    </ng-template>
+
+</p-toolbar>
+
+<p-table [value]="containers" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
+currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+<ng-template pTemplate="header">
+    <tr>
+        <th>Created At</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Status</th>
+        <th>Restart Count</th>
+        <th>Ip address</th>
+        <th></th>
+    </tr>
+</ng-template>
+<ng-template pTemplate="body" let-container>
+    <tr>
+        <td>{{container.createdAt | date:'short'}}</td>
+        <td>{{container.name}}</td>
+        <td>{{container.image}}</td>
+        <td>{{container.status}}</td>
+        <td>{{container.restartCount}}</td>
+        <td>{{container.ipAddress}}</td>
+        <td>
+        <button *ngIf="container.isRunning" pButton pRipple icon="pi pi-refresh" class="p-button-rounded p-button-info p-mr-2" (click)="restart(container)"></button>
+        <button *ngIf="!container.isRunning" pButton pRipple icon="pi pi-play" class="p-button-rounded p-button-info p-mr-2" (click)="start(container)"></button>
+        <button *ngIf="container.isRunning" pButton pRipple icon="pi pi-pause" class="p-button-rounded  p-button-success p-mr-2" (click)="Stop(container)"></button>
+        <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="delete(container)"></button>
+        <button  pButton pRipple icon="pi pi-info-circle" class="p-button-rounded p-button-info p-mr-2" (click)="details(container)"></button>
+        </td>
+    </tr>
+</ng-template>
+
+</p-table>
