@@ -21,7 +21,7 @@ if which node > /dev/null
 
 
 ### Automation steps ###
-rm -rf $APP_DIR/monitoring-tool
+sudo rm -rf $APP_DIR/monitoring-tool
 set -x
 
 # clone code from github
