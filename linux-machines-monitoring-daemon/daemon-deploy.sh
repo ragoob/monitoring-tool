@@ -6,6 +6,7 @@ set -e
 APP_DIR=/home/$USER/
 GIT_URL=https://github.com/ragoob/monitoring-tool.git
 RESTART_ARGS=
+PI_USER=$USER
 export SOCKET_SERVER=192.168.1.7:4001
 export MACHINE_ID=9b130e3a-3a33-5709-ab3e-d7642231d236
 export PORT=30003
@@ -43,7 +44,7 @@ sudo npm run build
 ## create systemd service ####
 sudo rm -rf /lib/systemd/system/linux-machines-monitoring-daemon.service
 sudo touch  /lib/systemd/system/linux-machines-monitoring-daemon.service
-sudo cat > /lib/systemd/system/linux-machines-monitoring-daemon.service << EOF
+sudo  bash -c  'cat > /lib/systemd/system/linux-machines-monitoring-daemon.service << EOF
 [Unit]
 Description=montoring tool agent to send data to dashboard
 Documentation=https://github.com/ragoob/monitoring-tool
@@ -52,12 +53,12 @@ After=network.target
 [Service]
 Environment=NODE_PORT=30003
 Type=simple
-User=$USER
-ExecStart=/usr/bin/node /home/$USER/monitoring-tool/linux-machines-monitoring-daemon/dist/main.js
+User=$PI_USER
+ExecStart=/usr/bin/node /home/$PI_USER/monitoring-tool/linux-machines-monitoring-daemon/dist/main.js
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF'
 
  sudo systemctl daemon-reload
  sudo systemctl start linux-machines-monitoring-daemon

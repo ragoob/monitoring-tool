@@ -19,10 +19,16 @@ export class ContainerService {
       return    new Promise((resolve, reject) => {
        process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
             if (error) {
-                return reject(error);
+                return resolve([]);
             }
 
-            resolve(this.util.parseDockerContainers(stdout));
+            if(stdout && stdout.length > 0){
+              resolve(this.util.parseDockerContainers(stdout));
+            }
+            else{
+              resolve([])
+            }
+            
         });
     });
   }
@@ -152,9 +158,16 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
            if (error) {
-            return reject(error);
+            return resolve(new ContainerMetrics());
            }
-           resolve(this.util.parseContainerMetrics(stdout));
+          
+           if(stdout && stdout.length > 0){
+            resolve(this.util.parseContainerMetrics(stdout));
+           }
+           else{
+             resolve(new ContainerMetrics());
+           }
+           
        });
    });
 
@@ -166,9 +179,16 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
            if (error) {
-            return reject(error);
+            return resolve([]);
            }
-           resolve(this.util.parseContainerListMetrics(stdout));
+          
+           if(stdout && stdout.length > 0){
+            resolve(this.util.parseContainerListMetrics(stdout));
+           }
+           else{
+            resolve([]);
+           }
+           
        });
    });
 
