@@ -23,11 +23,34 @@
 .deamon-status{
   height: 25px;
   width: 25px;
-  background-color: #bbb;
+ // background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
 }
 
 .connected{
   background-color:green !important;
+}
+
+.disconnected{
+  background-color: #FF4136;
+}
+
+.connecting{
+ // background-color:#bbb !important;
+  animation: color-change 1s infinite;
+}
+
+@keyframes color-change {
+  0% {
+    background-color: green;
+  }
+  100% {
+    background-color: #FF4136;
+  }
+}
+
+.wait-daemon-message{
+  display: inline-block;
+  padding-left: 5px;
 }

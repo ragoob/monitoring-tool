@@ -14,7 +14,7 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
   @Input('daemonId') daemonId : string;
 
   public lineChartData: ChartDataSets[] = [
-    { data: [0], label: 'Cpu temperature',fill:false },
+    { data: [], label: 'Cpu temperature',fill:false },
   ];
   public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
@@ -55,11 +55,10 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
       this.socketService.getDeamontemperature(this.daemonId)
       .pipe(distinct())
       .subscribe((result: {temperature: number,dateTime: any})=>{
-        if(this.lineChartLabels.findIndex(d=> d === new Date(result.dateTime).toLocaleTimeString('it-IT'))=== - 1){
-          this.lineChartData[0].data.push(result.temperature);
-          this.lineChartLabels.push(new Date(result.dateTime).toLocaleTimeString('it-IT'));
 
-        }
+        this.lineChartData[0].data.push(result.temperature);
+        this.lineChartLabels.push(new Date(result.dateTime).toLocaleTimeString('it-IT'));
+
       
 
 

@@ -17,8 +17,11 @@ export class SocketService{
 
     private  getSocket() {
         const URL: string = environment.socketServer;
-        this.socket =  io(URL);
+        this.socket =  io(URL,{
+          reconnection: false
+        });
         return this.socket;
+       
     }
 
     public disconnect(){
@@ -52,6 +55,7 @@ export class SocketService{
   
               return ()=> {
                   socket.disconnect();
+                
               }
           })
 
@@ -67,6 +71,7 @@ export class SocketService{
             });
             return () => {
               this.socket.disconnect();
+              this.socket.close();
             };  
           })     
 

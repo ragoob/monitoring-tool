@@ -2,7 +2,6 @@
 @import url('../node_modules/primeicons/primeicons.css');
 @import url('../node_modules/primeng/resources/themes/saga-blue/theme.css');
 @import url('../node_modules/primeng/resources/primeng.min.css');
-@import "~bootstrap/dist/css/bootstrap.css";
 
 
 html, body { height: 100%; }
@@ -22,6 +21,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-left: 5px;
     color: #000;
     font-weight: bold;
+}
+
+.mat-list-item.active{
+    background-color:rgb(0 0 0 / 11%);
+}
+
+.page-header{
+    margin: 20px;
 }
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';

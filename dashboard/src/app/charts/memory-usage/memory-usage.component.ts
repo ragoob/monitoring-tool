@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { distinct, first, share } from 'rxjs/operators';
+import { distinct, first, share, take } from 'rxjs/operators';
 import { SocketService } from '../../core/services/socket-io.service';
 
 @Component({
@@ -55,24 +55,19 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.subscribers.push(
       this.socketService.getDeamonMemoryUsage(this.daemonId)
-      .pipe(distinct())
       .subscribe((data: {total:number,used:number,free:number,dateTime:any})=> {
 
         if(data.used && data.total){
           
           this.lineChartData[0].label = `Memory Usage ${data.used} / ${data.total}` ;
 
-        }
-        if(this.lineChartLabels.findIndex(d=> d === new Date(data.dateTime).toLocaleTimeString('it-IT'))=== - 1){
-          this.lineChartData[0].data.push(data.used);
-          this.lineChartLabels.push(new Date(data.dateTime).toLocaleTimeString('it-IT'))
 
         }
+         this.lineChartData[0].data.push(data.used);
+          this.lineChartLabels.push(new Date(data.dateTime).toLocaleTimeString('it-IT'))
+
       
-        if(this.lineChartData[0].data.length > 3){
-          this.loading = false;
-        }
-      
+
       })
     )
 

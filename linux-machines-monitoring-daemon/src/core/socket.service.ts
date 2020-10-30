@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io-client';
 import { URL } from 'url';
+import { Events } from './events';
 @Injectable()
 export class SocketService {
   private socket: SocketIOClient.Socket;
@@ -10,34 +11,23 @@ export class SocketService {
    
    this.getSocket();
    this.getSocket().on('connect_error', (err) => {
-      console.log('error in connection ', err);
+      console.error('error in connection ', err);
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
-      console.log('timeout error', timeout);
+      console.error('timeout error', timeout);
     });
 
     this.getSocket().on('connect', () => {
-      console.log('socket is connected')
+      console.info('socket is connected')
 
     });
 
    
 
     this.getSocket().on('disconnect', (reason) => {
-      if (reason === 'io server disconnect') {
-        // the disconnection was initiated by the server, you need to reconnect manually
-        this.getSocket().connect();
-      }
-
-      else{
-        
-      }
-      // else the socket will automatically try to reconnect
+      console.info('disconnected',reason)
     });
-
-   
-
   }
 
   public getSocket(){
@@ -57,7 +47,10 @@ export class SocketService {
 
       try {
         const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
-        console.log(`${new Date().toLocaleTimeString('it-IT')} push on ${machineEvent}`)
+        if(event === Events.MEMORY_USAGE){
+          console.log(`${new Date().toLocaleTimeString('it-IT')} push on ${machineEvent}`)
+
+        }
          this.getSocket().emit(machineEvent,data);
       } catch (error) {
         console.log(`error in sending data ${error}`)

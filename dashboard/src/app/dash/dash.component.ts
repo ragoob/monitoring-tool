@@ -20,6 +20,7 @@ export class DashComponent implements OnInit {
   public daemonId: string;
   public aliveMessages: string[] = [];
   public connected: boolean = false;
+  public disconnected: boolean = false;
   constructor(private http: HttpClient,private socketService: SocketService,private router: ActivatedRoute,private serverService: ServerService) {}
   ngOnInit(): void {
     this.router.params.subscribe
@@ -29,10 +30,10 @@ export class DashComponent implements OnInit {
       this.title = this.serverService.getAll().find(d=> d.name).name;
       this.http.get(`http://localhost:4002/listen/${id}`)
       .subscribe(d=> {
-        this.http.get(`http://localhost:4002/start/${id}`)
-        .subscribe(d=> {
+        // this.http.get(`http://localhost:4002/start/${id}`)
+        // .subscribe(d=> {
           
-        })
+        // })
         this.socketService.getDeamonAlive(id)
         .subscribe(s=> {
           this.connected = true;

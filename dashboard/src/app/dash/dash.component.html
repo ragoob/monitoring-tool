@@ -1,124 +1,79 @@
-<div class="grid-container">
-  <h1  class="mat-h1">Dashboard {{title}}  <span class="deamon-status" [ngClass]="{'connected': connected}"></span></h1>
+<div class="container-fluid">
+  <div class="page-header">
+    <h1  class="mat-h1">Dashboard {{title}}  <span class="deamon-status" [ngClass]="{'connected': connected,'connecting': !connected,'disconnected': disconnected}"></span>
+      <span class="wait-daemon-message">
+        {{connected ? 'Connected' : 'Please wait until daemon join and start ...'}}
+      </span>
+      </h1>
+  </div>
 
- 
-  <mat-grid-list cols="4" rowHeight="300px">
-    <mat-grid-tile  [colspan]="1" [rowspan]="1.25">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-             Engine info
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
+
+  <div class="row mb-4" *ngIf="connected">
+    <div class="col col-lg-3 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Engine info </h5>
           <app-system-info [daemonId]="daemonId"></app-system-info>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
 
-    <mat-grid-tile  [colspan]="1" [rowspan]="1.25">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-           Disk usage
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-3 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> Disk usage </h5>
           <app-storage-usage [daemonId]="daemonId"></app-storage-usage>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-3 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">  Conatiners count </h5>
+          <app-containers [daemonId]="daemonId"></app-containers>
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-3 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">     Conatiners usage  </h5>
+          <app-containers-metrics [daemonId]="daemonId"></app-containers-metrics>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <mat-grid-tile  [colspan]="1" [rowspan]="1.25">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-           Conatiner counts 
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>
-            <app-containers [daemonId]="daemonId"></app-containers>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
-    <mat-grid-tile  [colspan]="" [rowspan]="1.25">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-           Conatiners usage 
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>
-            <app-containers-metrics [daemonId]="daemonId"></app-containers-metrics>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
-
-    
-    <mat-grid-tile  [colspan]="2" [rowspan]="2">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-           Cpu tempurature
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-            <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
-          <div>
-            
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
-    <mat-grid-tile  [colspan]="2" [rowspan]="2">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-           Memory usage
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-            <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
-          <div>
-            
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  
-    <mat-grid-tile  [colspan]="4" [rowspan]="2">
-      <mat-card class="dashboard-card" *ngIf="connected">
-        <mat-card-header>
-          <mat-card-title>
-          
-            Containers List
-        
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-            <app-containers-list [daemonId]="daemonId"></app-containers-list>
-          <div>
-            
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-
-  
-    
-  </mat-grid-list>
+  <div class="row mb-4" *ngIf="connected">
+    <div class="col col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">     Cpu tempurature </h5>
+          <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">       Memory usage  </h5>
+          <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="row mb-4" *ngIf="connected">
+    <div class="col col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">        Containers List </h5>
+          <app-containers-list [daemonId]="daemonId"></app-containers-list>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
 </div>
 
 

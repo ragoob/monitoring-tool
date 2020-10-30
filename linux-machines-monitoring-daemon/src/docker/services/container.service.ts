@@ -22,7 +22,6 @@ export class ContainerService {
                 return reject(error);
             }
 
-            this.logger.debug(JSON.parse(stdout)[0].Config.Image)
             resolve(this.util.parseDockerContainers(stdout));
         });
     });
@@ -152,7 +151,6 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
     const command: string = `docker stats --no-stream --format='{{json .}}' ${containerId}`;
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
-           this.logger.debug(stdout)
            if (error) {
             return reject(error);
            }
@@ -167,7 +165,6 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
     const command: string = `docker stats --no-stream --format='{{json .}}'`;
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
-           this.logger.debug(stdout)
            if (error) {
             return reject(error);
            }

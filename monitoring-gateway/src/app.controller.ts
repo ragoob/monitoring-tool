@@ -3,7 +3,6 @@ import { from } from 'rxjs';
 import { AppService } from './app.service';
 import { SocketService } from './core/socket.service';
 import {Response} from 'express'
-import { SocketChanels } from './core/socket-chanels';
 @Controller()
 export class AppController {
   private logger: Logger = new Logger();

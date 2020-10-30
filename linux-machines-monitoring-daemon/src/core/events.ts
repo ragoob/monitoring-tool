@@ -1,4 +1,4 @@
-export enum SocketChanels{
+export enum Events{
     CONTAINERS_LIST= "CONTAINERS_LIST",
     CONTAINERS_METRICS ="CONTAINERS_METRICS",
     MEMORY_USAGE= "MEMORY_USAGE",
