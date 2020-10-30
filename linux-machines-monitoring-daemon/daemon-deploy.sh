@@ -29,6 +29,7 @@ set -x
  cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
 
 # Install dependencies
+ npm i -g @nestjs/cli
 npm install --production
 npm prune --production
 npm run build
