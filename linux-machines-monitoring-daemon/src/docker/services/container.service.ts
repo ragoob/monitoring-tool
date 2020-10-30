@@ -17,7 +17,8 @@ export class ContainerService {
   public getList(): Promise<Container[]>{
        const command: string = `docker inspect  $(docker ps -aq)`
       return    new Promise((resolve, reject) => {
-       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+        try {
+          process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
             if (error) {
                 return resolve([]);
             }
@@ -30,7 +31,11 @@ export class ContainerService {
             }
             
         });
-    });
+        } catch (error) {
+          
+          resolve([])
+        }
+    })
   }
 
   // restart container
@@ -156,19 +161,24 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
   public metrics(containerId: string): Promise<ContainerMetrics>{
     const command: string = `docker stats --no-stream --format='{{json .}}' ${containerId}`;
     return  new Promise((resolve, reject) => {
-      process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
-           if (error) {
-            return resolve(new ContainerMetrics());
-           }
+      try {
+        process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+          if (error) {
+           return resolve(new ContainerMetrics());
+          }
+         
+          if(stdout && stdout.length > 0){
+           resolve(this.util.parseContainerMetrics(stdout));
+          }
+          else{
+            resolve(new ContainerMetrics());
+          }
           
-           if(stdout && stdout.length > 0){
-            resolve(this.util.parseContainerMetrics(stdout));
-           }
-           else{
-             resolve(new ContainerMetrics());
-           }
-           
-       });
+      });
+      } catch (error) {
+        console.log(error);
+        resolve(new ContainerMetrics())
+      }
    });
 
   }
@@ -177,19 +187,24 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
   public metricsAll(): Promise<ContainerMetrics[]>{
     const command: string = `docker stats --no-stream --format='{{json .}}'`;
     return  new Promise((resolve, reject) => {
-      process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
-           if (error) {
-            return resolve([]);
-           }
+      try {
+        process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+          if (error) {
+           return resolve([]);
+          }
+         
+          if(stdout && stdout.length > 0){
+           resolve(this.util.parseContainerListMetrics(stdout));
+          }
+          else{
+           resolve([]);
+          }
           
-           if(stdout && stdout.length > 0){
-            resolve(this.util.parseContainerListMetrics(stdout));
-           }
-           else{
+      });
+      } catch (error) {
+        console.log(error);
             resolve([]);
-           }
-           
-       });
+      }
    });
 
   }
