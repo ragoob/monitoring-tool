@@ -29,7 +29,13 @@ set -x
  cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
 
 # Install dependencies
-sudo npm i -g @nestjs/cli
+sudo npm install -g typescript
+sudo npm install -g @nestjs/cli
+sudo npm install -g rimraf
+sudo npm install -g copyfiles
+sudo npm install -g prettier
+
+# Install application
 sudo npm install --production
 sudo npm run build
 
