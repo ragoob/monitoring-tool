@@ -25,7 +25,7 @@ rm -rf $APP_DIR/monitoring-tool
 set -x
 
 # clone code from github
- git clone $GIT_URL $APP_DIR
+ git clone $GIT_URL $APP_DIR/monitoring-tool
  cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
 
 # Install dependencies
