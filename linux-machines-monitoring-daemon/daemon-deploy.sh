@@ -29,10 +29,10 @@ set -x
  cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
 
 # Install dependencies
-npm i -g @nestjs/cli
-npm install --production
-npm prune --production
-npm run build
+sudo npm i -g @nestjs/cli
+sudo npm install --production
+sudo npm prune --production
+sudo npm run build
 
 
 ## create systemd service ####
