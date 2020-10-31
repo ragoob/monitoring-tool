@@ -6,7 +6,6 @@ set -e
 APP_DIR=/home/$USER/
 echo $APP_DIR
 GIT_URL=https://github.com/ragoob/monitoring-tool.git
-RESTART_ARGS=
 export SOCKET_SERVER=http://192.168.1.7:4001
 export MACHINE_ID={Daemon_GUID}
 export PORT=30003
@@ -30,25 +29,9 @@ set -x
  cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
 
 # Install dependencies
-if [ `npm list -g | grep -c typescript` -eq 0 ]; then
-  sudo npm install -g typescript
-  else
-    echo "typescript is installed, skipping..."
-fi
-
-if [ `npm list -g | grep -c @types/node` -eq 0 ]; then
- sudo npm install @types/node
- else
-    echo "@types/node is installed, skipping..."
-
-fi
-
-if [ `npm list -g | grep -c rimraf` -eq 0 ]; then
+sudo npm install -g typescript
+sudo npm install @types/node
 sudo npm install -g rimraf
- else
-    echo "rimraf is installed, skipping..."
-fi
-
 # Install application
 sudo npm install --production
  npm run build
