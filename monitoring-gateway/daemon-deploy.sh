@@ -8,8 +8,11 @@ GIT_URL=https://github.com/ragoob/monitoring-tool.git
 RESTART_ARGS=
 PI_USER=$USER
 export SOCKET_SERVER=http://192.168.1.7:4001
+echo $SOCKET_SERVER
 export MACHINE_ID={Daemon_GUID}
+echo $MACHINE_ID
 export PORT=30003
+echo $PORT
 ### Installing Node ###
 if which node > /dev/null
     then
@@ -35,10 +38,9 @@ sudo npm install @types/node
 sudo npm install -g rimraf
 sudo npm install -g copyfiles
 sudo npm install -g prettier
-sudo npm install -g @nestjs/cli
 # Install application
 sudo npm install --production
-sudo npm run build
+ npm run build
 
 
 ## create systemd service ####
