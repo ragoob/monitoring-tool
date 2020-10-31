@@ -53,6 +53,25 @@ export class SocketService  {
            this.io.emit(`ui-${deamonId}-${Events.DOCKER_ENGINE_INFO}`,data);
          });
 
+         socket.on(`ui-${deamonId}-${Events.CONTAINER_START}`, (data: any) => {   
+          this.io.emit(`${deamonId}-${Events.CONTAINER_START}`,data);
+         });
+
+         socket.on(`ui-${deamonId}-${Events.CONTAINER_RESTART}`, (data: any) => {   
+          this.io.emit(`${deamonId}-${Events.CONTAINER_RESTART}`,data);
+         });
+
+         socket.on(`ui-${deamonId}-${Events.CONTAINER_STOP}`, (data: any) => {   
+           console.log('stopping container ' + data)
+          this.io.emit(`${deamonId}-${Events.CONTAINER_STOP}`,data);
+         });
+
+         socket.on(`ui-${deamonId}-${Events.CONTAINER_DELETE}`, (data: any) => {   
+          this.io.emit(`${deamonId}-${Events.CONTAINER_DELETE}`,data);
+         });
+
+        
+
          
       })
 

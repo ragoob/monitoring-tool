@@ -8,9 +8,29 @@ import { ServiceFactory } from './service-factory.service';
 @Injectable()
 export class TasksService  implements OnModuleInit {
        constructor(private serviceFactory: ServiceFactory, private socketService: SocketService) {
+
+        this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_START}`,async (data)=> {
+             
+          await this.serviceFactory.startContainer(data);
+     });
+
+     this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_STOP}`,async (data)=> {
+       console.log(`command stop ${data}`)
+       await this.serviceFactory.stopContainer(data);
+     });
+
+     this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_RESTART}`,async (data)=> {
+       await this.serviceFactory.restartContainer(data);
+     });
+     this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_DELETE}`,async (data)=> {
+       await this.serviceFactory.deleteContainer(data);
+     });
     
        }
        async onModuleInit() {
+       
+              
+
                setInterval(async ()=> {
                 const info = await this.serviceFactory.dockerInfo();
           

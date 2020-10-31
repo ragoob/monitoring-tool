@@ -57,6 +57,30 @@ public async memoryUsage(): Promise<any>  {
  
 }
 
+public async startContainer(containerId: string): Promise<any>  {
+    const result = await this.continerService.start(containerId);
+    return result;
+ 
+}
+
+public async stopContainer(containerId: string): Promise<any>  {
+    const result = await this.continerService.stop(containerId);
+    return result;
+ 
+}
+
+public async deleteContainer(containerId: string): Promise<any>  {
+    const result = await this.continerService.killContainer(containerId);
+    return result;
+ 
+}
+
+public async restartContainer(containerId: string): Promise<any>  {
+    const result = await this.continerService.restart(containerId);
+    return result;
+ 
+}
+
 
 
 }

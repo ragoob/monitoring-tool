@@ -55,33 +55,20 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
       this.socketService.getDeamontemperature(this.daemonId)
       .pipe(distinct())
       .subscribe((data: {temperature: number,dateTime: any})=>{
-
-
         const date = new Date(data.dateTime);
         data.dateTime = date;
-        if(this.lineChartLabels.findIndex(l=> l === data.dateTime.toLocaleTimeString('it-IT')) === -1){
-          this.sortedList.push(data);
-        }
-       
+        this.sortedList.push(data); 
         this.sortedList = this.sortedList.sort((a, b) => a.dateTime - b.dateTime )
          .slice(Math.max(this.sortedList.length - 20, 0))
          .sort((a, b) => a.dateTime - b.dateTime );
-
         this.lineChartData[0].data = this.sortedList.map(d=> d.temperature);
         this.lineChartLabels = this.sortedList.map(label=> label.dateTime.toLocaleTimeString('it-IT'));
-
         if(data.temperature  && this.sortedList.length > 0){
           const avg =   this.sortedList.map(d=> d.temperature).reduce((a, b) => a + b) / this.sortedList.length;
 
           this.lineChartData[0].label = `(Avg temp ${Math.round(avg)} C)` ;
         }
-    
-
-
       })
-
-      
-
     )
  
   }

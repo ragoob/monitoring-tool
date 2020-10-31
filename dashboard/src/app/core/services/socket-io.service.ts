@@ -1,154 +1,69 @@
 import { Injectable } from '@angular/core';
-import { ThemeService } from 'ng2-charts';
-import { BehaviorSubject, defer, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import * as io from 'socket.io-client'
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Containers } from '../models/containers.model';
-import { SocketEvents } from '../models/socket-events';
+import { Events } from '../models/events';
+import { RxSocket } from './rx-socket-io';
+import * as socketIO from 'socket.io-client';
+
 @Injectable()
 export class SocketService{
-    private sockets: SocketIOClient.Socket[] = [];
-    constructor(){
-      this.getSocket();
+  constructor(){
+   
     }
    
 
-    private  getSocket() {
-      this.clearSockets();
-        const URL: string = environment.socketServer;
-        const socket =  io.connect(URL,{
-          reconnection: false
-        })
-        return socket;
-       
-    }
-
-    private clearSockets(){
-      this.sockets.forEach(s=> {
-        s.disconnect();
-        s.removeAllListeners();
-        s.close();    
-      });
-    } 
-
-    
     public emit(event,data){
-        this.getSocket().emit(event,data);
+      const socket = socketIO(environment.socketServer); 
+      socket.emit(event,data);
     }
     public getDeamonAlive(daemonId: string): Observable<string>{
-      const socket = this.getSocket();     
-      return  new Observable(observer=> {
-            socket.on(`ui-${daemonId}-${SocketEvents.HEALTH_CHECK}`,(data: any)=>{
-                console.log(data);
-                observer.next(data)
-            });
-
-            return ()=> {
-                socket.disconnect();
-            }
-        })
+      const socket = new RxSocket(environment.socketServer); 
+      const event$ = socket.observable<string>(`ui-${daemonId}-${Events.HEALTH_CHECK}`);
+      return event$;
     }
 
     public getDeamontemperature(daemonId: string): Observable<any>{
-      
-        let observable =   new Observable(observer=> {
-            const socket = this.getSocket();     
-              socket.on(`ui-${daemonId}-${SocketEvents.TEMPERATURE}`,(data: any)=>{
-                  observer.next(data)
-              });
-  
-              return ()=> {
-                socket.removeAllListeners();
-                  socket.disconnect();
-                 
-                
-              }
-          })
+      const socket = new RxSocket(environment.socketServer); 
 
-          return observable;
+      const event$ = socket.observable(`ui-${daemonId}-${Events.TEMPERATURE}`);
+      return event$;
       }
 
       public getDeamonMemoryUsage(daemonId: string): Observable<any>{
+        const socket = new RxSocket(environment.socketServer); 
 
-        let observable = new Observable(observer => {
-            const scoket = this.getSocket();
-            scoket.on(`ui-${daemonId}-${SocketEvents.MEMORY_USAGE}`, (data) => {
-              observer.next(data);    
-            });
-            return () => {
-              scoket.disconnect();
-              scoket.close();
-            };  
-          })     
+        const event$ = socket.observable(`ui-${daemonId}-${Events.MEMORY_USAGE}`);
+        return event$;
 
-        return observable;
       }
 
       public getContainerUsage(daemonId: string): Observable<any>{
+        const socket = new RxSocket(environment.socketServer); 
 
-        let observable = new Observable(observer => {
-           const scoket = this.getSocket();
-           scoket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_METRICS}`, (data) => {
-              observer.next(data);    
-            });
-            return () => {
-              scoket.disconnect();
-            };  
-          })     
-
-        return observable;
+        const event$ = socket.observable(`ui-${daemonId}-${Events.CONTAINERS_METRICS}`);
+        return event$;
       }
 
       public getContainerList(daemonId: string): Observable<any>{
+        const socket = new RxSocket(environment.socketServer); 
 
-        let observable = new Observable(observer => {
-            const scoket = this.getSocket();
-            scoket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_LIST}`, (data: Containers[]) => {
-              observer.next(data);    
-            });
-            return () => {
-              scoket.disconnect();
-            };  
-          })     
+        const event$ = socket.observable(`ui-${daemonId}-${Events.CONTAINERS_LIST}`);
+        return event$;
 
-        return observable;
       }
 
       public getInfo(daemonId: string): Observable<any>{
-        let observable=   new Observable(observer=> {
-            const socket = this.getSocket();     
+        const socket = new RxSocket(environment.socketServer); 
 
-              socket.on(`ui-${daemonId}-${SocketEvents.DOCKER_ENGINE_INFO}`,(data: any)=>{
-                  console.log(data)
-                  observer.next(data)
-              });
-  
-              return ()=> {
-                  socket.disconnect();
-              }
-          });
-
-          return observable;
-
+        const event$ = socket.observable(`ui-${daemonId}-${Events.DOCKER_ENGINE_INFO}`);
+        return event$;
       }
 
       public getDisk(daemonId: string): Observable<any>{
-        let observable=   new Observable(observer=> {
-            const socket = this.getSocket();     
+        const socket = new RxSocket(environment.socketServer); 
 
-              socket.on(`ui-${daemonId}-${SocketEvents.DISK_USAGE}`,(data: any)=>{
-                  console.log(data)
-                  observer.next(data)
-              });
-  
-              return ()=> {
-                  socket.disconnect();
-              }
-          });
-
-          return observable;
-
+        const event$ = socket.observable(`ui-${daemonId}-${Events.DISK_USAGE}`);
+        return event$;
       }
 
 }
