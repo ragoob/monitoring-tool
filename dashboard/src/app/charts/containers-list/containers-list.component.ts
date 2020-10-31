@@ -16,7 +16,6 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
-   this.socketService.disconnect();
   }
 
   ngOnInit(): void {

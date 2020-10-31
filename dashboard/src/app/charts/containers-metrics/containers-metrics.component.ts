@@ -69,7 +69,6 @@ export class ContainersMetricsComponent implements OnInit {
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
-   this.socketService.disconnect();
   }
 
   ngOnInit() {

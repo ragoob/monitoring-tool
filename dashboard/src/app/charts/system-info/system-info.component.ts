@@ -18,7 +18,6 @@ export class SystemInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
   this.subscribers.forEach(s=> s.unsubscribe());
-  this.socketService.disconnect();
   }
 
   ngOnInit(): void {

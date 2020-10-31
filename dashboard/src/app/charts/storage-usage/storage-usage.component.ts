@@ -21,11 +21,14 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
   public pieChartPlugins = [];
+  public pieChartColors: Array < any > = [{
+    backgroundColor: ['#556ee6', '#34c38f', '#f1b44c'],
+    borderColor: ['#556ee6', '#34c38f', '#f1b44c']
+ }];
   private subscribers: Subscription[] = [];
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
-   this.socketService.disconnect();
   }
 
   ngOnInit() {

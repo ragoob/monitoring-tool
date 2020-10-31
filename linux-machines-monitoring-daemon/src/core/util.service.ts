@@ -14,9 +14,9 @@ export class UtilService{
         const result = this.parseStdout(stdout);
         if(result){
           return {
-            total: parseFloat(result[0].total.replace(/\D/g,'')),
-            free: parseFloat(result[0].free.replace(/\D/g,'')),
-            used: parseFloat(result[0].used.replace(/\D/g,'')),
+            total: result[0].total.replace(/\D/g,''),
+            free: result[0].free.replace(/\D/g,''),
+            used: result[0].used.replace(/\D/g,''),
             dateTime: new Date()
           }
         }
@@ -26,9 +26,9 @@ export class UtilService{
       const result = this.parseStdout(stdout);
       if(result){
         return {
-          size: parseFloat(result[0].Size.replace(/\D/g,'')),
-          free: parseFloat(result[0].Avail.replace(/\D/g,'')),
-          used: parseFloat(result[0].Used.replace(/\D/g,'')),
+          size: result[0].Size.replace(/\D/g,''),
+          free: result[0].Avail.replace(/\D/g,''),
+          used: result[0].Used.replace(/\D/g,''),
           dateTime: new Date()
         }
       }
@@ -115,11 +115,11 @@ export class UtilService{
                   const obj = JSON.parse(out);
                   return {
                     id: obj["ID"],
-                    memoryPerc: parseFloat(obj["MemPerc"].replace(/\D/g,'')),
-                    memoryUsage: parseFloat(obj["MemUsage"].split('/')[0].replace(/\D/g,'')),
-                    cpuPerc: parseFloat(obj["CPUPerc"].replace(/\D/g,'')),
+                    memoryPerc: obj["MemPerc"].replace(/\D/g,''),
+                    memoryUsage: obj["MemUsage"].split('/')[0].replace(/\D/g,''),
+                    cpuPerc: obj["CPUPerc"].replace(/\D/g,''),
                     name: obj["Name"],
-                    blockIo: parseFloat(obj["BlockIO"].replace(/\D/g,'')),
+                    blockIo: obj["BlockIO"].replace(/\D/g,''),
                     
                 };
                   
@@ -141,11 +141,11 @@ export class UtilService{
              containersMetrics = 
                  {
                   id: obj["ID"],
-                  memoryPerc: parseFloat(obj["MemPerc"].replace(/\D/g,'')),
-                  memoryUsage: parseFloat(obj["MemUsage"].split('/')[0].replace(/\D/g,'')),
-                  cpuPerc: parseFloat(obj["CPUPerc"].replace(/\D/g,'')),
+                  memoryPerc: obj["MemPerc"].replace(/\D/g,''),
+                  memoryUsage:obj["MemUsage"].split('/')[0].replace(/\D/g,''),
+                  cpuPerc: obj["CPUPerc"].replace(/\D/g,''),
                   name: obj["Name"],
-                  blockIo: parseFloat(obj["BlockIO"].replace(/\D/g,'')),
+                  blockIo: obj["BlockIO"].replace(/\D/g,''),
                     
                 }
             

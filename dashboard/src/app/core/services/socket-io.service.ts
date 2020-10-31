@@ -8,26 +8,31 @@ import { Containers } from '../models/containers.model';
 import { SocketEvents } from '../models/socket-events';
 @Injectable()
 export class SocketService{
-
-    private socket: SocketIOClient.Socket;
+    private sockets: SocketIOClient.Socket[] = [];
     constructor(){
       this.getSocket();
     }
    
 
     private  getSocket() {
+      this.clearSockets();
         const URL: string = environment.socketServer;
-        this.socket =  io(URL,{
+        const socket =  io.connect(URL,{
           reconnection: false
-        });
-        return this.socket;
+        })
+        return socket;
        
     }
 
-    public disconnect(){
-        this.socket.disconnect();
-    }
+    private clearSockets(){
+      this.sockets.forEach(s=> {
+        s.disconnect();
+        s.removeAllListeners();
+        s.close();    
+      });
+    } 
 
+    
     public emit(event,data){
         this.getSocket().emit(event,data);
     }
@@ -54,7 +59,9 @@ export class SocketService{
               });
   
               return ()=> {
+                socket.removeAllListeners();
                   socket.disconnect();
+                 
                 
               }
           })
@@ -65,13 +72,13 @@ export class SocketService{
       public getDeamonMemoryUsage(daemonId: string): Observable<any>{
 
         let observable = new Observable(observer => {
-            this.socket = this.getSocket();
-            this.socket.on(`ui-${daemonId}-${SocketEvents.MEMORY_USAGE}`, (data) => {
+            const scoket = this.getSocket();
+            scoket.on(`ui-${daemonId}-${SocketEvents.MEMORY_USAGE}`, (data) => {
               observer.next(data);    
             });
             return () => {
-              this.socket.disconnect();
-              this.socket.close();
+              scoket.disconnect();
+              scoket.close();
             };  
           })     
 
@@ -81,12 +88,12 @@ export class SocketService{
       public getContainerUsage(daemonId: string): Observable<any>{
 
         let observable = new Observable(observer => {
-            this.socket = this.getSocket();
-            this.socket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_METRICS}`, (data) => {
+           const scoket = this.getSocket();
+           scoket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_METRICS}`, (data) => {
               observer.next(data);    
             });
             return () => {
-              this.socket.disconnect();
+              scoket.disconnect();
             };  
           })     
 
@@ -96,12 +103,12 @@ export class SocketService{
       public getContainerList(daemonId: string): Observable<any>{
 
         let observable = new Observable(observer => {
-            this.socket = this.getSocket();
-            this.socket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_LIST}`, (data: Containers[]) => {
+            const scoket = this.getSocket();
+            scoket.on(`ui-${daemonId}-${SocketEvents.CONTAINERS_LIST}`, (data: Containers[]) => {
               observer.next(data);    
             });
             return () => {
-              this.socket.disconnect();
+              scoket.disconnect();
             };  
           })     
 

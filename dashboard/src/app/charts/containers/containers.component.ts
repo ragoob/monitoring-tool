@@ -28,7 +28,6 @@ export class ContainersComponent implements OnInit {
 
   ngOnDestroy(): void {
   this.subscribers.forEach(s=> s.unsubscribe());
-  this.socketService.disconnect();
   }
 
   ngOnInit(): void {

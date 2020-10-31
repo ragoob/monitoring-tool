@@ -1,10 +1,10 @@
 
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io-client';
-import { URL } from 'url';
 import { Events } from './events';
 @Injectable()
 export class SocketService {
+  sockets: SocketIOClient.Socket[] = [];
   constructor() {
 
    this.getSocket().on('connect_error', (err) => {
@@ -29,13 +29,22 @@ export class SocketService {
   }
 
   public getSocket(){
-    
+  this.clearSockets();
   const socket =   io.connect(process.env.SOCKET_SERVER,{
     reconnection: false
   });
+
+   this.sockets.push(socket);
     return socket;
   }
 
+  private clearSockets(){
+    this.sockets.forEach(s=> {
+      s.disconnect();
+      s.removeAllListeners();
+      s.close();    
+    });
+  }
   public emitEvent(event: string, data: any): any {
 
       try {
