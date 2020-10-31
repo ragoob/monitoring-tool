@@ -42,4 +42,14 @@ export class DashComponent implements OnInit {
      
     })
   }
+
+  public copyScript(){
+    const script: string = `curl ${environment.gateWay}/deployment/${this.daemonId} | sh`;
+    const el = document.createElement('textarea');
+    el.value = script;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
 }

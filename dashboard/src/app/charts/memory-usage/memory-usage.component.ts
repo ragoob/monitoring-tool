@@ -11,8 +11,9 @@ import { SocketService } from '../../core/services/socket-io.service';
   styleUrls: ['./memory-usage.component.scss']
 })
 export class MemoryUsageComponent implements OnInit, OnDestroy {
-
+  
   @Input('daemonId') daemonId: string;
+  private sortedList: any[] = [];
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Memory Usage',fill:false },
   ];
@@ -58,15 +59,19 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
       .subscribe((data: {total:number,used:number,free:number,dateTime:any})=> {
 
         if(data.used && data.total){
-          
           this.lineChartData[0].label = `Memory Usage ${data.used} / ${data.total}` ;
-
-
         }
-         this.lineChartData[0].data.push(data.used);
-          this.lineChartLabels.push(new Date(data.dateTime).toLocaleTimeString('it-IT'))
 
-      
+
+       
+
+         const date = new Date(data.dateTime);
+         data.dateTime = date;
+         this.sortedList.push(data);
+         this.sortedList = this.sortedList.sort((a, b) => a.dateTime - b.dateTime );
+         this.lineChartData[0].data = this.sortedList.map(d=> d.used);
+         this.lineChartLabels = this.sortedList.map(label=> label.dateTime.toLocaleTimeString('it-IT'));
+         
 
       })
     )

@@ -4,9 +4,11 @@ set -e
 ### Configuration ###
 
 APP_DIR=/home/$USER/
+echo $APP_DIR
 GIT_URL=https://github.com/ragoob/monitoring-tool.git
 RESTART_ARGS=
-PI_USER=$USER
+export PI_USER=$USER
+
 export SOCKET_SERVER=http://192.168.1.7:4001
 echo $SOCKET_SERVER
 export MACHINE_ID={Daemon_GUID}
@@ -41,8 +43,11 @@ sudo npm install -g prettier
 # Install application
 sudo npm install --production
  npm run build
-
-
+sudo rm -rf /usr/bin/linux-machines-monitoring-daemon
+sudo mkdir /usr/bin/linux-machines-monitoring-daemon
+sudo cp -a dist  /usr/bin/linux-machines-monitoring-daemon/dist
+sudo cp -a node_modules  /usr/bin/linux-machines-monitoring-daemon/node_modules
+sudo rm -rf $APP_DIR/monitoring-tool
 ## create systemd service ####
 sudo rm -rf /lib/systemd/system/linux-machines-monitoring-daemon.service
 sudo touch  /lib/systemd/system/linux-machines-monitoring-daemon.service
@@ -54,16 +59,20 @@ After=network.target
 
 [Service]
 Environment=NODE_PORT=30003
+Environment=MACHINE_ID={Daemon_GUID}
+Environment=NODE_ENV=production
+Environment=SOCKET_SERVER=http://192.168.1.7:4001
 Type=simple
-User=$PI_USER
-ExecStart=/usr/bin/node /home/$PI_USER/monitoring-tool/linux-machines-monitoring-daemon/dist/main
+User=$USER
+ExecStart=/usr/bin/node  /usr/bin/linux-machines-monitoring-daemon/dist/main
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF'
 
  sudo systemctl daemon-reload
- sudo systemctl start linux-machines-monitoring-daemon
+  sudo systemctl enable linux-machines-monitoring-daemon
+  sudo systemctl start linux-machines-monitoring-daemon
 
 
 

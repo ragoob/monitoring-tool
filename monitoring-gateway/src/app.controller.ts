@@ -45,7 +45,7 @@ export class AppController {
   async deployment(@Res() res: Response,@Param('id') id: number): Promise<void>{
     console.log('generate file')
     const file  = await this.read();
-    const updatedfile = file.replace('{Daemon_GUID}',id.toString());
+    const updatedfile = file.replace(/{Daemon_GUID}/g,id.toString());
     res.setHeader('Content-type', "application/octet-stream");
    res.setHeader('Content-disposition', `attachment; filename=dep-${id.toString()}.sh`);
    res.send(updatedfile); 

@@ -2,8 +2,13 @@
   <div class="page-header">
     <h1  class="mat-h1">Dashboard {{title}}  <span class="deamon-status" [ngClass]="{'connected': connected,'connecting': !connected,'disconnected': disconnected}"></span>
       <span class="wait-daemon-message">
-        {{connected ? 'Connected' : 'Please wait until daemon join and start ...'}}
+        {{connected ? 'Connected' : 'Loading ....'}}
       </span>
+
+      <span class="material-icons copy-script-btn"  title="Copy script" (click)="copyScript()">
+        content_copy
+        </span>
+
       </h1>
   </div>
 

@@ -12,7 +12,7 @@ import { SocketService } from '../../core/services/socket-io.service';
 })
 export class CpuTemperatureComponent implements OnInit, OnDestroy{
   @Input('daemonId') daemonId : string;
-
+  private sortedList: any[] = [];
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'Cpu temperature',fill:false },
   ];
@@ -54,12 +54,17 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
     this.subscribers.push(
       this.socketService.getDeamontemperature(this.daemonId)
       .pipe(distinct())
-      .subscribe((result: {temperature: number,dateTime: any})=>{
+      .subscribe((data: {temperature: number,dateTime: any})=>{
 
-        this.lineChartData[0].data.push(result.temperature);
-        this.lineChartLabels.push(new Date(result.dateTime).toLocaleTimeString('it-IT'));
+        const date = new Date(data.dateTime);
+        data.dateTime = date;
+        this.sortedList.push(data);
+        this.sortedList = this.sortedList.sort((a, b) => b.dateTime - a.dateTime);
 
-      
+        this.lineChartData[0].data = this.sortedList.map(d=> d.temperature);
+        this.lineChartLabels = this.sortedList.map(label=> label.dateTime.toLocaleTimeString('it-IT'));
+
+    
 
 
       })
