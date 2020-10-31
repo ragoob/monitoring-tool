@@ -14,9 +14,9 @@ export class UtilService{
         const result = this.parseStdout(stdout);
         if(result){
           return {
-            total: result[0].total.replace(/\D/g,''),
-            free: result[0].free.replace(/\D/g,''),
-            used: result[0].used.replace(/\D/g,''),
+            total:this.getNumber(result[0].total),
+            free: this.getNumber(result[0].free),
+            used: this.getNumber(result[0].used),
             dateTime: new Date()
           }
         }
@@ -26,9 +26,9 @@ export class UtilService{
       const result = this.parseStdout(stdout);
       if(result){
         return {
-          size: result[0].Size.replace(/\D/g,''),
-          free: result[0].Avail.replace(/\D/g,''),
-          used: result[0].Used.replace(/\D/g,''),
+          size: this.getNumber(result[0].Size),
+          free: this.getNumber(result[0].Avail),
+          used: this.getNumber(result[0].Used),
           dateTime: new Date()
         }
       }
@@ -115,11 +115,11 @@ export class UtilService{
                   const obj = JSON.parse(out);
                   return {
                     id: obj["ID"],
-                    memoryPerc: obj["MemPerc"].replace(/\D/g,''),
-                    memoryUsage: obj["MemUsage"].split('/')[0].replace(/\D/g,''),
-                    cpuPerc: obj["CPUPerc"].replace(/\D/g,''),
+                    memoryPerc: this.getNumber(obj["MemPerc"]),
+                    memoryUsage: this.getNumber(obj["MemUsage"]),
+                    cpuPerc: this.getNumber(obj["CPUPerc"]),
                     name: obj["Name"],
-                    blockIo: obj["BlockIO"].replace(/\D/g,''),
+                    blockIo: this.getNumber(obj["BlockIO"]),
                     
                 };
                   
@@ -141,11 +141,11 @@ export class UtilService{
              containersMetrics = 
                  {
                   id: obj["ID"],
-                  memoryPerc: obj["MemPerc"].replace(/\D/g,''),
-                  memoryUsage:obj["MemUsage"].split('/')[0].replace(/\D/g,''),
-                  cpuPerc: obj["CPUPerc"].replace(/\D/g,''),
+                  memoryPerc: this.getNumber(obj["MemPerc"]),
+                  memoryUsage:this.getNumber(obj["MemUsage"].split('/')[0]),
+                  cpuPerc: this.getNumber(obj["CPUPerc"]),
                   name: obj["Name"],
-                  blockIo: obj["BlockIO"].replace(/\D/g,''),
+                  blockIo: this.getNumber(obj["BlockIO"]),
                     
                 }
             
@@ -160,4 +160,8 @@ export class UtilService{
 
   }
 
+  getNumber(str: string): number{
+    const floatRegex =  /[+-]?([0-9]*[.])?[0-9]+/;
+    return  str.match(floatRegex).map(function(v) { return parseFloat(v); })[0];
+  }
 }

@@ -35,6 +35,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
     this.subscribers.push(
       this.socketService.getDisk(this.daemonId)
       .subscribe((disk: {size:number,used: number,free: number,dateTime:any})=> {
+        
          this.pieChartData = [disk.size,disk.used,disk.free]
       })
     )
