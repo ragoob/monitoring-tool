@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as process from 'child_process';
-import { Container } from 'src/docker/models/container.model';
+import { Container } from 'src/engine/models/container.model';
 import { UtilService } from '../../core/util.service';
 import { ContainerMetrics } from '../models/container-metrics.model';
 import { CreateContainerOptions } from '../models/create-container-options.model';

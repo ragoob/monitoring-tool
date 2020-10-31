@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-import { DockerModule } from './docker/docker.module';
+import { DockerModule } from './engine/docker.module';
 
 @Module({
   imports: [

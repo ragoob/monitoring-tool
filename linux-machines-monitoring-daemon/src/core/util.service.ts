@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { Container } from "src/docker/models/container.model";
-import { ContainerMetrics } from "../docker/models/container-metrics.model";
-import { DiskUsage } from "../docker/models/disk-usage.model";
-import { DockerEngine } from "../docker/models/docker-engine.model";
-import { MemoryUsage } from "../docker/models/memory-usage.model";
+import { Container } from "src/engine/models/container.model";
+import { ContainerMetrics } from "../engine/models/container-metrics.model";
+import { DiskUsage } from "../engine/models/disk-usage.model";
+import { DockerEngine } from "../engine/models/docker-engine.model";
+import { MemoryUsage } from "../engine/models/memory-usage.model";
 var shellParser = require('node-shell-parser');
 
 @Injectable()
