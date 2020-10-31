@@ -9,11 +9,8 @@ export class SocketService  {
     private io: socket.Server;
     constructor() {
         // Socket Server
-      
-
        const server = http.createServer();
-       server.listen(4001,'192.168.1.7');
-
+       server.listen(parseInt(process.env.SOCKET_PORT),`${process.env.SOCKET_HOST}`);
         this.io = socket.listen(server);
         console.log('listing')
     }
@@ -23,7 +20,6 @@ export class SocketService  {
     }
 
     startListen(deamonId: string){
-       
         // start listen to Daemon events
       this.io.on('connection',(socket)=> {
        

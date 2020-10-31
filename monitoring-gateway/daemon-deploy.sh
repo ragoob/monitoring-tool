@@ -7,8 +7,8 @@ APP_DIR=/home/$USER/
 GIT_URL=https://github.com/ragoob/monitoring-tool.git
 RESTART_ARGS=
 PI_USER=$USER
-export SOCKET_SERVER=192.168.1.7:4001
-export MACHINE_ID=9b130e3a-3a33-5709-ab3e-d7642231d236
+export SOCKET_SERVER=http://192.168.1.7:4001
+export MACHINE_ID={Daemon_GUID}
 export PORT=30003
 ### Installing Node ###
 if which node > /dev/null
@@ -54,7 +54,7 @@ After=network.target
 Environment=NODE_PORT=30003
 Type=simple
 User=$PI_USER
-ExecStart=/usr/bin/node /home/$PI_USER/monitoring-tool/linux-machines-monitoring-daemon/dist/main.js
+ExecStart=/usr/bin/node /home/$PI_USER/monitoring-tool/linux-machines-monitoring-daemon/dist/main
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target

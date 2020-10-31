@@ -6,6 +6,9 @@ import {Menu} from '../../../app/core/models/menu.model'
 import { MenuService } from '../../core/services/menu.service';
 import {MatDialog} from '@angular/material/dialog';
 import { NewEngineComponent } from '../../shared/new-engine/new-engine.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationComponent } from '../../shared/notification/notification.component';
+import { Guid } from "guid-typescript";
 
 @Component({
   selector: 'app-nav',
@@ -13,26 +16,39 @@ import { NewEngineComponent } from '../../shared/new-engine/new-engine.component
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
- 
+  durationInSeconds = 5;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, public menuService: MenuService, public dialog: MatDialog) {}
+  constructor(private breakpointObserver: BreakpointObserver, public menuService: MenuService, public dialog: MatDialog
+    ,private snackBar: MatSnackBar) {}
   ngOnInit(): void {
    this.menuService.loadMenu();
   }
 
   public addNewEngine(){
     const dialogRef = this.dialog.open(NewEngineComponent,{
-      width: '500px',
-      height: '200px'
+      width: '700px',
+      height: '200px',
+      data: {
+        GUID: Guid.create().toString()
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if(result.result){
+        this.snackBar.openFromComponent(NotificationComponent, {
+          duration: this.durationInSeconds * 1000,
+          data: {
+            type: 'success',
+            message: 'Machine has been added'
+          }
+        });
+      }
+      
     });
    
   }

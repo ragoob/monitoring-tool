@@ -5,9 +5,7 @@ import { URL } from 'url';
 import { Events } from './events';
 @Injectable()
 export class SocketService {
-  //private socket: SocketIOClient.Socket;
   constructor() {
-   //this.getSocket();
 
    this.getSocket().on('connect_error', (err) => {
       console.error('error in connection ', err);
@@ -32,7 +30,7 @@ export class SocketService {
 
   public getSocket(){
     
-  const socket =   io.connect('http://192.168.1.7:4001',{
+  const socket =   io.connect(process.env.SOCKET_SERVER,{
     reconnection: true
   });
     return socket;

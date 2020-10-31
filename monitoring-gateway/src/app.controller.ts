@@ -3,6 +3,9 @@ import { from } from 'rxjs';
 import { AppService } from './app.service';
 import { SocketService } from './core/socket.service';
 import {Response} from 'express'
+import * as fs from 'fs';
+import * as path from 'path'
+import { rejects } from 'assert';
 @Controller()
 export class AppController {
   private logger: Logger = new Logger();
@@ -35,6 +38,33 @@ export class AppController {
     this.socketService.emit(`${id}-intial-info`,'test');
     res.status(200).send({
       success: true
+    });
+  }
+
+  @Get('deployment/:id')
+  async deployment(@Res() res: Response,@Param('id') id: number): Promise<void>{
+    console.log('generate file')
+    const file  = await this.read();
+    const updatedfile = file.replace('{Daemon_GUID}',id.toString());
+    res.setHeader('Content-type', "application/octet-stream");
+   res.setHeader('Content-disposition', `attachment; filename=dep-${id.toString()}.sh`);
+   res.send(updatedfile); 
+  }
+  private async read(): Promise<string> {
+  
+    const _path: string = path.join(__dirname, '..','daemon-deploy.sh');
+    return new Promise<string>((resolve, reject) => {
+      fs.readFile(
+        _path,
+        (error: NodeJS.ErrnoException | null, data: Buffer) => {
+          
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data.toString());
+          }
+        },
+      );
     });
   }
 }

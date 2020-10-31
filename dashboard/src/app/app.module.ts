@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { ContainersComponent } from './charts/containers/containers.component';
 import { ContainersMetricsComponent } from './charts/containers-metrics/containers-metrics.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { NotificationComponent } from './shared/notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ContainersComponent,
     ContainersMetricsComponent,
     LoaderComponent,
+    NotificationComponent
   
   
     
@@ -86,7 +89,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     TableModule,
     ToolbarModule,
     NgbModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   providers: [SocketService],
 

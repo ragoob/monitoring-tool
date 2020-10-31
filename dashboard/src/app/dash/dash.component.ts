@@ -9,6 +9,7 @@ import { ServerService } from '../core/services/server.service';
 import { Label, SingleDataSet,Color } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
 import { SocketService } from '../core/services/socket-io.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-dash',
@@ -28,12 +29,9 @@ export class DashComponent implements OnInit {
       const id = d.id;
       this.daemonId = id;
       this.title = this.serverService.getAll().find(d=> d.name).name;
-      this.http.get(`http://localhost:4002/listen/${id}`)
+      this.http.get(`${environment.gateWay}/listen/${id}`)
       .subscribe(d=> {
-        // this.http.get(`http://localhost:4002/start/${id}`)
-        // .subscribe(d=> {
-          
-        // })
+        
         this.socketService.getDeamonAlive(id)
         .subscribe(s=> {
           this.connected = true;

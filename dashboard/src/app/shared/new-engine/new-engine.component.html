@@ -1,14 +1,25 @@
 
 
-<div class="form-container">
-  <mat-form-field appearance="fill">
-    <mat-label>Enter name</mat-label>
-    <input matInput placeholder="Enter daemon name" [(ngModel)]="model"   required>
-  </mat-form-field>
+<div class="row">
+
+  <form [ngStyle]="{'width': '100%'}">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Enter name for machine</label>
+      <input type="text" class="form-control"  [ngModelOptions]="{standalone: true}" [(ngModel)]="model"  placeholder="Enter name for machine">
+    </div>
+
+    <div class="input-group">
+      <input type="text" class="form-control" #commandelement   [ngModelOptions]="{standalone: true}" [(ngModel)]="command" >
+      <span class="input-group-addon btn btn-primary" (click)="copy()">Copy</span>
+  </div>
+
+
+  </form>
+ 
+   
+  </div>
 
   <div mat-dialog-actions>
     <button (click)="addNew()" mat-button color="primary">Save</button>
     <button (click)="close()" mat-button  cdkFocusInitial>cancel</button>
-  </div>
-   
   </div>
