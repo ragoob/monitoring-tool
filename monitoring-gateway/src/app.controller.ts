@@ -21,12 +21,13 @@ export class AppController {
   
     if(this.Listeners.findIndex(d=> d === id.toString()) === -1){
       this.socketService.startListen(id.toString());
+      this.Listeners.push(id.toString());
     }
    
     else{
       console.log(`${id} is already registered`)
     }
-    this.Listeners.push(id.toString());
+   
     res.status(200).send({
       success: true
     })
