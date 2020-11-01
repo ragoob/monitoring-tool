@@ -6,7 +6,7 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
 
-      <a (click)="addNewEngine()" mat-list-item [routerLink]="'/'"> <mat-icon aria-hidden="false" aria-label="Example home icon">addchart</mat-icon>Add Engine</a>
+      <a (click)="addNewEngine()" mat-list-item href="javascript:;"> <mat-icon aria-hidden="false" aria-label="Example home icon">addchart</mat-icon>Register hardware</a>
 
 
       <!-- <a  mat-list-item [routerLink]="'/'"> Home </a> -->
@@ -25,7 +25,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Pi Monitoring</span>
+      <span>Hardware monitoring tool</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
     <!-- Add Content Here -->

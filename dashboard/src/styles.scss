@@ -30,5 +30,97 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .page-header{
     margin: 20px;
 }
+
+.sidenav-container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    width: 200px;
+  }
+  
+  .sidenav .mat-toolbar {
+    background: inherit;
+  }
+  
+  .mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .grid-container {
+    margin: 20px;
+  }
+  
+  .dashboard-card {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+  }
+  
+  .more-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+  }
+  
+  .dashboard-card-content {
+    text-align: center;
+  }
+  
+  .deamon-status{
+    height: 25px;
+    width: 25px;
+   // background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .connected{
+    background-color:green !important;
+  }
+  
+  .disconnected{
+    background-color: #FF4136;
+  }
+  
+  .connecting{
+   // background-color:#bbb !important;
+    animation: color-change 1s infinite;
+  }
+  
+  @keyframes color-change {
+    0% {
+      background-color: green;
+    }
+    100% {
+      background-color: #FF4136;
+    }
+  }
+  
+  .wait-daemon-message{
+    display: inline-block;
+    padding-left: 5px;
+  }
+  
+  .copy-script-btn{
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .card-title{
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    color: #74788d !important;
+  }
+  
+  .card{
+    min-height: 300px;
+  }
+
+  
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';

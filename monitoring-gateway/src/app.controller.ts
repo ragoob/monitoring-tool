@@ -8,6 +8,7 @@ import { rejects } from 'assert';
 @Controller()
 export class AppController {
   private logger: Logger = new Logger();
+  private Listeners: string[] = [];
   constructor(private readonly appService: AppService,private socketService: SocketService) {}
 
   @Get()
@@ -17,8 +18,15 @@ export class AppController {
 
   @Get('listen/:id')
   healthcheck(@Res() res: Response, @Param('id') id: number){
-    console.log(id)
-    this.socketService.startListen(id.toString())
+  
+    if(this.Listeners.findIndex(d=> d === id.toString()) === -1){
+      this.socketService.startListen(id.toString());
+    }
+   
+    else{
+      console.log(`${id} is already registered`)
+    }
+    this.Listeners.push(id.toString());
     res.status(200).send({
       success: true
     })

@@ -56,7 +56,7 @@ Environment=NODE_ENV=production
 Environment=SOCKET_SERVER=http://192.168.1.7:4001
 Type=simple
 User=$USER
-ExecStart=/usr/bin/node  /usr/bin/linux-machines-monitoring-daemon/dist/main
+ExecStart=$(which node)  /usr/bin/linux-machines-monitoring-daemon/dist/main
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
