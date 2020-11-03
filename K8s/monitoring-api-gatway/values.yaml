@@ -9,7 +9,7 @@ image:
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
-  port: 3000
+  
 
 imagePullSecrets: []
 nameOverride: ""
@@ -60,11 +60,11 @@ resources:
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 256m
+      memory: 256Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 256m
+      memory: 256Mi
 
 autoscaling:
   enabled: false

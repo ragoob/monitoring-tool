@@ -35,14 +35,12 @@ spec:
           env:
           - name: PORT
             value: "3000"
-          - name: SOCKET_PORT
-            value: "40510"
           - name: NODE_ENV
             value: "production"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.image.port }}
+              containerPort: 3000
               protocol: TCP
           livenessProbe:
             httpGet:
