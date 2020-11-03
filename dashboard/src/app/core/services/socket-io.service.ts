@@ -15,22 +15,38 @@ export class SocketService{
     public emit(event,data){
       const socket = socketIO(environment.socketServer); 
       socket.emit(event,data);
+
+      
     }
+
+    // const socket =   io.connect(`${process.env.SOCKET_SERVER}/websockettest`,{
+    //   reconnection: true,
+    //   transports: ['websocket']
+    // });
     public getDeamonAlive(daemonId: string): Observable<string>{
-      const socket = new RxSocket(environment.socketServer); 
+      const socket = new RxSocket(`${environment.socketServer}`,{
+        reconnection: true,
+        transports: ['websocket']
+      }); 
       const event$ = socket.observable<string>(`ui-${daemonId}-${Events.HEALTH_CHECK}`);
       return event$;
     }
 
     public getDeamontemperature(daemonId: string): Observable<any>{
-      const socket = new RxSocket(environment.socketServer); 
+      const socket = new RxSocket(`${environment.socketServer}`,{
+        reconnection: true,
+        transports: ['websocket']
+      }); 
 
       const event$ = socket.observable(`ui-${daemonId}-${Events.TEMPERATURE}`);
       return event$;
       }
 
       public getDeamonMemoryUsage(daemonId: string): Observable<any>{
-        const socket = new RxSocket(environment.socketServer); 
+        const socket = new RxSocket(`${environment.socketServer}`,{
+          reconnection: true,
+          transports: ['websocket']
+        }); 
 
         const event$ = socket.observable(`ui-${daemonId}-${Events.MEMORY_USAGE}`);
         return event$;
@@ -38,14 +54,20 @@ export class SocketService{
       }
 
       public getContainerUsage(daemonId: string): Observable<any>{
-        const socket = new RxSocket(environment.socketServer); 
+        const socket = new RxSocket(`${environment.socketServer}`,{
+          reconnection: true,
+          transports: ['websocket']
+        }); 
 
         const event$ = socket.observable(`ui-${daemonId}-${Events.CONTAINERS_METRICS}`);
         return event$;
       }
 
       public getContainerList(daemonId: string): Observable<any>{
-        const socket = new RxSocket(environment.socketServer); 
+        const socket = new RxSocket(`${environment.socketServer}`,{
+          reconnection: true,
+          transports: ['websocket']
+        }); 
 
         const event$ = socket.observable(`ui-${daemonId}-${Events.CONTAINERS_LIST}`);
         return event$;
@@ -53,14 +75,19 @@ export class SocketService{
       }
 
       public getInfo(daemonId: string): Observable<any>{
-        const socket = new RxSocket(environment.socketServer); 
-
+        const socket = new RxSocket(`${environment.socketServer}`,{
+          reconnection: true,
+          transports: ['websocket']
+        }); 
         const event$ = socket.observable(`ui-${daemonId}-${Events.DOCKER_ENGINE_INFO}`);
         return event$;
       }
 
       public getDisk(daemonId: string): Observable<any>{
-        const socket = new RxSocket(environment.socketServer); 
+        const socket = new RxSocket(`${environment.socketServer}`,{
+          reconnection: true,
+          transports: ['websocket']
+        }); 
 
         const event$ = socket.observable(`ui-${daemonId}-${Events.DISK_USAGE}`);
         return event$;
