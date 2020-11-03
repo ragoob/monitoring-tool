@@ -34,9 +34,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
           env:
           - name: PORT
-            value: 3000
+            value: "3000"
           - name: SOCKET_PORT
-            value: 40510
+            value: "40510"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
