@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  socketServer: 'http://192.168.1.7:4002',
-  gateWay: 'http://192.168.1.7:4002'
+  socketServer: 'http://192.168.1.7:40510',
+  gateWay: 'http://192.168.1.7:3000'
 };
 
 /*

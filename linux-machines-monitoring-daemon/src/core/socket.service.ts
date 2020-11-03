@@ -30,9 +30,10 @@ export class SocketService {
   }
 
   public getSocket(){
-  const socket =   io.connect(`${process.env.SOCKET_SERVER}/websockettest`,{
+  const socket =   io.connect(process.env.SOCKET_SERVER,{
     reconnection: true,
-    transports: ['websocket']
+    path: '/socket',
+   transports: ['websocket'],
   });
 
     return socket;
