@@ -79,8 +79,8 @@ export class SocketService{
       private getSocketInstance(){
          return new RxSocket(`${environment.socketServer}`,{
           reconnection: true,
-          transports: ['websocket'],
-          path: '/socket'
+          // transports: ['websocket'],
+          // path: '/socket'
         }); 
 
       }

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  socketServer: 'http://192.168.1.7:40510',
+  socketServer: 'http://192.168.1.7:3000',
   gateWay: 'http://192.168.1.7:3000'
 };
 

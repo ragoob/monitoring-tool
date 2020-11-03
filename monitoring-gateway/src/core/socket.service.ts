@@ -1,32 +1,26 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import * as socket from 'socket.io';
 import { Events } from "./events";
-import * as http from 'http';
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  OnGatewayConnection,
+} from '@nestjs/websockets';
+import { Socket, Server } from 'socket.io';
 
-@Injectable()
-export class SocketService  {
-    private io: socket.Server;
-    private nsp: socket.Namespace;
-    constructor() {
-        // Socket Server
-       const server = http.createServer();
-      
-        this.io = socket.listen(server,{
-          path: '/socket',
-          transports: ['websocket']
-        });
+@WebSocketGateway()
+export class SocketService implements OnGatewayConnection  {
+  @WebSocketServer() io: Server;
 
-     server.listen(parseInt(process.env.SOCKET_PORT));
-
-     
-
-    }
+  handleConnection(client: any, ...args: any[]) {
+    console.log(`client connected: ${JSON.stringify(client.id)}`);
+  }
    
     emit(event: string, data: any) {
         this.io.emit(event, data);
     }
 
     startListen(deamonId: string){
+      console.log('start listen on ' + deamonId)
         // start listen to Daemon events
       this.io.on('connection',(socket)=> {
        
