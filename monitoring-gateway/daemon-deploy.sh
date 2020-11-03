@@ -53,7 +53,7 @@ After=network.target
 Environment=NODE_PORT=30003
 Environment=MACHINE_ID={Daemon_GUID}
 Environment=NODE_ENV=production
-Environment=SOCKET_SERVER=http://192.168.1.7:4002
+Environment=SOCKET_SERVER={Daemon_URL}
 Type=simple
 User=$USER
 ExecStart=$(which node)  /usr/bin/linux-machines-monitoring-daemon/dist/main
