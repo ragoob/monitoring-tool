@@ -1,4 +1,5 @@
 FROM node:12.13-alpine As development
+RUN npm i -g rimraf
 
 WORKDIR /usr/src/app
 
