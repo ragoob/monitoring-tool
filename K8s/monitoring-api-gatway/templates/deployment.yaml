@@ -37,6 +37,8 @@ spec:
             value: "3000"
           - name: SOCKET_PORT
             value: "40510"
+          - name: NODE_ENV
+            value: "production"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
