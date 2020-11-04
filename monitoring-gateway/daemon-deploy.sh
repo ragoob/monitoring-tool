@@ -5,19 +5,15 @@ set -e
 
 APP_DIR=/home/$USER/
 echo $APP_DIR
+sudo apt install -y git-all
 GIT_URL=https://github.com/ragoob/monitoring-tool.git
 export SOCKET_SERVER=http://192.168.1.7:4001
 export MACHINE_ID={Daemon_GUID}
 export PORT=30003
 ### Installing Node ###
-if which node > /dev/null
-    then
-        echo "node is installed, skipping..."
-    else
-      sudo apt-get -y install curl
+ sudo apt-get -y install curl
       curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
       sudo apt-get -y install nodejs
-    fi
 
 
 ### Automation steps ###
@@ -31,7 +27,7 @@ set -x
 # Install dependencies
 sudo npm install -g typescript
 sudo npm install @types/node
-sudo npm install -g rimraf
+sudo npm install --force -g rimraf
 # Install application
 sudo npm install --production
  npm run build

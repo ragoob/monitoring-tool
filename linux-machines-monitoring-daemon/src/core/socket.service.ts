@@ -31,9 +31,7 @@ export class SocketService {
 
   public getSocket(){
   const socket =   io.connect(process.env.SOCKET_SERVER,{
-    reconnection: true,
-  //   path: '/socket',
-  //  transports: ['websocket'],
+    reconnection: true
   });
 
     return socket;
@@ -41,17 +39,13 @@ export class SocketService {
 
 
   public emitEvent(event: string, data: any): any {
-
-      try {
         const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
         if(event === Events.MEMORY_USAGE){
           console.log(`${new Date().toLocaleTimeString('it-IT')} push on ${machineEvent}`)
 
         }
          this.getSocket().emit(machineEvent,data);
-      } catch (error) {
-        console.log(`error in sending data ${error}`)
-      }
+      
   }
 
 }
