@@ -5,19 +5,14 @@ set -e
 
 APP_DIR=/home/$USER/
 echo $APP_DIR
-sudo apt install -y git-all
-GIT_URL=https://github.com/ragoob/monitoring-tool.git
-export SOCKET_SERVER=http://192.168.1.7:4001
-export MACHINE_ID={Daemon_GUID}
-export PORT=30003
 ### Installing Node ###
  sudo apt-get -y install curl
       curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
       sudo apt-get -y install nodejs
 
-
 ### Automation steps ###
 sudo rm -rf $APP_DIR/monitoring-tool
+mkdir  $APP_DIR/monitoring-tool
 set -x
 cd  $APP_DIR/monitoring-tool
 curl -L https://github.com/ragoob/monitoring-tool/blob/main/linux-machines-monitoring-daemon/build.tar.gz?raw=true | tar zx
