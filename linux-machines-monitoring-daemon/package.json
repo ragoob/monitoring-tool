@@ -8,6 +8,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "targz" : " rm -rf build.tar.gz && tar -czvf build.tar.gz ./build/dist && cd ../ && git add . && git commit -m 'add new daemon build' && git push",
+    "build:release": "rm -rf ./build/dist && nest build -p  tsconfig.release.json && cp package.json build/dist/package.json && cd build/dist && npm install --only=production",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "NODE_ENV=development && nest start --watch",
@@ -54,6 +56,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "jest": "26.4.2",
+    "npm-pack-zip": "^1.2.7",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "26.2.0",
