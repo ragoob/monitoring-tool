@@ -19,22 +19,12 @@ export PORT=30003
 ### Automation steps ###
 sudo rm -rf $APP_DIR/monitoring-tool
 set -x
+cd  $APP_DIR/monitoring-tool
+curl -L https://github.com/ragoob/monitoring-tool/blob/main/linux-machines-monitoring-daemon/build.tar.gz?raw=true | tar zx
 
-# clone code from github
- git clone $GIT_URL $APP_DIR/monitoring-tool
- cd $APP_DIR/monitoring-tool/linux-machines-monitoring-daemon
-
-# Install dependencies
-sudo npm install -g typescript
-sudo npm install @types/node
-sudo npm install --force -g rimraf
-# Install application
-sudo npm install --production
- npm run build
 sudo rm -rf /usr/bin/linux-machines-monitoring-daemon
 sudo mkdir /usr/bin/linux-machines-monitoring-daemon
-sudo cp -a dist  /usr/bin/linux-machines-monitoring-daemon/dist
-sudo cp -a node_modules  /usr/bin/linux-machines-monitoring-daemon/node_modules
+sudo cp -a build/dist  /usr/bin/linux-machines-monitoring-daemon/dist
 sudo rm -rf $APP_DIR/monitoring-tool
 ## create systemd service ####
 sudo rm -rf /lib/systemd/system/linux-machines-monitoring-daemon.service
