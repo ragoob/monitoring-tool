@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { SocketService } from './core/socket.service';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MachinesModule } from './machines/machines.module';
-import { MachineService } from './machines/services/machine.service';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -24,9 +23,8 @@ import { MachineService } from './machines/services/machine.service';
       logging: true,
       synchronize: true,
     }),
-  
-
-    MachinesModule
+    MachinesModule,
+    AuthenticationModule
     
   ],
   controllers: [AppController],

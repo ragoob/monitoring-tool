@@ -16,6 +16,7 @@ import { NotificationComponent } from '../notification/notification.component';
   styleUrls: ['./new-engine.component.scss']
 })
 export class NewEngineComponent implements OnInit {
+   menu: any;
    machineForm: FormGroup;
   public command: string;
   public formSubmitted: boolean;
@@ -34,6 +35,7 @@ export class NewEngineComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+   
     this.machineForm = this.fb.group({
       id: [Guid.create().toString()],
       name:['',Validators.required]
@@ -49,16 +51,18 @@ export class NewEngineComponent implements OnInit {
       return;
     }
 
-    this.loader.loading$.next(true);
+    //this.loader.loading$.next(true);
     this.machineService.saveMachine(this.machineForm.value)
     .then(d=> {
       const menu = this.menuService.menuItems$.value;
-      menu.push({
-        title:this.machineForm.controls["name"].value,
-        route: `/${this.machineForm.controls["id"].value}`
+      console.log(menu[1])
+      menu[1].items.push({
+        label:this.machineForm.controls["name"].value,
+        link: `/dashboard/${this.machineForm.controls["id"].value}`,
+        faIcon : ''
       });
       this.menuService.menuItems$.next(menu);
-      this.loader.loading$.next(false);
+     // this.loader.loading$.next(false);
       this.dialogRef.close({
         result: true
       });

@@ -126,10 +126,45 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: #d4edda;
     border-color: #c3e6cb;
   }
-  .btn{
-    margin-left: 5px;
+  button{
+    margin-left: 5px !important;
   }
 
   
+  button:focus{
+    outline:none !important;
+    
+  }
+
+  .dialog-actions{
+    margin-top: 30px;
+  }
+
+  .mat-list-base .mat-list-item{
+    color: #a6b0cf;
+  }
+
+  .mat-drawer{
+    background-color: #2a3042;
+    color: #a6b0cf;
+  }
+
+  .mat-toolbar.mat-primary{
+    background-color: #fff;
+    color: #495057;
+  }
+
+  .container-fluid{
+    margin-top: 50px;
+  }
+
+  .mat-drawer-container{
+    background-color: #f8f8fb;
+  }
+
+  .mat-toolbar{
+    color: #f3f3f9;
+  }
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+

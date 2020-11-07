@@ -1,0 +1,36 @@
+<form [formGroup]="form">
+    <div class="form-group" >
+      <label>Email</label>
+      <input type="text" 
+      [ngClass]="{'is-invalid': form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched) && formSubmitted}"
+       type="text" class="form-control" 
+       formControlName="email" 
+       class="form-control"
+        placeholder="Enter user email">
+    
+    </div>
+  
+    <div class="form-group" >
+        <label>Passsword</label>
+        <input type="text" 
+        [ngClass]="{'is-invalid': form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched) && formSubmitted}" 
+        type="text" class="form-control"
+         formControlName="password"
+          class="form-control" 
+          placeholder="Enter user password">
+      
+      </div>
+    
+      <div class="form-check">
+        <input class="form-check-input"  formControlName="isAdmin" type="checkbox" value="" id="defaultCheck1">
+        <label class="form-check-label" for="defaultCheck1">
+        Is Admin
+        </label>
+      </div>
+   
+  </form>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button (click)="save()" class="btn btn-primary">Save changes</button>
+    <button  (click)="close()" class="btn btn-secondary">Cancel</button>
+  </div>

@@ -1,5 +1,6 @@
 export class Menu{
-    title: string;
-    route: string;
-    icon?: string;
+    label: string;
+    link: string;
+    faIcon?: string;
+    items?: Menu[]
 }

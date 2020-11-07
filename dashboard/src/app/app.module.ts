@@ -12,7 +12,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { DashComponent } from './dash/dash.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card'
 import { MatMenuModule } from '@angular/material/menu';
@@ -21,7 +20,7 @@ import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dia
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -44,6 +43,14 @@ import { NotificationComponent } from './shared/notification/notification.compon
 import { API_BASE_URL } from './core/constant';
 import { environment } from '../environments/environment';
 import { RunImageComponent } from './shared/run-image/run-image.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuardService } from './core/services/auth.guard.service';
+import { AuthService } from './core/services/auth.service';
+import { HomeComponent } from './home/home.component';
+import { TokenInterceptor } from './core/services/auth.interceptor';
+import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
+import { DashComponent } from './dashboard/dash.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -60,13 +67,16 @@ import { RunImageComponent } from './shared/run-image/run-image.component';
     ContainersMetricsComponent,
     LoaderComponent,
     NotificationComponent,
-    RunImageComponent
+    RunImageComponent,
+    LoginComponent,
+    HomeComponent
   
   
     
     
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -95,10 +105,20 @@ import { RunImageComponent } from './shared/run-image/run-image.component';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ReactiveFormsModule,
-    
+    NgMaterialMultilevelMenuModule
     
   ],
-  providers: [SocketService,{ provide: API_BASE_URL, useValue: environment.gateWay }],
+  providers: [
+    SocketService,
+    { provide: API_BASE_URL, useValue: environment.gateWay }
+    ,AuthService,AuthGuardService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  
+  ],
 
   bootstrap: [AppComponent]
   

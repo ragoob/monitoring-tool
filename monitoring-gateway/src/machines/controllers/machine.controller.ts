@@ -1,11 +1,14 @@
-import { Body, Controller, Get, Logger, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Machine } from '../models/machine.entity';
 import {Response} from 'express'
 import * as fs from 'fs';
 import * as path from 'path'
 import { MachineService } from '../services/machine.service';
 import { SocketService } from '../../core/socket.service';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../../authentication/services/jwt.auth.guard';
 @Controller('machine')
+
 export class MachineController {
     private logger: Logger = new Logger();
 
@@ -17,21 +20,25 @@ export class MachineController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     public saveConfigurations(@Body() machine: Machine): Promise<Machine>{
         return this.machineService.saveConfiguration(machine);
     }
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     public getAll(): Promise<Machine[]>{
         return this.machineService.getAll();
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     public getConfiguration(@Param('id') id: string): Promise<Machine>{
         return this.machineService.getConfiguration(id);
     }
 
     @Get('listen/:id')
+    @UseGuards(JwtAuthGuard)
     async healthcheck(@Res() res: Response, @Param('id') id: string){
     
       const machine = await this.machineService.getConfiguration(id);

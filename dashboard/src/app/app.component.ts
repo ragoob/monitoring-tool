@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'docker-metrics-app';
+export class AppComponent implements OnInit {
+  constructor(public auth: AuthService){
+    
+  }
+  ngOnInit(): void {
+    if(this.auth.isAuthenticated()){
+      this.auth.isLoggedIn$.next(true);
+    }
+  }
+  
 }

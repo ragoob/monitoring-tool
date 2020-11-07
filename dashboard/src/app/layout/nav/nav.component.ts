@@ -8,6 +8,8 @@ import { NewEngineComponent } from '../../shared/new-engine/new-engine.component
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../../shared/notification/notification.component';
 import { Guid } from "guid-typescript";
+import { AuthService } from '../../core/services/auth.service';
+import { MENU_CONFIG } from '../../core/config/constants';
 
 @Component({
   selector: 'app-nav',
@@ -15,6 +17,7 @@ import { Guid } from "guid-typescript";
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+  public config = MENU_CONFIG
   durationInSeconds = 5;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -25,10 +28,14 @@ export class NavComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver,
      public menuService: MenuService, 
      public dialog: MatDialog
-    ,private snackBar: MatSnackBar) {}
+    ,private snackBar: MatSnackBar,
+    public authService: AuthService
+    
+    ) {}
 
   public ngOnInit(): void {
-   this.menuService.loadMenu();
+
+   this.menuService.loadMenu(this.authService.getUser());
   }
 
   public addNewEngine(){
@@ -54,6 +61,13 @@ export class NavComponent implements OnInit {
       
     });
    
+  }
+
+  public selectedItem(event){
+
+  }
+  public logOut(){
+    this.authService.logOut();
   }
 
 }

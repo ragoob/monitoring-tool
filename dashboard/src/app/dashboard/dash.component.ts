@@ -35,10 +35,9 @@ export class DashComponent implements OnInit , OnDestroy{
    this.subscribers.forEach(s=> s.unsubscribe());
   }
   ngOnInit(): void {
-  
-   
   this.router.params.subscribe
     (d=> {
+     
       this.subscribers.forEach(s=> s.unsubscribe());
       this.connected = false;
 
