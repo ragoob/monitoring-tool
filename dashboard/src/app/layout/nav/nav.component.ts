@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import {Menu} from '../../../app/core/models/menu.model'
 import { MenuService } from '../../core/services/menu.service';
 import {MatDialog} from '@angular/material/dialog';
 import { NewEngineComponent } from '../../shared/new-engine/new-engine.component';
@@ -23,9 +22,12 @@ export class NavComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, public menuService: MenuService, public dialog: MatDialog
+  constructor(private breakpointObserver: BreakpointObserver,
+     public menuService: MenuService, 
+     public dialog: MatDialog
     ,private snackBar: MatSnackBar) {}
-  ngOnInit(): void {
+
+  public ngOnInit(): void {
    this.menuService.loadMenu();
   }
 
@@ -42,6 +44,7 @@ export class NavComponent implements OnInit {
       if(result.result){
         this.snackBar.openFromComponent(NotificationComponent, {
           duration: this.durationInSeconds * 1000,
+          panelClass: 'panel-success',
           data: {
             type: 'success',
             message: 'Machine has been added'

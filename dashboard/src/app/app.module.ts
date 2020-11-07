@@ -18,7 +18,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatMenuModule } from '@angular/material/menu';
 import { NewEngineComponent } from './shared/new-engine/new-engine.component';
 import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
@@ -41,6 +41,8 @@ import { ContainersMetricsComponent } from './charts/containers-metrics/containe
 import { LoaderComponent } from './shared/loader/loader.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NotificationComponent } from './shared/notification/notification.component';
+import { API_BASE_URL } from './core/constant';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,6 @@ import { NotificationComponent } from './shared/notification/notification.compon
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    FormsModule,
     ChartsModule,
     MatTableModule,
     MatPaginatorModule,
@@ -90,9 +91,12 @@ import { NotificationComponent } from './shared/notification/notification.compon
     ToolbarModule,
     NgbModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    
+    
   ],
-  providers: [SocketService],
+  providers: [SocketService,{ provide: API_BASE_URL, useValue: environment.gateWay }],
 
   bootstrap: [AppComponent]
   

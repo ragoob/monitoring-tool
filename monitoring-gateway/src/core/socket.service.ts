@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Events } from "./events";
 import {
   WebSocketGateway,
@@ -9,10 +9,11 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway()
 export class SocketService implements OnGatewayConnection  {
+  private logger: Logger = new Logger(SocketService.name);
   @WebSocketServer() io: Server;
 
   handleConnection(client: any, ...args: any[]) {
-    console.log(`client connected: ${JSON.stringify(client.id)}`);
+   this.logger.debug(`client connected: ${JSON.stringify(client.id)}`);
   }
    
     emit(event: string, data: any) {
@@ -20,10 +21,10 @@ export class SocketService implements OnGatewayConnection  {
     }
 
     startListen(deamonId: string){
-      console.log('start listen on ' + deamonId)
-        // start listen to Daemon events
-      this.io.on('connection',(socket)=> {
-       
+      this.logger.debug(`Start listen to daemon ${deamonId}`);
+
+       this.io.on('connection',(socket)=> {
+
         socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {   
           this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`,data);
          });
@@ -63,7 +64,6 @@ export class SocketService implements OnGatewayConnection  {
          });
 
          socket.on(`ui-${deamonId}-${Events.CONTAINER_STOP}`, (data: any) => {   
-           console.log('stopping container ' + data)
           this.io.emit(`${deamonId}-${Events.CONTAINER_STOP}`,data);
          });
 
@@ -71,9 +71,6 @@ export class SocketService implements OnGatewayConnection  {
           this.io.emit(`${deamonId}-${Events.CONTAINER_DELETE}`,data);
          });
 
-        
-
-         
       })
 
   

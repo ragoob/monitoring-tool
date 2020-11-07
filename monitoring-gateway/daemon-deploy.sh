@@ -15,7 +15,7 @@ sudo rm -rf $APP_DIR/monitoring-tool
 mkdir  $APP_DIR/monitoring-tool
 set -x
 cd  $APP_DIR/monitoring-tool
-curl -L https://github.com/ragoob/monitoring-tool/blob/main/linux-machines-monitoring-daemon/build.tar.gz?raw=true | tar zx
+curl -L {SOCKET_SERVER_URL}/machine/deamonBuild/download | tar zx
 
 sudo rm -rf /usr/bin/linux-machines-monitoring-daemon
 sudo mkdir /usr/bin/linux-machines-monitoring-daemon
@@ -34,7 +34,7 @@ After=network.target
 Environment=NODE_PORT=30003
 Environment=MACHINE_ID={Daemon_GUID}
 Environment=NODE_ENV=production
-Environment=SOCKET_SERVER={Daemon_URL}
+Environment=SOCKET_SERVER={SOCKET_SERVER_URL}
 Type=simple
 User=$USER
 ExecStart=$(which node)  /usr/bin/linux-machines-monitoring-daemon/dist/main

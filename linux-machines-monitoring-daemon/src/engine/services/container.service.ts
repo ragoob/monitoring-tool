@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as process from 'child_process';
 import { Container } from 'src/engine/models/container.model';
+import { CONTAINER_LOGS, CONTAINER_METERCIS, CONTAINER_START, CONTAINER_STOP, DOCKER_RUN_IMAGE, INSPECT_DOCKER_CONTAINERS, REMOVE_CONTAINER, RESTART_CONTAINER } from '../../core/commands';
 import { UtilService } from '../../core/util.service';
 import { ContainerMetrics } from '../models/container-metrics.model';
 import { CreateContainerOptions } from '../models/create-container-options.model';
@@ -15,33 +16,27 @@ export class ContainerService {
 
   // get list of containers
   public getList(): Promise<Container[]>{
-       const command: string = `docker inspect  $(docker ps -aq)`
       return    new Promise((resolve, reject) => {
-        try {
-          process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
-            if (error) {
-                return resolve([]);
-            }
+        process.exec(INSPECT_DOCKER_CONTAINERS,(error: process.ExecException,stdout: string, stderr: string)=> {
+          if (error) {
+              return resolve([]);
+          }
 
-            if(stdout && stdout.length > 0){
-              resolve(this.util.parseDockerContainers(stdout));
-            }
-            else{
-              resolve([])
-            }
-            
-        });
-        } catch (error) {
+          if(stdout && stdout.length > 0){
+            resolve(this.util.parseDockerContainers(stdout));
+          }
+          else{
+            resolve([])
+          }
           
-          resolve([])
-        }
+      });
     })
   }
 
   // restart container
   public restart(containerId: string,withAutoRestart?: boolean): Promise<DockerCommandResult>{
    const unLessStopped = withAutoRestart ? 'unless-stopped' : ''
-   const command: string = `docker update --restart ${unLessStopped} ${containerId}`;
+   const command: string = `${RESTART_CONTAINER} ${unLessStopped} ${containerId}`;
    return  new Promise((resolve, reject) => {
     process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
          if (error) {
@@ -61,7 +56,7 @@ export class ContainerService {
 
   // start stopped container
   public start(containerId: string): Promise<DockerCommandResult>{
-    const command: string = `docker start  ${containerId}`;
+    const command: string = `${CONTAINER_START} ${containerId}`;
     return  new Promise((resolve, reject) => {
      process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
           if (error) {
@@ -82,7 +77,7 @@ export class ContainerService {
    // stop container
 
    public stop(containerId: string): Promise<DockerCommandResult>{
-    const command: string = `docker stop  ${containerId}`;
+    const command: string = `${CONTAINER_STOP}  ${containerId}`;
     return  new Promise((resolve, reject) => {
      process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
           if (error) {
@@ -103,7 +98,7 @@ export class ContainerService {
    // rm container
 
   public killContainer(containerId: string) : Promise<DockerCommandResult>{
-    const command: string = `docker rm -f ${containerId}`;
+    const command: string = `${REMOVE_CONTAINER} ${containerId}`;
     return  new Promise((resolve, reject) => {
      process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
           if (error) {
@@ -145,7 +140,7 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
 
 // show container logs
   public logs(containerId: string): Promise<string>{
-    const command: string = `docker logs ${containerId}`;
+    const command: string = `${CONTAINER_LOGS} ${containerId}`;
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
            if (error) {
@@ -159,7 +154,7 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
 
   // get metrics of a containers
   public metrics(containerId: string): Promise<ContainerMetrics>{
-    const command: string = `docker stats --no-stream --format='{{json .}}' ${containerId}`;
+    const command: string = `${CONTAINER_METERCIS} ${containerId}`;
     return  new Promise((resolve, reject) => {
       try {
         process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
@@ -185,10 +180,10 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
 
     // get metrics of a all containers
   public metricsAll(): Promise<ContainerMetrics[]>{
-    const command: string = `docker stats --no-stream --format='{{json .}}'`;
+  
     return  new Promise((resolve, reject) => {
       try {
-        process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+        process.exec(CONTAINER_METERCIS,(error: process.ExecException,stdout: string, stderr: string)=> {
           if (error) {
            return resolve([]);
           }
@@ -212,7 +207,7 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
   // build docker 
 
   private buildCreateContainerCommand(options: CreateContainerOptions): string{
-    let command = `docker run `
+    let command = `${DOCKER_RUN_IMAGE} `
     if(options.ports){
       const ports = options.ports.map((port)=>{
         return ` -p ${port.hostPort}:${port.containerPort} `

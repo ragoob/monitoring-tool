@@ -5,6 +5,7 @@ import { UtilService } from "../../core/util.service";
 import { MemoryUsage } from "../models/memory-usage.model";
 import { Thermal } from "../models/thermal.model";
 import { DiskUsage } from "../models/disk-usage.model";
+import { DISK_USAGE, DOCKER_INFO, MEMORY_USAGE } from "../../core/commands";
 
 @Injectable()
 export class EngineService{
@@ -14,9 +15,9 @@ export class EngineService{
     // Get engine memory usage 
 
     public getMemoryInfo(): Promise<MemoryUsage>{
-        const command = `free -m`;
+
         return    new Promise((resolve, reject) => {
-            process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+            process.exec(MEMORY_USAGE,(error: process.ExecException,stdout: string, stderr: string)=> {
                  if (error) {
                      return reject(error);
                  }
@@ -30,9 +31,8 @@ export class EngineService{
     // get docker engine information
 
     public getDockerEngineInfo(): Promise<DockerEngine>{
-        const command = `docker info   --format='{{json .}}'`;
         return    new Promise((resolve, reject) => {
-            process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+            process.exec(DOCKER_INFO,(error: process.ExecException,stdout: string, stderr: string)=> {
                  if (error) {
                      return reject(error);
                  }
@@ -62,9 +62,8 @@ export class EngineService{
 
    // disk usage 
    public getDiskUsage(): Promise<DiskUsage>{
-    const command = `df -h /`;
     return    new Promise((resolve, reject) => {
-        process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+        process.exec(DISK_USAGE,(error: process.ExecException,stdout: string, stderr: string)=> {
              if (error) {
                  return reject(error);
              }

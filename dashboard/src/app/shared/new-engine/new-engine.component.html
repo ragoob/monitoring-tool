@@ -2,10 +2,11 @@
 
 <div class="row">
 
-  <form [ngStyle]="{'width': '100%'}">
-    <div class="form-group">
+  <form [ngStyle]="{'width': '100%'}" [formGroup]="machineForm">
+    <div class="form-group" >
       <label for="exampleInputEmail1">Enter name for machine</label>
-      <input type="text" class="form-control"  [ngModelOptions]="{standalone: true}" [(ngModel)]="model"  placeholder="Enter name for machine">
+      <input [ngClass]="{'is-invalid': machineForm.controls['name'].invalid && (machineForm.controls['name'].dirty || machineForm.controls['name'].touched) && formSubmitted}" type="text" class="form-control" formControlName="name"   placeholder="Enter name for machine">
+      
     </div>
 
     <div class="input-group">

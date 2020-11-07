@@ -1,6 +1,14 @@
 <div class="container-fluid">
   <div class="page-header">
-    <h1  class="mat-h1">Dashboard {{title}}  <span class="deamon-status" [ngClass]="{'connected': connected,'connecting': !connected,'disconnected': disconnected}"></span>
+    <h1  class="mat-h1">Dashboard {{title}}  
+      <div *ngIf="!connected" class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+
+      <span  *ngIf="connected || disconnected" class="deamon-status" [ngClass]="{'connected': connected,'disconnected': disconnected}"></span>
+
+  
+     
       <span class="wait-daemon-message">
         {{connected ? 'Connected' : 'Loading ....'}}
       </span>

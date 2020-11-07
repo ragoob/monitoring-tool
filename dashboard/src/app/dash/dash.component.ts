@@ -1,16 +1,15 @@
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { DockerEngineService } from '../core/services/docker-engine.service';
 import { Engine } from '../core/models/engine.model';
 import { Route } from '@angular/compiler/src/core';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { ServerService } from '../core/services/server.service';
 import { Label, SingleDataSet,Color } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
 import { SocketService } from '../core/services/socket-io.service';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
+import { MachineService } from '../core/services/machine.service';
 
 @Component({
   selector: 'app-dash',
@@ -24,7 +23,12 @@ export class DashComponent implements OnInit , OnDestroy{
   public connected: boolean = false;
   public disconnected: boolean = false;
   private subscribers: Subscription[] = [];
-  constructor(private http: HttpClient,private socketService: SocketService,private router: ActivatedRoute,private route: Router,private serverService: ServerService) {}
+  constructor(private socketService: SocketService,
+    private router: ActivatedRoute,
+    private route: Router,
+    private machineService: MachineService
+    
+    ) {}
  
   ngOnDestroy(): void {
     
@@ -35,32 +39,36 @@ export class DashComponent implements OnInit , OnDestroy{
    
   this.router.params.subscribe
     (d=> {
-
       this.subscribers.forEach(s=> s.unsubscribe());
       this.connected = false;
-      const id = d.id;
-      this.daemonId = id;
-      this.title = this.serverService.getAll().find(d=> d.host === id).name;
-      this.http.get(`${environment.gateWay}/listen/${id}`)
-       .toPromise()
+
+      this.machineService.getMachine(d.id)
+      .then(machine=> {
+        console.log(machine)
+        this.daemonId = machine.id;
+        this.title= machine.name;
+        this.machineService.listen(machine.id)
        .then(d=> {
          this.subscribers.push(
-          this.socketService.getDeamonAlive(id)
+          this.socketService.getDeamonAlive(machine.id)
           .subscribe(s=> {
-            console.log(s)
+            console.info('connected')
             this.connected = true;
             this.aliveMessages.push(s);
           })
          )
        
        })
+      });
+      
+      
     
      
     })
   }
 
   public copyScript(){
-    const script: string = `curl ${environment.gateWay}/deployment/${this.daemonId} | sh`;
+    const script: string = `curl ${environment.gateWay}/machine/deployment/${this.daemonId} | sh`;
     const el = document.createElement('textarea');
     el.value = script;
     document.body.appendChild(el);

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  socketServer: 'https://monitoring-gatway.mohammedragab.com',
-  gateWay: 'https://monitoring-gatway.mohammedragab.com'
+  socketServer: 'http://localhost:3000',
+  gateWay: 'http://localhost:3000',
 };
 
 /*

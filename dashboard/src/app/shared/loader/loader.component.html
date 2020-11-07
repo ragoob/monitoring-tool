@@ -1,2 +1,5 @@
-<mat-spinner style="margin:0 auto;" 
-mode="indeterminate" *ngIf="loading"></mat-spinner>
+
+
+<div class="spinner-border text-primary" role="status" *ngIf="loader.loading$ | async">
+    <span class="sr-only">Loading...</span>
+  </div>

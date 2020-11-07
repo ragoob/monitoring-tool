@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-import { DockerModule } from './engine/docker.module';
+import { EngineModule } from './engine/engine.module';
 
 @Module({
   imports: [
@@ -8,7 +8,7 @@ import { DockerModule } from './engine/docker.module';
       ignoreEnvFile: process.env.NODE_ENV == 'production'
     }),
     
-    DockerModule
+    EngineModule
   ],
   controllers: [],
   providers: [],
