@@ -9,7 +9,7 @@ import { SocketService } from '../../core/socket.service';
 export class MachineController {
     private logger: Logger = new Logger();
 
-    private Listeners: string[] = [];
+    private Listeners: Map<string,boolean> = new Map<string,boolean>();
 
     constructor(private machineService: MachineService,
         private socketService: SocketService){
@@ -41,9 +41,10 @@ export class MachineController {
         return;
       }
       
-      if(this.Listeners.findIndex(d=> d === id.toString()) === -1){
+      this.logger.debug(this.Listeners)
+      if(!this.Listeners[id]){
         this.socketService.startListen(id.toString());
-        this.Listeners.push(id.toString());
+        this.Listeners[id] = true;
       }
      
       else{

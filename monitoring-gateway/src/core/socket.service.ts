@@ -13,7 +13,7 @@ export class SocketService implements OnGatewayConnection  {
   @WebSocketServer() io: Server;
 
   handleConnection(client: any, ...args: any[]) {
-   this.logger.debug(`client connected: ${JSON.stringify(client.id)}`);
+  // this.logger.debug(`client connected: ${JSON.stringify(client.id)}`);
   }
    
     emit(event: string, data: any) {
