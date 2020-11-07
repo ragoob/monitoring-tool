@@ -70,6 +70,11 @@ export class SocketService implements OnGatewayConnection  {
          socket.on(`ui-${deamonId}-${Events.CONTAINER_DELETE}`, (data: any) => {   
           this.io.emit(`${deamonId}-${Events.CONTAINER_DELETE}`,data);
          });
+         
+         socket.on(`ui-${deamonId}-${Events.DOCKER_RUN_IMAGE}`, (data: any) => {  
+           this.logger.debug("DOCKER_RUN_IMAGE" ,data)
+          this.io.emit(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`,data);
+         });
 
       })
 

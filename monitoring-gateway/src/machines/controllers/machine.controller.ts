@@ -85,9 +85,7 @@ export class MachineController {
     }
 
     private async read(path: string): Promise<string> {
-    
-     // const _path: string = path.join(__dirname,'daemon-deploy.sh');
-      return new Promise<string>((resolve, reject) => {
+          return new Promise<string>((resolve, reject) => {
         fs.readFile(
           path,
           (error: NodeJS.ErrnoException | null, data: Buffer) => {

@@ -43,6 +43,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NotificationComponent } from './shared/notification/notification.component';
 import { API_BASE_URL } from './core/constant';
 import { environment } from '../environments/environment';
+import { RunImageComponent } from './shared/run-image/run-image.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { environment } from '../environments/environment';
     ContainersComponent,
     ContainersMetricsComponent,
     LoaderComponent,
-    NotificationComponent
+    NotificationComponent,
+    RunImageComponent
   
   
     

@@ -4,7 +4,7 @@
 
   <form [ngStyle]="{'width': '100%'}" [formGroup]="machineForm">
     <div class="form-group" >
-      <label for="exampleInputEmail1">Enter name for machine</label>
+      <label>Enter name for machine</label>
       <input [ngClass]="{'is-invalid': machineForm.controls['name'].invalid && (machineForm.controls['name'].dirty || machineForm.controls['name'].touched) && formSubmitted}" type="text" class="form-control" formControlName="name"   placeholder="Enter name for machine">
       
     </div>
@@ -21,6 +21,6 @@
   </div>
 
   <div mat-dialog-actions>
-    <button (click)="addNew()" mat-button color="primary">Save</button>
-    <button (click)="close()" mat-button  cdkFocusInitial>cancel</button>
+    <button (click)="addNew()" class="btn btn-primary">Save</button>
+    <button (click)="close()" class="btn btn-secondary">Cancel</button>
   </div>

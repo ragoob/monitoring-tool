@@ -119,10 +119,13 @@ export class ContainerService {
 //create container from image
 
 public createContainer(options: CreateContainerOptions) : Promise<DockerCommandResult>{
+ 
   const command: string = this.buildCreateContainerCommand(options);
+  this.logger.debug(command);
   return  new Promise((resolve, reject) => {
    process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
         if (error) {
+          this.logger.debug(error);
          resolve({
            success: false,
            error: error
@@ -208,41 +211,14 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
 
   private buildCreateContainerCommand(options: CreateContainerOptions): string{
     let command = `${DOCKER_RUN_IMAGE} `
-    if(options.ports){
-      const ports = options.ports.map((port)=>{
-        return ` -p ${port.hostPort}:${port.containerPort} `
-      });
-     command += ` ${ports.join(' ')}`
-    }
-
-    if(options.envirnment){
-      const env = options.envirnment.map((env)=>{
-        return ` -e ${env.key}=${env.value} `
-      });
-
-      command += ` ${env.join(' ')}`
-    }
-
-    if(options.options){
-      command += ` ${options.options.join(' -')}`
-    }
-
-    if(options.volumes){
-      const volumes =  options.volumes.map((v)=>{
-        return ` -v ${v} `
-      });
-
-      command += ` ${volumes.join(' ')}`
-    }
-
-    if(options.cmd){
-      command += ` -c ${options.cmd}`
+    if(options.args){
+      command = ` ${command} ${options.args}`
     }
 
     if(options.name){
-      command += ` --name ${options.name}`
+      command = ` ${command} --name ${options.name}`
     }
-    command += ` ${options.image}`
+    command = ` ${command} ${options.image}`
     return command;
   }
 }

@@ -1,10 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { Containers } from '../../core/models/containers.model';
 import { Events } from '../../core/models/events';
 import { SocketService } from '../../core/services/socket-io.service';
 import { NotificationComponent } from '../../shared/notification/notification.component';
+import { RunImageComponent } from '../../shared/run-image/run-image.component';
 
 @Component({
   selector: 'app-containers-list',
@@ -16,12 +18,16 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   containers: Containers[];
   @Input('daemonId') daemonId: string;
   subscribers: Subscription[] = [];
-  constructor(private socketService: SocketService,private snackBar: MatSnackBar) { }
-  ngOnDestroy(): void {
+  constructor(private socketService: SocketService,
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
+    
+    ) { }
+  public ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.subscribers.push(
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data: Containers[])=>{
@@ -32,7 +38,27 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public new(){
-    alert('feature under development');
+    const dialogRef = this.dialog.open(RunImageComponent,{
+      width: '80%',
+      //height: '80%',
+     data: {
+       daemonId: this.daemonId
+     }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.result){
+        this.snackBar.openFromComponent(NotificationComponent, {
+          duration: this.durationInSeconds * 1000,
+          panelClass: 'panel-success',
+          data: {
+            type: 'success',
+            message: 'Run image command sent to machine successfuly'
+          }
+        });
+      }
+      
+    });
   }
 
   private notification(message: string){

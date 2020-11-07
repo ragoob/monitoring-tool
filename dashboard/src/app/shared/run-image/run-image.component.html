@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+    <div class="form-group" >
+      <label>Image repository</label>
+      <input type="text" [ngClass]="{'is-invalid': form.controls['image'].invalid && (form.controls['image'].dirty || form.controls['image'].touched) && formSubmitted}" type="text" class="form-control" formControlName="image" class="form-control" placeholder="Enter repository">
+    
+    </div>
+    <div class="form-group">
+        <label>Container Name</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Enter container Name">
+      
+      </div>
+
+    <div class="form-group">
+      <label >Arguments</label>
+      <textarea class="form-control" formControlName="args" placeholder="Add docker args example (-e , -v ,--name )">
+
+      </textarea>
+    </div>
+   
+  </form>
+
+  <div mat-dialog-actions>
+    <button (click)="run()" class="btn btn-primary">Run</button>
+    <button  (click)="close()" class="btn btn-secondary">Cancel</button>
+  </div>

@@ -1,5 +1,4 @@
 import { Injectable, Logger } from "@nestjs/common";
-import {SocketService } from "../../core/socket.service";
 import { ContainerService } from "./container.service";
 import { EngineService } from "./engine.service";
 
@@ -12,72 +11,72 @@ export class ServiceFactory{
       
   }
 
-  public async healthcheck(): Promise<any> {
-    const result = await this.engine.healthCheck();
-     return result;
+  public  healthcheck(): Promise<any> {
+    return this.engine.healthCheck();
+    
 }
 
-public async dockerInfo(): Promise<any> {
-    const result = this.engine.getDockerEngineInfo();
+public  dockerInfo(): Promise<any> {
+    return this.engine.getDockerEngineInfo();
   
-    return result;
+    
 }
 
-public async containersList() : Promise<any> {
-    const result = await this.continerService.getList();
+public  containersList() : Promise<any> {
+    return this.continerService.getList();
    
-    return result;
+   
     
 }
 
 
-public async containersUsage(): Promise<any> {
-    const result = await this.continerService.metricsAll();
-  
-    return result;
-}
-
-public async diskUsage(): Promise<any> {
-    const result = await this.engine.getDiskUsage();
-  
-    return result;
+public  containersUsage(): Promise<any> {
+    return this.continerService.metricsAll();
   
 }
 
-public async thermal(): Promise<any> {
-    const result = await this.engine.getThermal();
-    return result;
+public  diskUsage(): Promise<any> {
+    return  this.engine.getDiskUsage();
+    
+}
+
+public  thermal(): Promise<any> {
+ return this.engine.getThermal();
+    
+}
+
+public  memoryUsage(): Promise<any>  {
+   return  this.engine.getMemoryInfo();
+
+ 
+}
+
+public  startContainer(containerId: string): Promise<any>  {
+     return this.continerService.start(containerId);
+  
+ 
+}
+
+public  stopContainer(containerId: string): Promise<any>  {
+    return  this.continerService.stop(containerId);
+  
+ 
+}
+
+public  deleteContainer(containerId: string): Promise<any>  {
+   return  this.continerService.killContainer(containerId);
   
 }
 
-public async memoryUsage(): Promise<any>  {
-    const result = await this.engine.getMemoryInfo();
+public  restartContainer(containerId: string): Promise<any>  {
+    return   this.continerService.restart(containerId);
    
-    return result;
  
 }
 
-public async startContainer(containerId: string): Promise<any>  {
-    const result = await this.continerService.start(containerId);
-    return result;
- 
-}
-
-public async stopContainer(containerId: string): Promise<any>  {
-    const result = await this.continerService.stop(containerId);
-    return result;
- 
-}
-
-public async deleteContainer(containerId: string): Promise<any>  {
-    const result = await this.continerService.killContainer(containerId);
-    return result;
- 
-}
-
-public async restartContainer(containerId: string): Promise<any>  {
-    const result = await this.continerService.restart(containerId);
-    return result;
+public  runImage(data: any): Promise<any>  {
+   return  this.continerService.createContainer(data);
+    
  
 }
 

@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { throws } from 'assert';
 import { Events } from '../../core/events';
 import { SocketService } from '../../core/socket.service';
 import { ServiceFactory } from './service-factory.service';
@@ -10,52 +9,73 @@ export class TasksService implements OnModuleInit {
   constructor(private serviceFactory: ServiceFactory, private socketService: SocketService) {
 
   }
-  async onModuleInit() {
+   onModuleInit() {
 
     this.registerToDockerCommandEvents();
 
-    setInterval(async () => {
-      const info = await this.serviceFactory.dockerInfo();
-
+    setInterval( () => {
+     this.serviceFactory.dockerInfo()
+     .then(info=> {
       this.socketService.emitEvent(`${Events.DOCKER_ENGINE_INFO}`, info);
+     })
+
+   
 
     }, 5 * 1000)
-    setInterval(async () => {
-      const healthcheck = await this.serviceFactory.healthcheck();
+    setInterval( () => {
+       this.serviceFactory.healthcheck()
+       .then(healthcheck=> {
+        this.socketService.emitEvent(`${Events.HEALTH_CHECK}`, healthcheck);
+       })
 
-      this.socketService.emitEvent(`${Events.HEALTH_CHECK}`, healthcheck);
+     
     }
       , 5 * 1000);
 
-    setInterval(async () => {
-      const memory = await this.serviceFactory.memoryUsage();
-      this.socketService.emitEvent(`${Events.MEMORY_USAGE}`, memory);
+    setInterval( () => {
+      this.serviceFactory.memoryUsage()
+      .then(memory=> {
+        this.socketService.emitEvent(`${Events.MEMORY_USAGE}`, memory);
+      })
+     
     }
       , 5 * 1000);
 
-    setInterval(async () => {
+    setInterval( () => {
 
-      const thermal = await this.serviceFactory.thermal();
-      this.socketService.emitEvent(`${Events.TEMPERATURE}`, thermal);
+       this.serviceFactory.thermal()
+       .then(thermal=> {
+        this.socketService.emitEvent(`${Events.TEMPERATURE}`, thermal);
+       })
+     
 
     }
       , 5 * 1000);
 
-    setInterval(async () => {
-      const disk = await this.serviceFactory.diskUsage();
+    setInterval( () => {
+     this.serviceFactory.diskUsage()
+     .then(disk=> {
       this.socketService.emitEvent(`${Events.DISK_USAGE}`, disk);
+     })
+     
     }
       , 5 * 1000);
 
-    setInterval(async () => {
-      const disk = await this.serviceFactory.containersUsage();
-      this.socketService.emitEvent(`${Events.CONTAINERS_METRICS}`, disk);
+    setInterval( () => {
+      this.serviceFactory.containersUsage()
+      .then(disk=> {
+        this.socketService.emitEvent(`${Events.CONTAINERS_METRICS}`, disk);
+      })
+     
     }
       , 5 * 1000);
 
-    setInterval(async () => {
-      const disk = await this.serviceFactory.containersList();
-      this.socketService.emitEvent(`${Events.CONTAINERS_LIST}`, disk);
+    setInterval( () => {
+      this.serviceFactory.containersList()
+      .then(disk=> {
+        this.socketService.emitEvent(`${Events.CONTAINERS_LIST}`, disk);
+      })
+      
     }
       , 5 * 1000);
       
@@ -63,20 +83,26 @@ export class TasksService implements OnModuleInit {
 
 
   private registerToDockerCommandEvents(): void {
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_START}`, async (data) => {
-      await this.serviceFactory.startContainer(data);
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_START}`,  (data) => {
+       this.serviceFactory.startContainer(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_STOP}`, async (data) => {
-      await this.serviceFactory.stopContainer(data);
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_STOP}`,  (data) => {
+       this.serviceFactory.stopContainer(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_RESTART}`, async (data) => {
-      await this.serviceFactory.restartContainer(data);
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_RESTART}`,  (data) => {
+       this.serviceFactory.restartContainer(data);
     });
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_DELETE}`, async (data) => {
-      await this.serviceFactory.deleteContainer(data);
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_DELETE}`,  (data) => {
+       this.serviceFactory.deleteContainer(data);
     });
+
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.DOCKER_RUN_IMAGE}`,  (data) => {
+      this.serviceFactory.runImage(data);
+    });
+
+    
 
   }
 

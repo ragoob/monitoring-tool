@@ -9,11 +9,11 @@ export class SocketService {
   
 
    this.getSocket().on('connect_error', (err) => {
-      console.error('error in connection ', err);
+     // console.error('error in connection ', err);
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
-      console.error('timeout error', timeout);
+     // console.error('timeout error', timeout);
     });
 
     this.getSocket().on('connect', () => {
@@ -31,7 +31,8 @@ export class SocketService {
 
   public getSocket(){
   const socket =   io.connect(process.env.SOCKET_SERVER,{
-    reconnection: true
+    reconnection: true,
+    timeout: 1000 * 60 * 300
   });
 
     return socket;
@@ -40,10 +41,6 @@ export class SocketService {
 
   public emitEvent(event: string, data: any): any {
         const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
-        if(event === Events.MEMORY_USAGE){
-          console.log(`${new Date().toLocaleTimeString('it-IT')} push on ${machineEvent}`)
-
-        }
          this.getSocket().emit(machineEvent,data);
       
   }
