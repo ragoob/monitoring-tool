@@ -7,6 +7,7 @@ import { UserManagementController } from './controllers/user-management.controll
 import { User } from './models/user.entity';
 import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './services/jwt.strategy';
+const jwtSecretKey = process.env.JWT_SECRET;
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { JwtStrategy } from './services/jwt.strategy';
             defaultStrategy: 'jwt'
           }),
           JwtModule.register({
-            secret: process.env.JWT_SECRET || 'secret@2010!',
+            secret: jwtSecretKey,
             signOptions: {
               expiresIn: 86400,
             }
