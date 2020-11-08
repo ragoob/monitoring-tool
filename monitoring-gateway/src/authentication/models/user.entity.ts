@@ -19,8 +19,8 @@ export  class User{
      validatePassword(password: string): Promise<boolean> {
          return new Promise<boolean>((resolve,reject)=>{
             bcrypt.hash(password, this.passwordSalt)
-            .then((password: string)=> {
-                resolve(password === this.password);
+            .then((pwd: string)=> {
+                resolve(pwd === this.password);
             },error=> {
                 reject(error);
             })
