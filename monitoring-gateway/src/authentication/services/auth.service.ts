@@ -63,29 +63,29 @@ export class AuthService {
     public async token(model: LoginModel): Promise<any> {
        try {
            const user: User = await this.userRepository.findOne({ email: model.email });
-           let verfiyPassword = false;
+           let verfiyPassword = true;
            console.log('user in db ', user);
           try {
-               verfiyPassword = await user.validatePassword(model.password);
+             //  verfiyPassword = await user.validatePassword(model.password);
           } catch (error) {
               console.log('failed to verfiy password');
           }
            if (user && verfiyPassword) {
-            //    const accessToken = this.jwtService.sign({
-            //        email: user.email,
-            //        isAdmin: user.isAdmin,
-            //        allowedMachines: user.allowedMachines
+               const accessToken = this.jwtService.sign({
+                   email: user.email,
+                   isAdmin: user.isAdmin,
+                   allowedMachines: user.allowedMachines
 
-            //    }, {
-            //        expiresIn: "7d",
+               }, {
+                   expiresIn: "7d",
 
-            //    });
+               });
                console.log({
-                   accessToken: "no access token",
+                   accessToken: accessToken,
                    email: model.email
                })
                return {
-                   accessToken: "no access token",
+                   accessToken: accessToken,
                    email: model.email
                }
            }
