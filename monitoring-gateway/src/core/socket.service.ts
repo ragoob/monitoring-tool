@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-@WebSocketGateway(80,{
+@WebSocketGateway({
  serveClient: false,
  pingTimeout: 15000,
  pingInterval: 5000 
