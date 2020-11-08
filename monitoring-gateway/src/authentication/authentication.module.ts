@@ -7,7 +7,7 @@ import { UserManagementController } from './controllers/user-management.controll
 import { User } from './models/user.entity';
 import { AuthService } from './services/auth.service';
 import { JwtStrategy } from './services/jwt.strategy';
-const jwtSecretKey = process.env.JWT_SECRET;
+const jwtSecretKey = (process.env.JWT_SECRET || "secret@2010!");
 
 @Module({
     imports: [

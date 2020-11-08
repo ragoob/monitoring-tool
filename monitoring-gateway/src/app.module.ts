@@ -8,7 +8,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-    ignoreEnvFile: process.env.NODE_ENV == 'production'
+     ignoreEnvFile: process.env.NODE_ENV == 'production'
      }),
     TypeOrmModule.forRoot({
       type: 'postgres',
