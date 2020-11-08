@@ -1,4 +1,7 @@
-FROM node:12.13-alpine As development
+ FROM ubuntu:latest As development
+ USER root
+RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
+RUN apt-get -y install nodejs
 RUN apt-get update && apt-get install -y build-essential && apt-get install -y python
 WORKDIR /usr/src/app
 
@@ -10,8 +13,12 @@ COPY . .
 
 RUN npm run build
 
-FROM node:12.13-alpine as production
+FROM ubuntu:latest as production
+USER root
+RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
+RUN apt-get -y install nodejs
 RUN apt-get update && apt-get install -y build-essential && apt-get install -y python
+
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
