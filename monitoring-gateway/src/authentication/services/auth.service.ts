@@ -73,6 +73,10 @@ export class AuthService {
                    expiresIn: "7d",
 
                });
+               console.log({
+                   accessToken,
+                   email: model.email
+               })
                return {
                    accessToken,
                    email: model.email
