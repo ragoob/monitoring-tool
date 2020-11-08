@@ -9,7 +9,7 @@ import { Server } from 'socket.io';
 
 @WebSocketGateway({
  serveClient: false,
- pingTimeout: 15000,
+ pingTimeout: 300000,
  pingInterval: 5000 
 })
 export class SocketService implements OnGatewayConnection , OnModuleInit  {

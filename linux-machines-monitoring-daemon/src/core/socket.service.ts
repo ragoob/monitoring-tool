@@ -29,9 +29,10 @@ export class SocketService {
   }
 
   public getSocket(){
-  const socket =   io.connect(process.env.SOCKET_SERVER,{
+  const socket =   io(process.env.SOCKET_SERVER,{
     reconnection: true,
-    timeout: 1000 * 60 * 300,
+    timeout: 300000
+    
   });
 
     return socket;
