@@ -51,7 +51,7 @@ export class MachineController {
       this.logger.debug(this.Listeners)
       if(!this.Listeners[id]){
         this.socketService.startListen(id.toString());
-        this.Listeners[id] = true;
+        //this.Listeners[id] = true;
       }
      
       else{

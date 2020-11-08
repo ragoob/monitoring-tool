@@ -1,7 +1,6 @@
 
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io-client';
-import { Events } from './events';
 @Injectable()
 export class SocketService {
   sockets: SocketIOClient.Socket[] = [];
@@ -9,11 +8,11 @@ export class SocketService {
   
 
    this.getSocket().on('connect_error', (err) => {
-     // console.error('error in connection ', err);
+      console.log('error in connection ', err);
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
-     // console.error('timeout error', timeout);
+      console.log('timeout error', timeout);
     });
 
     this.getSocket().on('connect', () => {
@@ -32,7 +31,7 @@ export class SocketService {
   public getSocket(){
   const socket =   io.connect(process.env.SOCKET_SERVER,{
     reconnection: true,
-    timeout: 1000 * 60 * 300
+    timeout: 1000 * 60 * 300,
   });
 
     return socket;

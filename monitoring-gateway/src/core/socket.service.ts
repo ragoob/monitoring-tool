@@ -5,10 +5,14 @@ import {
   WebSocketServer,
   OnGatewayConnection,
 } from '@nestjs/websockets';
-import { Socket, Server } from 'socket.io';
+import { Server } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  pingInterval: 5000,
+  pingTimeout: 15000 
+})
 export class SocketService implements OnGatewayConnection  {
+  
   private logger: Logger = new Logger(SocketService.name);
   @WebSocketServer() io: Server;
 
@@ -21,10 +25,16 @@ export class SocketService implements OnGatewayConnection  {
     }
 
     startListen(deamonId: string){
-      this.logger.debug(`Start listen to daemon ${deamonId}`);
+      
+     
+      try {
+        this.removeListeners(deamonId);
+      } catch (error) {
+         console.log(`error in removing listeners ${error}`)
+      }
 
        this.io.on('connection',(socket)=> {
-
+        
         socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {   
           this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`,data);
          });
@@ -80,5 +90,21 @@ export class SocketService implements OnGatewayConnection  {
 
   
      
+    }
+
+     private  removeListeners(deamonId: string){
+      this.io.sockets.removeAllListeners(`${deamonId}-${Events.HEALTH_CHECK}`);
+      this.io.sockets.removeAllListeners(`${deamonId}-${Events.TEMPERATURE}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.MEMORY_USAGE}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DISK_USAGE}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DOCKER_ENGINE_INFO}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.HEALTH_CHECK}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_START}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_RESTART}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_STOP}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_DELETE}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_DETAILS}`);
+       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`);
+
     }
 }
