@@ -25,8 +25,6 @@ export class AuthController implements OnModuleInit{
 
     @Post('token')
      signIn(@Body(ValidationPipe) model: LoginModel): Promise<{}> {
-         this.logger.debug(model)
-        
         return this.authService.token(model);
     }
 }

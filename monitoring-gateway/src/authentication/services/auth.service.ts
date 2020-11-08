@@ -64,21 +64,21 @@ export class AuthService {
        try {
            const user: User = await this.userRepository.findOne({ email: model.email });
            if (user && await user.validatePassword(model.password)) {
-               const accessToken = this.jwtService.sign({
-                   email: user.email,
-                   isAdmin: user.isAdmin,
-                   allowedMachines: user.allowedMachines
+            //    const accessToken = this.jwtService.sign({
+            //        email: user.email,
+            //        isAdmin: user.isAdmin,
+            //        allowedMachines: user.allowedMachines
 
-               }, {
-                   expiresIn: "7d",
+            //    }, {
+            //        expiresIn: "7d",
 
-               });
+            //    });
                console.log({
-                   accessToken,
+                   accessToken: "no access token",
                    email: model.email
                })
                return {
-                   accessToken,
+                   accessToken: "no access token",
                    email: model.email
                }
            }
