@@ -1,5 +1,5 @@
 FROM node:12.13-alpine As development
-
+RUN apt-get update && apt-get install -y build-essential && apt-get install -y python
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 FROM node:12.13-alpine as production
-
+RUN apt-get update && apt-get install -y build-essential && apt-get install -y python
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
