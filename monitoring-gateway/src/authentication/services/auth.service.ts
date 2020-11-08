@@ -61,25 +61,34 @@ export class AuthService {
 
 
     public async token(model: LoginModel): Promise<any> {
-        const user: User = await this.userRepository.findOne({ email: model.email });
-        if (user && await user.validatePassword(model.password)) {
-            const accessToken = this.jwtService.sign({
-                email: user.email,
-                isAdmin: user.isAdmin,
-                allowedMachines: user.allowedMachines
-                
-            },{
-                expiresIn: "7d",
-                
-            });
-            return {
-                accessToken,
-                email: model.email
-            }
-        }
-        else {
-            throw new UnauthorizedException("Invalid username or password");
-        }
+       try {
+           const user: User = await this.userRepository.findOne({ email: model.email });
+           if (user && await user.validatePassword(model.password)) {
+               const accessToken = this.jwtService.sign({
+                   email: user.email,
+                   isAdmin: user.isAdmin,
+                   allowedMachines: user.allowedMachines
+
+               }, {
+                   expiresIn: "7d",
+
+               });
+               return {
+                   accessToken,
+                   email: model.email
+               }
+           }
+           else {
+               throw new UnauthorizedException("Invalid username or password");
+           }
+       } catch (error) {
+           console.log(error);
+           return {
+               error: error,
+               sussess: false
+           }
+           
+       }
     }
 
     public delete(id: number){
