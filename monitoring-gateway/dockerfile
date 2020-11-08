@@ -1,6 +1,6 @@
  FROM ubuntu:latest As development
  USER root
-RUN apt-get update && apt-get upgrade
+RUN apt-get -y update  && apt-get -y upgrade 
 RUN apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
 RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
 RUN apt-get -y install nodejs
@@ -17,7 +17,7 @@ RUN npm run build
 
 FROM ubuntu:latest as production
 USER root
-RUN apt-get update && apt-get upgrade
+RUN apt-get -y update  && apt-get -y upgrade 
 RUN apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
 RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
 RUN apt-get -y install nodejs
