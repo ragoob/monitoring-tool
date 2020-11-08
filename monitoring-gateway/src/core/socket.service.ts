@@ -8,8 +8,10 @@ import {
 import { Server } from 'socket.io';
 
 @WebSocketGateway({
-  pingInterval: 5000,
-  pingTimeout: 15000 
+  pingInterval: 10000,
+  pingTimeout: 5000,
+  serveClient: false
+  
 })
 export class SocketService implements OnGatewayConnection  {
   
