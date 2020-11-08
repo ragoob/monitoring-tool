@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit {
     .then(d=>{
         this.loading = false;
     },error=> {
+      this.loading =false;
       this.loginError = true;
     })
 
