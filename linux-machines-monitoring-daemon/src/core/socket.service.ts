@@ -32,6 +32,8 @@ export class SocketService {
   const socket =   io.connect(process.env.SOCKET_SERVER,{
     reconnection: true,
     timeout: 1000 * 60 * 300,
+    transports: ['websocket'],
+    upgrade: false
   });
 
     return socket;
