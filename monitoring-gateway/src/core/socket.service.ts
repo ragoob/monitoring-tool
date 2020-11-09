@@ -8,18 +8,19 @@ import {
 import { Server } from 'socket.io';
 
 @WebSocketGateway({
-  pingInterval: 10000,
-  pingTimeout: 5000,
-  serveClient: false
-  
+ serveClient: false,
+ pingTimeout: 300000,
+ pingInterval: 5000 
 })
-export class SocketService implements OnGatewayConnection  {
+export class SocketService implements OnGatewayConnection , OnModuleInit  {
+  onModuleInit() {
+  
+  }
   
   private logger: Logger = new Logger(SocketService.name);
   @WebSocketServer() io: Server;
-
+  
   handleConnection(client: any, ...args: any[]) {
-  // this.logger.debug(`client connected: ${JSON.stringify(client.id)}`);
   }
    
     emit(event: string, data: any) {
