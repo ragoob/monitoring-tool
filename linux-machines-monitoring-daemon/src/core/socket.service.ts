@@ -1,5 +1,6 @@
 
 import { Injectable } from '@nestjs/common';
+import { exception } from 'console';
 import * as io from 'socket.io-client';
 @Injectable()
 export class SocketService {
@@ -8,11 +9,11 @@ export class SocketService {
   
 
    this.getSocket().on('connect_error', (err) => {
-      console.log('error in connection ', err);
+     throw new exception(`connect_error ${err}`)
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
-      console.log('timeout error', timeout);
+      throw new exception(`connect_timeout ${timeout}`)
     });
 
     this.getSocket().on('connect', () => {
@@ -23,7 +24,7 @@ export class SocketService {
    
 
     this.getSocket().on('disconnect', (reason) => {
-      console.info('disconnected',reason)
+      throw new exception(`disconnect ${reason}`)
     });
     
   }
