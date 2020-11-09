@@ -31,14 +31,10 @@ export class SocketService {
   public getSocket(){
   const socket =   io(process.env.SOCKET_SERVER,{
     reconnection: true,
-<<<<<<< HEAD
-    timeout: 1000 * 60 * 300,
     transports: ['websocket'],
-    upgrade: false
-=======
+    upgrade: false,
     timeout: 300000
-    
->>>>>>> 5ba2c37b394e3a34646aba787b2f8f316e9025b1
+
   });
 
     return socket;
