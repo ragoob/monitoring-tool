@@ -6,9 +6,9 @@ set -e
 APP_DIR=/home/$USER/
 echo $APP_DIR
 ### Installing Node ###
- sudo apt-get -y install curl
-      curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-      sudo apt-get -y install nodejs
+#  sudo apt-get -y install curl
+#       curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+#       sudo apt-get -y install nodejs
 
 ### Automation steps ###
 sudo rm -rf $APP_DIR/monitoring-tool
