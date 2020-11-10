@@ -21,7 +21,7 @@ export class ContainersMetricsComponent implements OnInit {
   public lineChartLabels: Label[] = [];
   public lineChartOptions: ChartOptions = {
     responsive: true,
-    maintainAspectRatio: false
+   // maintainAspectRatio: false
   };
   public lineChartColors: Color[] = [
    
