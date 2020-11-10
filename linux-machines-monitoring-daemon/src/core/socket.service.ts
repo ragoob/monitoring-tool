@@ -9,11 +9,11 @@ export class SocketService {
   
 
    this.getSocket().on('connect_error', (err) => {
-     throw new exception(`connect_error ${err}`)
+     console.log(`connect_error`, err);
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
-      throw new exception(`connect_timeout ${timeout}`)
+      console.log(`connect_timeout`, timeout);
     });
 
     this.getSocket().on('connect', () => {
@@ -24,7 +24,7 @@ export class SocketService {
    
 
     this.getSocket().on('disconnect', (reason) => {
-      throw new exception(`disconnect ${reason}`)
+      console.log(`disconnect`, reason);
     });
     
   }
