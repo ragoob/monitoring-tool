@@ -15,6 +15,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   @Input('daemonId') daemonId: string;
   public pieChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false
   };
   public pieChartLabels: Label[] = ['Total', 'Used', 'Free'];
   public pieChartData: SingleDataSet = [0, 0, 0];
