@@ -35,6 +35,7 @@ Environment=NODE_PORT=30003
 Environment=MACHINE_ID={Daemon_GUID}
 Environment=NODE_ENV=production
 Environment=SOCKET_SERVER={SOCKET_SERVER_URL}
+Environment=NODE_TLS_REJECT_UNAUTHORIZED='0'
 Type=simple
 User=$USER
 ExecStart=$(which node)  /usr/bin/linux-machines-monitoring-daemon/dist/main

@@ -30,11 +30,14 @@ export class SocketService {
   }
 
   public getSocket(){
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
   const socket =   io(process.env.SOCKET_SERVER,{
     reconnection: true,
     transports: ['websocket'],
     upgrade: false,
-    timeout: 300000
+    timeout: 300000,
+    rejectUnauthorized: false
 
   });
 
@@ -43,6 +46,8 @@ export class SocketService {
 
 
   public emitEvent(event: string, data: any): any {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
         const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
          this.getSocket().emit(machineEvent,data);
       
