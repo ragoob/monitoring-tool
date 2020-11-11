@@ -51,6 +51,26 @@
   </div>
 
   <div class="row mb-4" *ngIf="connected">
+    <div class="col col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> Cpu tempurature </h5>
+          <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-6 col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"> Memory usage </h5>
+          <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="row mb-4" *ngIf="connected">
     <div class="col col-lg-12 col-md-12">
       <div class="card">
         <div class="card-body">
@@ -60,24 +80,7 @@
       </div>
     </div>
   </div>
-  <div class="row mb-4" *ngIf="connected">
-    <div class="col col-lg-6 col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">     Cpu tempurature </h5>
-          <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
-        </div>
-      </div>
-    </div>
-    <div class="col col-lg-6 col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">       Memory usage  </h5>
-          <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
-        </div>
-      </div>
-    </div>
-  </div>
+  
  
   <div class="row mb-4" *ngIf="connected">
     <div class="col col-lg-12">
