@@ -31,7 +31,7 @@ export class SocketService {
 
   public getSocket(){
 
-  const socket =   io.connect("http://192.168.1.7:3000",{
+    const socket = io.connect(process.env.SOCKET_SERVER,{
     reconnection: true,
     transports: ['websocket'],
     upgrade: false,

@@ -64,6 +64,7 @@ export class DashComponent implements OnInit , OnDestroy{
 
   public copyScript(){
 
+    //curl https://pi-mon-gateway.aptar.mobi/machine/deployment/f68b89a7-cf86-a43c-b44c-4ca05a9c573c | sh
     
     const script: string = `curl ${environment.gateWay}/machine/deployment/${this.daemonId} | sh`;
     const el = document.createElement('textarea');
