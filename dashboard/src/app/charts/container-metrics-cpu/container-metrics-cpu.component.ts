@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 import { ContainerMetrics } from '../../core/models/container-metrics.model';
 import { SocketService } from '../../core/services/socket-io.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -33,12 +35,15 @@ export class ContainerMetricsCpuComponent implements OnInit {
 
   @Input('daemonId') daemonId: string;
   private subscribers: Subscription[] = [];
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    ) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
 
   ngOnInit() {
+    this.spinner.show(ContainerMetricsCpuComponent.name);
     this.loadOptions();
     this.subscribers.push(
       this.socketService.getContainerUsage(this.daemonId)
@@ -56,11 +61,12 @@ export class ContainerMetricsCpuComponent implements OnInit {
             })
           }])
         
+         
 
 
         }
         
-      
+        this.spinner.hide(ContainerMetricsCpuComponent.name);
       })
     )
 
@@ -81,7 +87,7 @@ export class ContainerMetricsCpuComponent implements OnInit {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '10px'
+          columnWidth: '15px'
         }
       },
       dataLabels: {

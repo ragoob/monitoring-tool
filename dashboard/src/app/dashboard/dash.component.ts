@@ -10,6 +10,7 @@ import { SocketService } from '../core/services/socket-io.service';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { MachineService } from '../core/services/machine.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dash',
@@ -26,7 +27,8 @@ export class DashComponent implements OnInit , OnDestroy{
   constructor(private socketService: SocketService,
     private router: ActivatedRoute,
     private route: Router,
-    private machineService: MachineService
+    private machineService: MachineService,
+    private spinner: NgxSpinnerService
     
     ) {}
  
@@ -35,9 +37,9 @@ export class DashComponent implements OnInit , OnDestroy{
    this.subscribers.forEach(s=> s.unsubscribe());
   }
   ngOnInit(): void {
+    this.spinner.show();
   this.router.params.subscribe
     (d=> {
-     
       this.subscribers.forEach(s=> s.unsubscribe());
       this.connected = false;
 
@@ -51,6 +53,7 @@ export class DashComponent implements OnInit , OnDestroy{
           .subscribe(s=> {
             console.info('connected')
             this.connected = true;
+            this.spinner.hide();
             this.aliveMessages.push(s);
           })
          )
@@ -64,7 +67,7 @@ export class DashComponent implements OnInit , OnDestroy{
 
   public copyScript(){
 
-    //curl -k https://pi-mon-gateway.aptar.mobi/machine/deployment/7ac0c775-f48d-ec46-6add-870a14f57e09 | sh
+    //curl -k http://192.168.1.7/machine/deployment/6b5ada7a-a941-e5e2-8302-b8113f8c2006 | sh
     
     const script: string = `curl ${environment.gateWay}/machine/deployment/${this.daemonId} | sh`;
     const el = document.createElement('textarea');

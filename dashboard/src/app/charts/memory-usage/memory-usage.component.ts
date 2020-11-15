@@ -16,6 +16,7 @@ import {
   ApexLegend,
   ApexFill
 } from "ng-apexcharts";
+import { NgxSpinnerService } from 'ngx-spinner';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -44,11 +45,15 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
   public loading: boolean;
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    
+    ) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
   ngOnInit() {
+    this.spinner.show(MemoryUsageComponent.name);
     this.fillChartOPtions();
     this.loading = true;
     this.subscribers.push(
@@ -70,6 +75,8 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
            color: "#4e37b2"
          }])
        
+        this.spinner.hide(MemoryUsageComponent.name);
+
       })
     )
 

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 import { SocketService } from '../../core/services/socket-io.service';
@@ -20,10 +21,12 @@ export class TempCardComponent implements OnInit {
   public status: string = "success";
   constructor( private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private spinner: NgxSpinnerService
     ) { }
 
   ngOnInit(): void {
+    this.spinner.show(TempCardComponent.name);
     this.matIconRegistry.addSvgIcon(
       "thermometer",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/mdi-thermometer.svg")
@@ -54,6 +57,9 @@ export class TempCardComponent implements OnInit {
          else{
            this.status = "success"
          }
+
+        this.spinner.hide(TempCardComponent.name);
+
 
       })
     )

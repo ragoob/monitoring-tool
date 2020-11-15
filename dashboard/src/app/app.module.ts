@@ -63,6 +63,7 @@ import { DiskCardComponent } from './charts/disk-card/disk-card.component';
 import { CpuCardComponent } from './charts/cpu-card/cpu-card.component';
 import { TempCardComponent } from './charts/temp-card/temp-card.component';
 import { CpuUsageComponent } from './charts/cpu-usage/cpu-usage.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { CpuUsageComponent } from './charts/cpu-usage/cpu-usage.component';
     NgMaterialMultilevelMenuModule,
     FlexLayoutModule,
     NgApexchartsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgxSpinnerModule
     
   ],
   providers: [

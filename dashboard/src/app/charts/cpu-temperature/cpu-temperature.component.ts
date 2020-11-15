@@ -16,6 +16,7 @@ import {
   ApexLegend,
   ApexFill
 } from "ng-apexcharts";
+import { NgxSpinnerService } from 'ngx-spinner';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -42,13 +43,16 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
   @Input('daemonId') daemonId : string;
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    ) { }
   ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
   }
 
 
   ngOnInit() {
+    this.spinner.show(CpuTemperatureComponent.name);
     this.fillChartOPtions();
     this.subscribers.push(
       this.socketService.getDeamontemperature(this.daemonId)
@@ -70,6 +74,9 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
           }),
           color: "rgb(255, 119, 80)"
         }])
+
+        this.spinner.hide(CpuTemperatureComponent.name);
+
 
       })
     )

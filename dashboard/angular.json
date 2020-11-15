@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "docker-metrics-app"
+  "defaultProject": "docker-metrics-app",
+  "cli": {
+    "analytics": false
+  }
 }

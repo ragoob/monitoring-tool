@@ -8,6 +8,7 @@ import {
   ApexChart
 } from "ng-apexcharts";
 import { animate } from '@angular/animations';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -27,16 +28,21 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   @Input('daemonId') daemonId: string;
  
   private subscribers: Subscription[] = [];
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    
+    ) { }
   ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
   }
 
   ngOnInit() {
+    this.spinner.show(StorageUsageComponent.name);
     this.chartOptions = {
       series: [],
       chart: {
         width: '100%',
+        height: '200px',
         type: "pie",
         animations: {
           enabled: true,
@@ -74,6 +80,8 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
       .subscribe((disk: {size:number,used: number,free: number,dateTime:any})=> {
         if(disk && disk.size && disk.free){
           this.chart.updateSeries([disk.used, disk.free], true);
+          this.spinner.hide(StorageUsageComponent.name);
+
         }
       
        

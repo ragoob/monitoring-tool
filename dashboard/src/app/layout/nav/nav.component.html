@@ -35,6 +35,9 @@
    </mat-toolbar>
 
    <div class="container-fluid">
+      <ngx-spinner  [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium">
+        <p class="loading">Loading.....</p>
+      </ngx-spinner>
     <router-outlet></router-outlet>
   
    </div>

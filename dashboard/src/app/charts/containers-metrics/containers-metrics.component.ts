@@ -12,6 +12,7 @@ import {
   ApexPlotOptions,
   ApexYAxis
 } from "ng-apexcharts";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -32,7 +33,9 @@ export class ContainersMetricsComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
   private subscribers: Subscription[] = [];
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    ) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
@@ -40,6 +43,7 @@ export class ContainersMetricsComponent implements OnInit {
  
 
   ngOnInit() {
+    this.spinner.show(ContainersMetricsComponent.name);
     this.loadOptions();
     this.subscribers.push(
       this.socketService.getContainerUsage(this.daemonId)
@@ -55,8 +59,11 @@ export class ContainersMetricsComponent implements OnInit {
               }
             })
           }])
+
+         
+
         }
-        
+        this.spinner.hide(ContainersMetricsComponent.name);
       
       })
     )
@@ -78,7 +85,7 @@ export class ContainersMetricsComponent implements OnInit {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '10px'
+          columnWidth: '15px'
         }
       },
       dataLabels: {

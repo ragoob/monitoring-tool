@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Engine } from '../../core/models/engine.model';
@@ -14,18 +15,23 @@ export class SystemInfoComponent implements OnInit, OnDestroy {
   public info: Engine;
   private subscribers: Subscription[] = [];
 
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    
+    ) { }
 
   ngOnDestroy(): void {
   this.subscribers.forEach(s=> s.unsubscribe());
   }
 
   ngOnInit(): void {
+    this.spinner.show(SystemInfoComponent.name);
     this.subscribers.push(
       this.socketService.getInfo(this.daemonId)
       .subscribe((data:Engine)=> {
         
         this.info = data;
+        this.spinner.hide(SystemInfoComponent.name);
       })
     );
 

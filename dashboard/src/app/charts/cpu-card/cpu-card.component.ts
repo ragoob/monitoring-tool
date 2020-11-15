@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../../core/services/socket-io.service';
 
@@ -16,14 +17,15 @@ export class CpuCardComponent implements OnInit , OnDestroy{
   public avg: number;
   public status: string = "success";
   constructor( 
-    private socketService: SocketService
+    private socketService: SocketService,
+    private spinner: NgxSpinnerService
     ) { }
   ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
   }
 
   ngOnInit(): void {
-   
+    this.spinner.show(CpuCardComponent.name);
     this.subscribers.push(
       this.socketService.getDeamonCpuUsage(this.daemonId)
       .subscribe((data: {used: number,dateTime: any})=>{
@@ -48,6 +50,8 @@ export class CpuCardComponent implements OnInit , OnDestroy{
          else{
            this.status = "success"
          }
+
+        this.spinner.hide(CpuCardComponent.name);
 
       })
     )

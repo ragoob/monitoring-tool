@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { Containers } from '../../core/models/containers.model';
 import { Events } from '../../core/models/events';
@@ -20,7 +21,8 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   subscribers: Subscription[] = [];
   constructor(private socketService: SocketService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private spinner: NgxSpinnerService
     
     ) { }
   public ngOnDestroy(): void {
@@ -28,10 +30,13 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public ngOnInit(): void {
+    this.spinner.show(ContainersListComponent.name);
     this.subscribers.push(
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data: Containers[])=>{
         this.containers = data;
+        this.spinner.hide(ContainersListComponent.name);
+
       })
     )
     

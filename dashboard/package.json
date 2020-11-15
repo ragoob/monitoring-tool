@@ -33,6 +33,7 @@
     "ng-apexcharts": "^1.5.6",
     "ng-material-multilevel-menu": "^4.12.2",
     "ng2-charts": "^2.4.2",
+    "ngx-spinner": "^10.0.1",
     "primeicons": "^4.0.0",
     "primeng": "^10.0.3",
     "rxjs": "^6.6.3",

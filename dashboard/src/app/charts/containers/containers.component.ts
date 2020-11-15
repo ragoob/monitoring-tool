@@ -9,6 +9,7 @@ import {
   ApexResponsive,
   ApexChart
 } from "ng-apexcharts";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -33,18 +34,22 @@ export class ContainersComponent implements OnInit {
   public pieChartPlugins = [];
   private subscribers: Subscription[] = [];
   
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    ) { }
 
   ngOnDestroy(): void {
   this.subscribers.forEach(s=> s.unsubscribe());
   }
 
   ngOnInit(): void {
+    this.spinner.show(ContainersComponent.name);
     this.chartOptions = {
       series: [],
       
       chart: {
         width: '100%',
+        height: '200px',
         type: "pie",
         animations: {
           enabled: true,
@@ -94,7 +99,7 @@ export class ContainersComponent implements OnInit {
           ]
 
           this.chart.updateSeries([chartData[0],chartData[1],chartData[2]],true)
-           
+          this.spinner.hide(ContainersComponent.name);
 
         }
        

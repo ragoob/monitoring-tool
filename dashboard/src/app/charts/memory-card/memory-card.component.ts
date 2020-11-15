@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../../core/services/socket-io.service';
 
@@ -19,7 +20,8 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
   public status: string = "success";
   constructor(private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private spinner: NgxSpinnerService
     
     ) { }
   ngOnDestroy(): void {
@@ -27,6 +29,7 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.spinner.show(MemoryCardComponent.name);
     this.matIconRegistry.addSvgIcon(
       "ram-memory",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/ram-memory.svg")
@@ -56,6 +59,9 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
          else{
           this.status= "success"
          }
+
+        this.spinner.hide(MemoryCardComponent.name);
+
        
       })
     )

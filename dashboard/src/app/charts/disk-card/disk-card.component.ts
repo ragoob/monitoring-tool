@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../../core/services/socket-io.service';
 
@@ -17,7 +18,8 @@ export class DiskCardComponent implements OnInit {
   public usagePerc: number;
   public status: string = "success";
   constructor(
-    private socketService: SocketService
+    private socketService: SocketService,
+    private spinner: NgxSpinnerService
     
     ) { }
   ngOnDestroy(): void {
@@ -25,7 +27,7 @@ export class DiskCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
+    this.spinner.show(DiskCardComponent.name);
     this.subscribers.push(
       this.socketService.getDisk(this.daemonId)
       .subscribe((data: {size:number,used: number,free: number,dateTime:any})=> {
@@ -45,6 +47,9 @@ export class DiskCardComponent implements OnInit {
         else{
          this.status= "success"
         }
+
+        this.spinner.hide(DiskCardComponent.name);
+
        
       })
     )
