@@ -61,7 +61,11 @@ export class AuthService {
 
 
     public async token(model: LoginModel): Promise<any> {
-        const user: User = await this.userRepository.findOne({ email: model.email });
+        const user: User = await this.userRepository.findOne({
+            where: {
+                'LOWER(email)': model.email.toLowerCase()
+            },
+        });
         const verfiyPassword = await user.validatePassword(model.password);
         if (user && verfiyPassword) {
             const accessToken = this.jwtService.sign({

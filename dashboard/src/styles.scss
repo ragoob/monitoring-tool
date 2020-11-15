@@ -235,6 +235,14 @@ h5 {
   max-height: 300px;
 }
 
+.min-h-350{
+  min-height: 300px;
+}
+
+.max-h-350{
+  max-height: 300px;
+}
+
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
