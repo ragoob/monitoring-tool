@@ -8,6 +8,7 @@ import { Events } from '../../core/models/events';
 import { SocketService } from '../../core/services/socket-io.service';
 import { NotificationComponent } from '../../shared/notification/notification.component';
 import { RunImageComponent } from '../../shared/run-image/run-image.component';
+import { ContainerDetailsComponent } from '../container-details/container-details.component';
 
 @Component({
   selector: 'app-containers-list',
@@ -107,7 +108,14 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public details(model: Containers){
-    alert('feature under development');
+    const dialogRef = this.dialog.open(ContainerDetailsComponent, {
+      width: '80%',
+      //height: '80%',
+      data: {
+        daemonId: this.daemonId,
+        containerId: model.id
+      }
+    });
   }
 
 

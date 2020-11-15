@@ -84,6 +84,13 @@ export class SocketService{
         return event$;
       }
 
+  public getContainerlogs(daemonId: string): Observable<any> {
+    const socket = this.getSocketInstance();
+
+    const event$ = socket.observable(`ui-${daemonId}-${Events.CONTAINER_LOGS}`);
+    return event$;
+  }
+
       private getSocketInstance(){
          return new RxSocket(`${environment.socketServer}`,{
           reconnection: true,

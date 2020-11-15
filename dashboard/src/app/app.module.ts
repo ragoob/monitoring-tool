@@ -64,6 +64,7 @@ import { CpuCardComponent } from './charts/cpu-card/cpu-card.component';
 import { TempCardComponent } from './charts/temp-card/temp-card.component';
 import { CpuUsageComponent } from './charts/cpu-usage/cpu-usage.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ContainerDetailsComponent } from './charts/container-details/container-details.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     DiskCardComponent,
     CpuCardComponent,
     TempCardComponent,
-    CpuUsageComponent
+    CpuUsageComponent,
+    ContainerDetailsComponent
   ],
   imports: [
     CommonModule,
