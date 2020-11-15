@@ -19,6 +19,7 @@ export class TempCardComponent implements OnInit {
   public avg: number;
   public usagePerc: number;
   public status: string = "success";
+  public loaded: boolean = false;
   constructor( private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private socketService: SocketService,
@@ -59,7 +60,7 @@ export class TempCardComponent implements OnInit {
          }
 
         this.spinner.hide('TempCardComponent');
-
+        this.loaded = true;
 
       })
     )

@@ -39,7 +39,7 @@ export type ChartOptions = {
 export class CpuTemperatureComponent implements OnInit, OnDestroy{
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
+  public loaded: boolean = false;
   @Input('daemonId') daemonId : string;
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
@@ -76,7 +76,7 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
         }])
 
         this.spinner.hide('CpuTemperatureComponent');
-
+        this.loaded = true;
 
       })
     )

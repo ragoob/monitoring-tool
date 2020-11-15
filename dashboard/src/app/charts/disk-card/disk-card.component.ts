@@ -17,6 +17,7 @@ export class DiskCardComponent implements OnInit {
   public avg: number;
   public usagePerc: number;
   public status: string = "success";
+  public loaded: boolean = false;
   constructor(
     private socketService: SocketService,
     private spinner: NgxSpinnerService
@@ -49,7 +50,7 @@ export class DiskCardComponent implements OnInit {
         }
 
         this.spinner.hide('DiskCardComponent');
-
+        this.loaded = true;
        
       })
     )

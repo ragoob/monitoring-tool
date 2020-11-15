@@ -1,7 +1,7 @@
 <ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="ContainerMetricsCpuComponent" [fullScreen]="false"
-    type="ball-fussion" size="medium"></ngx-spinner>
+    type="ball-clip-rotate-multiple"  size="medium"></ngx-spinner>
 
-<apx-chart #chart
+<apx-chart #chart [ngClass]="{'hidden': !loaded}"
 [series]="chartOptions.series"
 [chart]="chartOptions.chart"
 [dataLabels]="chartOptions.dataLabels"

@@ -44,7 +44,7 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
   @Input('daemonId') daemonId: string;
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
-  public loading: boolean;
+  public loaded: boolean = false;
   constructor(private socketService: SocketService,
     private spinner: NgxSpinnerService
     
@@ -55,7 +55,7 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.spinner.show('MemoryUsageComponent');
     this.fillChartOPtions();
-    this.loading = true;
+    
     this.subscribers.push(
       this.socketService.getDeamonMemoryUsage(this.daemonId)
       .subscribe((data: {total:number,used:number,free:number,dateTime:any})=> {
@@ -76,7 +76,7 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
          }])
        
         this.spinner.hide('MemoryUsageComponent');
-
+        this.loaded = true;
       })
     )
 

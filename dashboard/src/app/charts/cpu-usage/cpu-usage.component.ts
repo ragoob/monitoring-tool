@@ -44,7 +44,7 @@ export class CpuUsageComponent implements OnInit {
   @Input('daemonId') daemonId: string;
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
-  public loading: boolean;
+  public loaded: boolean = false;
   constructor(private socketService: SocketService,
     private spinner: NgxSpinnerService
     
@@ -55,7 +55,7 @@ export class CpuUsageComponent implements OnInit {
   ngOnInit() {
     this.spinner.show('CpuUsageComponent')
     this.fillChartOPtions();
-    this.loading = true;
+  
     this.subscribers.push(
       this.socketService.getDeamonCpuUsage(this.daemonId)
       .subscribe((data: {used:number,free:number,dateTime:any})=> {
@@ -77,7 +77,7 @@ export class CpuUsageComponent implements OnInit {
          }]);
 
         this.spinner.hide('CpuUsageComponent')
-       
+       this.loaded = true;
       })
     )
 

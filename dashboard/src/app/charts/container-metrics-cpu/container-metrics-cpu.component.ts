@@ -32,7 +32,7 @@ export type ChartOptions = {
 export class ContainerMetricsCpuComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
+  public loaded: boolean = false;
   @Input('daemonId') daemonId: string;
   private subscribers: Subscription[] = [];
   constructor(private socketService: SocketService,
@@ -67,6 +67,7 @@ export class ContainerMetricsCpuComponent implements OnInit {
         }
         
         this.spinner.hide('ContainerMetricsCpuComponent');
+        this.loaded = true;
       })
     )
 

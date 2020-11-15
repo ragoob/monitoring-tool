@@ -26,7 +26,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
- 
+  public loaded: boolean  = false;
   private subscribers: Subscription[] = [];
   constructor(private socketService: SocketService,
     private spinner: NgxSpinnerService
@@ -81,9 +81,10 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
         if(disk && disk.size && disk.free){
           this.chart.updateSeries([disk.used, disk.free], true);
           this.spinner.hide('StorageUsageComponent');
+          this.loaded = true;
 
         }
-      
+       
        
       })
     )

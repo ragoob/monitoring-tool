@@ -1,5 +1,5 @@
 <ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="ContainersListComponent" [fullScreen]="false"
-    type="ball-fussion" size="medium"></ngx-spinner>
+   type="ball-clip-rotate-multiple"  size="medium"></ngx-spinner>
 <p-toolbar styleClass="p-mb-4">
     <ng-template pTemplate="left">
         <button pButton pRipple label="Run new image" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="new()"></button>
@@ -33,7 +33,7 @@ currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
         <button *ngIf="!container.isRunning" pButton pRipple icon="pi pi-play" class="p-button-rounded p-button-info p-mr-2" (click)="start(container)"></button>
         <button *ngIf="container.isRunning" pButton pRipple icon="pi pi-pause" class="p-button-rounded  p-button-success p-mr-2" (click)="Stop(container)"></button>
         <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning p-mr-2" (click)="delete(container)"></button>
-        <!-- <button  pButton pRipple icon="pi pi-info-circle" class="p-button-rounded p-button-info p-mr-2" (click)="details(container)"></button> -->
+         <button  pButton pRipple icon="pi pi-info-circle" class="p-button-rounded p-button-info p-mr-2" (click)="details(container)"></button> 
         </td>
     </tr>
 </ng-template>

@@ -1,6 +1,6 @@
 <ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="ContainersComponent"
-    [fullScreen]="false" type="ball-fussion" size="medium"></ngx-spinner>
-<apx-chart #chart
+    [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
+<apx-chart #chart [ngClass]="{'hidden': !loaded}"
 [series]="chartOptions.series"
 [chart]="chartOptions.chart"
 [labels]="chartOptions.labels"

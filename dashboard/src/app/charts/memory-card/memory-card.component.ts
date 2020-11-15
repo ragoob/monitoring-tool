@@ -18,6 +18,7 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
   public avg: number;
   public usagePerc: number;
   public status: string = "success";
+  public loaded: boolean = false;
   constructor(private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private socketService: SocketService,
@@ -62,7 +63,7 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
 
         this.spinner.hide('MemoryCardComponent');
 
-       
+        this.loaded = true;
       })
     )
   }

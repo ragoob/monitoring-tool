@@ -29,7 +29,7 @@ export class ContainersComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
   public info: Engine;
-
+  public loaded: boolean = false;
   public pieChartLegend = true;
   public pieChartPlugins = [];
   private subscribers: Subscription[] = [];
@@ -104,7 +104,7 @@ export class ContainersComponent implements OnInit {
         }
 
         this.spinner.hide('ContainersComponent');
-       
+       this.loaded =true;
        
       })
     );

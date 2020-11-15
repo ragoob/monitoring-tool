@@ -33,6 +33,7 @@ export class ContainersMetricsComponent implements OnInit {
   public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
   private subscribers: Subscription[] = [];
+  public loaded: boolean = false;
   constructor(private socketService: SocketService,
     private spinner: NgxSpinnerService
     ) { }
@@ -64,7 +65,7 @@ export class ContainersMetricsComponent implements OnInit {
 
         }
         this.spinner.hide('ContainersMetricsComponent');
-      
+        this.loaded = true;
       })
     )
 

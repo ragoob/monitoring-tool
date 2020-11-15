@@ -1,4 +1,4 @@
-<app-loader></app-loader>
+
 <app-nav *ngIf="auth.isLoggedIn$ | async"></app-nav>
 
 <router-outlet *ngIf="!(auth.isLoggedIn$ | async)"></router-outlet>

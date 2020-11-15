@@ -16,6 +16,7 @@ export class CpuCardComponent implements OnInit , OnDestroy{
   public used: number;
   public avg: number;
   public status: string = "success";
+  public loaded: boolean = false;
   constructor( 
     private socketService: SocketService,
     private spinner: NgxSpinnerService
@@ -52,6 +53,7 @@ export class CpuCardComponent implements OnInit , OnDestroy{
          }
 
         this.spinner.hide('CpuCardComponent');
+        this.loaded = true;
 
       })
     )
