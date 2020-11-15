@@ -39,7 +39,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   ngOnInit() {
     this.spinner.show(StorageUsageComponent.name);
     this.chartOptions = {
-      series: [],
+      series: [0,0],
       chart: {
         width: '100%',
         height: '200px',

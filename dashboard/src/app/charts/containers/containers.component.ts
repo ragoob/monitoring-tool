@@ -45,7 +45,7 @@ export class ContainersComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.show(ContainersComponent.name);
     this.chartOptions = {
-      series: [],
+      series: [0, 0,0],
       
       chart: {
         width: '100%',
