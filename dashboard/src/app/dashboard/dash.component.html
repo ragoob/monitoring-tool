@@ -59,7 +59,7 @@
     
     <div class="row mb-2">
       <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card  [cssClass]="'h-400'" [hasHeader]="true" [title]="'Disk usage'">
+        <app-card   [hasHeader]="true" [title]="'Disk usage'">
           <app-storage-usage  [daemonId]="daemonId"></app-storage-usage>
         </app-card>
        
@@ -67,14 +67,14 @@
 
    
       <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card  [cssClass]="'h-400'" [hasHeader]="true" [title]="'Conatiners count'">
+        <app-card   [hasHeader]="true" [title]="'Conatiners count'">
           <app-containers [daemonId]="daemonId"></app-containers>
         </app-card>
        
       </div>
 
       <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [cssClass]="'h-400'" [hasHeader]="true" [title]="'Cpu usage real-time'">
+        <app-card [hasHeader]="true" [title]="'Cpu usage real-time'">
           <app-cpu-usage [daemonId]="daemonId"></app-cpu-usage>
         </app-card>
        
