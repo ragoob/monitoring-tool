@@ -119,9 +119,7 @@ export class CpuUsageComponent implements OnInit {
       
       xaxis: {
         type: "category",
-        labels: {
-          show: false
-        }
+        
       },
 
       fill: {
@@ -139,9 +137,7 @@ export class CpuUsageComponent implements OnInit {
       },
     
       yaxis: {
-        labels: {
-          show: false
-        }
+       
       },
       legend: {
         show: false
