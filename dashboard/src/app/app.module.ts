@@ -38,7 +38,7 @@ import { StorageUsageComponent } from './charts/storage-usage/storage-usage.comp
 import { ContainersComponent } from './charts/containers/containers.component';
 import { ContainersMetricsComponent } from './charts/containers-metrics/containers-metrics.component';
 import { LoaderComponent } from './shared/loader/loader.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressSpinner, MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NotificationComponent } from './shared/notification/notification.component';
 import { API_BASE_URL } from './core/constant';
 import { environment } from '../environments/environment';
@@ -51,6 +51,18 @@ import { TokenInterceptor } from './core/services/auth.interceptor';
 import { NgMaterialMultilevelMenuModule } from 'ng-material-multilevel-menu';
 import { DashComponent } from './dashboard/dash.component';
 import { CommonModule } from '@angular/common';
+import { ContainerMetricsCpuComponent } from './charts/container-metrics-cpu/container-metrics-cpu.component';
+import { MenuListItemComponent } from './layout/menu-list-item/menu-list-item.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { PageTitleComponent } from './layout/page-title/page-title.component';
+import { CardComponent } from './shared/card/card.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MemoryCardComponent } from './charts/memory-card/memory-card.component';
+import { DiskCardComponent } from './charts/disk-card/disk-card.component';
+import { CpuCardComponent } from './charts/cpu-card/cpu-card.component';
+import { TempCardComponent } from './charts/temp-card/temp-card.component';
+import { CpuUsageComponent } from './charts/cpu-usage/cpu-usage.component';
 
 @NgModule({
   declarations: [
@@ -69,11 +81,16 @@ import { CommonModule } from '@angular/common';
     NotificationComponent,
     RunImageComponent,
     LoginComponent,
-    HomeComponent
-  
-  
-    
-    
+    HomeComponent,
+    ContainerMetricsCpuComponent,
+    MenuListItemComponent,
+    PageTitleComponent,
+    CardComponent,
+    MemoryCardComponent,
+    DiskCardComponent,
+    CpuCardComponent,
+    TempCardComponent,
+    CpuUsageComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +122,10 @@ import { CommonModule } from '@angular/common';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ReactiveFormsModule,
-    NgMaterialMultilevelMenuModule
+    NgMaterialMultilevelMenuModule,
+    FlexLayoutModule,
+    NgApexchartsModule,
+    MatProgressBarModule
     
   ],
   providers: [

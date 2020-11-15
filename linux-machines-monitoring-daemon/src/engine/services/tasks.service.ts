@@ -41,6 +41,16 @@ export class TasksService implements OnModuleInit {
     }
       , 5 * 1000);
 
+      setInterval( () => {
+        this.serviceFactory.cpuUsage()
+        .then(cpu=> {
+          this.socketService.emitEvent(`${Events.CPU_USAGE}`, cpu);
+        })
+       
+      }
+        , 5 * 1000);
+
+
     setInterval( () => {
 
        this.serviceFactory.thermal()

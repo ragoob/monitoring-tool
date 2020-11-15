@@ -45,10 +45,8 @@ export class DashComponent implements OnInit , OnDestroy{
       .then(machine=> {
         console.log(machine)
         this.daemonId = machine.id;
-        this.title= machine.name;
-        this.machineService.listen(machine.id)
-       .then(d=> {
-         this.subscribers.push(
+        this.title= `Dashboard ${machine.name}`;
+        this.subscribers.push(
           this.socketService.getDeamonAlive(machine.id)
           .subscribe(s=> {
             console.info('connected')
@@ -56,8 +54,6 @@ export class DashComponent implements OnInit , OnDestroy{
             this.aliveMessages.push(s);
           })
          )
-       
-       })
       });
       
       
@@ -67,6 +63,8 @@ export class DashComponent implements OnInit , OnDestroy{
   }
 
   public copyScript(){
+
+    
     const script: string = `curl ${environment.gateWay}/machine/deployment/${this.daemonId} | sh`;
     const el = document.createElement('textarea');
     el.value = script;

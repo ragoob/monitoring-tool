@@ -6,15 +6,11 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <ng-container>
-        <a *ngIf="_user.isAdmin" (click)="addNewEngine()" mat-list-item href="javascript:;"> <mat-icon aria-hidden="false" aria-label="Example home icon">addchart</mat-icon>Register hardware</a>
+        <a *ngIf="_user.isAdmin" (click)="addNewEngine()" mat-list-item href="javascript:;"> <mat-icon class="btn-icon" aria-hidden="false">addchart</mat-icon>Register hardware</a>
 
       </ng-container>
       
-
-      <ng-material-multilevel-menu [configuration]="config" [items]="menuService.menuItems$ | async" (selectedItem)="selectedItem($event)">
-      </ng-material-multilevel-menu>
-
-   
+      <app-menu-list-item  *ngFor="let item of menuService.menuItems$ | async" [item]="item"></app-menu-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -30,10 +26,11 @@
 
      <span>Hardware monitoring tool</span>
      <span class="example-spacer"></span>
-     <button mat-button [matMenuTriggerFor]="menu">Welcome {{_user.email}}</button>
+     <button mat-button [matMenuTriggerFor]="menu"><mat-icon>person_pin</mat-icon>{{_user.email}}</button>
      <mat-menu #menu="matMenu" class="wh-100">
+       <button mat-menu-item>Change password</button>
        <button (click)="logOut()" mat-menu-item>Log out</button>
-    
+
      </mat-menu>
    </mat-toolbar>
 

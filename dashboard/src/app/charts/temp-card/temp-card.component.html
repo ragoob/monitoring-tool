@@ -1,0 +1,19 @@
+<div class="iq-icon-box pi-bg-{{status}}">
+ <mat-icon svgIcon="thermometer"></mat-icon>
+</div>
+<div class="mt-4">
+  <h5 class="text-black text-uppercase">Cpu temperature</h5>
+  <h3 class="d-flex pi-text-{{status}}"> {{temperature}} °C
+
+    <span class="material-icons" *ngIf="status == 'success'">
+      south
+      </span>
+      <span class="material-icons" *ngIf="status != 'success'">
+        north
+        </span>
+  </h3>
+</div>
+<p class="mb-0 mt-1">Avg +{{avg}}°C</p>
+<div class="mt-3">
+  <mat-progress-bar class="pi-bg-{{status}}" mode="determinate" value="{{temperature}}"></mat-progress-bar>
+</div>

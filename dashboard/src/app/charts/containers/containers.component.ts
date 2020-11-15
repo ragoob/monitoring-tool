@@ -1,10 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChartOptions, ChartType } from 'chart.js';
-import { Label, SingleDataSet } from 'ng2-charts';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Containers } from '../../core/models/containers.model';
 import { Engine } from '../../core/models/engine.model';
 import { SocketService } from '../../core/services/socket-io.service';
+import {
+  ChartComponent,
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart
+} from "ng-apexcharts";
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  colors: any;
+};
 
 @Component({
   selector: 'app-containers',
@@ -12,22 +24,15 @@ import { SocketService } from '../../core/services/socket-io.service';
   styleUrls: ['./containers.component.scss']
 })
 export class ContainersComponent implements OnInit {
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
   public info: Engine;
-  public pieChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false
-  };
-  public pieChartLabels: Label[] = ['Running', 'Stopped', 'Paused'];
-  public pieChartData: SingleDataSet = [0, 0, 0];
-  public pieChartType: ChartType = 'pie';
+
   public pieChartLegend = true;
   public pieChartPlugins = [];
   private subscribers: Subscription[] = [];
-  public pieChartColors: Array < any > = [{
-    backgroundColor: ['#34c38f', 'rgba(0, 0, 0, 0.11)', '#f1b44c'],
-    borderColor: ['#34c38f', 'rgba(0, 0, 0, 0.11)', '#f1b44c']
- }];
+  
   constructor(private socketService: SocketService) { }
 
   ngOnDestroy(): void {
@@ -35,6 +40,48 @@ export class ContainersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chartOptions = {
+      series: [],
+      
+      chart: {
+        width: '100%',
+        type: "pie",
+        animations: {
+          enabled: true,
+          easing: 'easeinout',
+          speed: 1000,
+          animateGradually: {
+              enabled: true,
+              delay: 150
+          },
+          dynamicAnimation: {
+              enabled: true,
+              speed: 350
+          }
+      }
+      },
+      
+      colors: ['#1ee2ac', '#dc3545', '#ff7750'],
+      labels: ["Running","Exited","Paused"],
+    
+  
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+          
+            },
+            legend: {
+              position: "bottom"
+            
+            }
+          }
+        }
+      ]
+    };
+
     this.subscribers.push(
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data:Containers[])=> {
@@ -44,7 +91,10 @@ export class ContainersComponent implements OnInit {
             data.filter(d=> d.status === 'exited').length,
             data.filter(d=> d.paused).length
           ]
-          this.pieChartData = chartData;
+
+          this.chart.updateSeries([chartData[0],chartData[1],chartData[2]],true)
+           
+
         }
        
        

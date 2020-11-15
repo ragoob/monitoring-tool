@@ -1,0 +1,21 @@
+
+
+  <div class="iq-icon-box pi-bg-{{status}}">
+    <mat-icon svgIcon="ram-memory"></mat-icon>
+  </div>
+  <div class="mt-4">
+    <h5 class="text-black text-uppercase">Memory</h5>
+    <h3 class="d-flex pi-text-{{status}}"> {{usage}} MB
+
+      <span class="material-icons" *ngIf="status == 'success'">
+        south
+        </span>
+        <span class="material-icons" *ngIf="status != 'success'">
+          north
+          </span>
+    </h3>
+  </div>
+  <p class="mb-0 mt-1">Avg +{{avg}}%</p>
+  <div class="mt-3">
+    <mat-progress-bar class="pi-bg-{{status}}" mode="determinate" value="{{usagePerc}}"></mat-progress-bar>
+  </div>

@@ -43,6 +43,14 @@ export class SocketService{
 
       }
 
+      public getDeamonCpuUsage(daemonId: string): Observable<any>{
+        const socket = this.getSocketInstance();
+
+        const event$ = socket.observable(`ui-${daemonId}-${Events.CPU_USAGE}`);
+        return event$;
+
+      }
+
       public getContainerUsage(daemonId: string): Observable<any>{
         const socket = this.getSocketInstance();
 

@@ -5,7 +5,7 @@ import { EngineModule } from './engine/engine.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      ignoreEnvFile: process.env.NODE_ENV == 'production'
+     // ignoreEnvFile: process.env.NODE_ENV == 'production'
     }),
     
     EngineModule

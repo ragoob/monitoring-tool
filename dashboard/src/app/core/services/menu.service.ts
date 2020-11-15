@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MENU_HOME, MENU_MANAGEMENT } from '../config/constants';
 import { Machine } from '../models/machine.model';
-import { Menu } from '../models/menu.model';
+import { NavItem } from '../models/nav-menu.model';
 import { User } from '../models/user.model';
 import { MachineService } from './machine.service';
 
@@ -10,7 +10,7 @@ import { MachineService } from './machine.service';
   providedIn: 'root'
 })
 export class MenuService {
-  menuItems$: BehaviorSubject<Menu[]> = new BehaviorSubject<Menu[]>([])
+  menuItems$: BehaviorSubject<NavItem[]> = new BehaviorSubject<NavItem[]>([])
   constructor(private machineService: MachineService) { 
 
   }
@@ -18,21 +18,21 @@ export class MenuService {
   loadMenu(user: User){
    this.machineService.getMachines()
    .then(d=> {
-     const menus: Menu[] = [
+     const menus: NavItem[] = [
       MENU_HOME, 
       {
-       label: 'Machines',
-       faIcon: '',
-       link: undefined,
-       items: []
+        displayName: 'Machines',
+        iconName: 'device_hub',
+        route: undefined,
+        children: []
      }]
-     menus[1].items = d
+     menus[1].children = d
      .filter(c=> user.isAdmin || (user.allowedMachines && user.allowedMachines.includes(c.id)))
      .map((item: Machine)=>{
        return {
-         label: item.name,
-         faIcon: "",
-         link: `/dashboard/${item.id}`
+        displayName: item.name,
+        iconName: "",
+        route: `/dashboard/${item.id}`
        }
      });
      if(user.isAdmin){

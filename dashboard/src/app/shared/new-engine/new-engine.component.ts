@@ -56,10 +56,10 @@ export class NewEngineComponent implements OnInit {
     .then(d=> {
       const menu = this.menuService.menuItems$.value;
       console.log(menu[1])
-      menu[1].items.push({
-        label:this.machineForm.controls["name"].value,
-        link: `/dashboard/${this.machineForm.controls["id"].value}`,
-        faIcon : ''
+      menu[1].children.push({
+        displayName:this.machineForm.controls["name"].value,
+        route: `/dashboard/${this.machineForm.controls["id"].value}`,
+        iconName : ''
       });
       this.menuService.menuItems$.next(menu);
      // this.loader.loading$.next(false);

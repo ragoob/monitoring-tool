@@ -9,3 +9,4 @@ export const DOCKER_RUN_IMAGE = 'docker run';
 export const DOCKER_INFO = 'docker info   --format=\'{{json .}}\'';
 export const MEMORY_USAGE = 'free -m';
 export const DISK_USAGE = 'df -h /';
+export const CPU_USAGE=  "top -bn1 | sed -n '/Cpu/p' | awk '{print $2}' | sed 's/..,//'"

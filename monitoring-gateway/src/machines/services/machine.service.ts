@@ -13,7 +13,7 @@ export class MachineService {
         return this.repository.save(machine);
     }
 
-    public getConfiguration(machineId: string): Promise<Machine>{
+    public getById(machineId: string): Promise<Machine>{
        return this.repository.findOne({id: machineId});
     }
 

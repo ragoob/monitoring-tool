@@ -9,12 +9,12 @@
 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
 <ng-template pTemplate="header">
     <tr>
-        <th>Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
-        <th>Name <p-sortIcon field="name"></p-sortIcon></th>
-        <th>Image <p-sortIcon field="image"></p-sortIcon></th>
-        <th>Status <p-sortIcon field="status"></p-sortIcon></th>
-        <th>Restart Count <p-sortIcon field="restartCount"></p-sortIcon></th>
-        <th>Ip address <p-sortIcon field="ipAddress"></p-sortIcon></th>
+        <th pSortableColumn="createdAt" >Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
+        <th pSortableColumn="name" >Name <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="image" >Image <p-sortIcon field="image"></p-sortIcon></th>
+        <th  pSortableColumn="status" >Status <p-sortIcon field="status"></p-sortIcon></th>
+        <th  pSortableColumn="restartCount"  >Restart Count <p-sortIcon field="restartCount"></p-sortIcon></th>
+        <th>Ip address</th>
         <th></th>
     </tr>
 </ng-template>

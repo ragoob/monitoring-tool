@@ -51,6 +51,10 @@ public  memoryUsage(): Promise<any>  {
  
 }
 
+public  cpuUsage(): Promise<any>  {
+    return  this.engine.getCpuUsage();
+ }
+
 public  startContainer(containerId: string): Promise<any>  {
      return this.continerService.start(containerId);
   

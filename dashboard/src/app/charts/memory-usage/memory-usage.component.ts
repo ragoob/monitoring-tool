@@ -1,9 +1,35 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { distinct, first, share, take } from 'rxjs/operators';
 import { SocketService } from '../../core/services/socket-io.service';
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexYAxis,
+  ApexMarkers,
+  ApexLegend,
+  ApexFill
+} from "ng-apexcharts";
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  dataLabels: ApexDataLabels;
+  grid: ApexGrid;
+  stroke: ApexStroke;
+  title: ApexTitleSubtitle;
+  yaxis: ApexYAxis,
+  markers: ApexMarkers,
+  legend: ApexLegend,
+  fill: ApexFill
+};
+
 
 @Component({
   selector: 'app-memory-usage',
@@ -11,48 +37,19 @@ import { SocketService } from '../../core/services/socket-io.service';
   styleUrls: ['./memory-usage.component.scss']
 })
 export class MemoryUsageComponent implements OnInit, OnDestroy {
-  
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
+
   @Input('daemonId') daemonId: string;
   private sortedList: any[] = [];
-  public lineChartData: ChartDataSets[] = [
-    { data: [], label: 'Memory Usage',fill:false },
-  ];
-  public lineChartLabels: Label[] = [];
-  public lineChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false
-  };
-  public lineChartColors: Color[] = [
-    {
-      backgroundColor: 'rgba(85, 110, 230, 0.2)',
-      borderColor: '#ffd75a',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: '#fff3cd',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: '#ffd75a',
-      pointHoverBorderColor: '#fff',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      borderWidth:1
-    },
-  ];
-  public lineChartLegend = true;
-  public lineChartType: ChartType = 'line';
-  public lineChartPlugins = [];
   private subscribers: Subscription[] = [];
   public loading: boolean;
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
-
   ngOnInit() {
+    this.fillChartOPtions();
     this.loading = true;
     this.subscribers.push(
       this.socketService.getDeamonMemoryUsage(this.daemonId)
@@ -60,22 +57,93 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
          const date = new Date(data.dateTime);
          data.dateTime = date;
           this.sortedList.push(data);
-          if(data.used && data.total && this.sortedList.length > 0){
-            const avg =   this.sortedList.map(d=> d.used).reduce((a, b) => a + b) / this.sortedList.length;
-  
-            this.lineChartData[0].label = `(Avg Usage ${Math.round(avg)} / ${data.total})` ;
-          }
-      
          this.sortedList = this.sortedList.sort((a, b) => a.dateTime - b.dateTime )
          .slice(Math.max(this.sortedList.length - 20, 0))
          .sort((a, b) => a.dateTime - b.dateTime );
-         this.lineChartData[0].data = this.sortedList.map(d=> d.used);
-         this.lineChartLabels = this.sortedList.map(label=> label.dateTime.toLocaleTimeString('it-IT'));
-         
-
+         this.chart.updateSeries([{
+           data: this.sortedList.map((item: {used:number,dateTime:any})=>{
+             return {
+               x: item.dateTime.toLocaleTimeString('it-IT'),
+               y: item.used
+             }
+           }),
+           color: "#4e37b2"
+         }])
+       
       })
     )
 
+  }
+
+  private fillChartOPtions(){
+    this.chartOptions = {
+      series: [
+        {
+          name: "Memory usage",
+          data: []
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "area",
+        zoom: {
+          enabled: false
+        },
+        stacked: false,
+        animations: {
+          enabled: true,
+          easing: 'linear',
+          dynamicAnimation: {
+            speed: 1000
+          }
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        lineCap: 'square',
+         width : 2
+      },
+      title: {
+        text: "",
+        align: "left"
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], 
+          opacity: 0.5
+        }
+      },
+     
+      
+      xaxis: {
+        type: "category"
+      },
+
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          inverseColors: false,
+          opacityFrom: 0.5,
+          opacityTo: 0,
+          stops: [0, 90, 100]
+        },
+      },
+      markers: {
+        size: 0
+      },
+    
+      yaxis: {
+       
+      },
+      legend: {
+        show: false
+      },
+      
+    };
   }
 
 }

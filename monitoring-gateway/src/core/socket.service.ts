@@ -51,6 +51,11 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
           this.io.emit(`ui-${deamonId}-${Events.MEMORY_USAGE}`,data);
          });
 
+         socket.on(`${deamonId}-${Events.CPU_USAGE}`, (data: any) => {   
+          console.log(`${new Date().toLocaleTimeString('it-IT')} ${Events.CPU_USAGE}` , data)       
+          this.io.emit(`ui-${deamonId}-${Events.CPU_USAGE}`,data);
+         });
+
          socket.on(`${deamonId}-${Events.DISK_USAGE}`, (data: any) => {   
           this.io.emit(`ui-${deamonId}-${Events.DISK_USAGE}`,data);
          });

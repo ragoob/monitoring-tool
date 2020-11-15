@@ -1,9 +1,20 @@
-import { ThrowStmt } from '@angular/compiler';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ChartOptions, ChartType } from 'chart.js';
-import { Label, SingleDataSet } from 'ng2-charts';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../../core/services/socket-io.service';
+import {
+  ChartComponent,
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart
+} from "ng-apexcharts";
+import { animate } from '@angular/animations';
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+};
 
 @Component({
   selector: 'app-storage-usage',
@@ -11,21 +22,10 @@ import { SocketService } from '../../core/services/socket-io.service';
   styleUrls: ['./storage-usage.component.scss']
 })
 export class StorageUsageComponent implements OnInit , OnDestroy {
-
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   @Input('daemonId') daemonId: string;
-  public pieChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false
-  };
-  public pieChartLabels: Label[] = ['Total', 'Used', 'Free'];
-  public pieChartData: SingleDataSet = [0, 0, 0];
-  public pieChartType: ChartType = 'pie';
-  public pieChartLegend = true;
-  public pieChartPlugins = [];
-  public pieChartColors: Array < any > = [{
-    backgroundColor: ['#556ee6', '#34c38f', '#f1b44c'],
-    borderColor: ['#556ee6', '#34c38f', '#f1b44c']
- }];
+ 
   private subscribers: Subscription[] = [];
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
@@ -33,11 +33,48 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   }
 
   ngOnInit() {
+    this.chartOptions = {
+      series: [],
+      chart: {
+        width: '100%',
+        type: "pie",
+        animations: {
+          enabled: true,
+          easing: 'easeout',
+          speed: 800,
+          animateGradually: {
+              enabled: true,
+              delay: 150
+          },
+          dynamicAnimation: {
+              enabled: true,
+              speed: 350
+          }
+      }
+      },
+      labels: ["Used","Free"],
+  
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
+
     this.subscribers.push(
       this.socketService.getDisk(this.daemonId)
       .subscribe((disk: {size:number,used: number,free: number,dateTime:any})=> {
         
-         this.pieChartData = [disk.size,disk.used,disk.free]
+        this.chart.updateSeries([disk.used,disk.free],true)
+       
       })
     )
   }

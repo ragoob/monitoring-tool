@@ -5,7 +5,7 @@ import { UtilService } from "../../core/util.service";
 import { MemoryUsage } from "../models/memory-usage.model";
 import { Thermal } from "../models/thermal.model";
 import { DiskUsage } from "../models/disk-usage.model";
-import { DISK_USAGE, DOCKER_INFO, MEMORY_USAGE } from "../../core/commands";
+import { CPU_USAGE, DISK_USAGE, DOCKER_INFO, MEMORY_USAGE } from "../../core/commands";
 
 @Injectable()
 export class EngineService{
@@ -86,6 +86,22 @@ public healthCheck(): Promise<string>{
      });
 }
 
+
+public getCpuUsage(): Promise<any>{
+
+    return    new Promise((resolve, reject) => {
+        process.exec(CPU_USAGE,(error: process.ExecException,stdout: string, stderr: string)=> {
+             if (error) {
+                 return reject(error);
+             }
+ 
+             resolve({
+                used: parseFloat(stdout),
+                dateTime: new Date()
+             });
+         });
+     });
+}
 
  
 }

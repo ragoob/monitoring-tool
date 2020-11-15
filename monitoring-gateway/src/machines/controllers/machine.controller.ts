@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, OnModuleInit, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Machine } from '../models/machine.entity';
 import {Response} from 'express'
 import * as fs from 'fs';
@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../../authentication/services/jwt.auth.guard';
 @Controller('machine')
 
-export class MachineController {
+export class MachineController implements OnModuleInit {
     private logger: Logger = new Logger();
 
     private Listeners: Map<string,boolean> = new Map<string,boolean>();
@@ -18,11 +18,26 @@ export class MachineController {
         private socketService: SocketService){
 
     }
+  async onModuleInit() {
+    this.logger.debug(`Start listen to sockets`)
+   const machines = await this.machineService.getAll();
+   machines.forEach(machine=> {
+    this.socketService.startListen(machine.id.toString());
+    this.Listeners[machine.id] = true;
+   });
+  }
 
     @Post()
     @UseGuards(JwtAuthGuard)
-    public saveConfigurations(@Body() machine: Machine): Promise<Machine>{
-        return this.machineService.saveConfiguration(machine);
+    public async saveConfigurations(@Body() machine: Machine): Promise<Machine>{
+       const createdMachine =  await this.machineService.saveConfiguration(machine);
+       if(createdMachine){
+        if(!this.Listeners[createdMachine.id]){
+          this.socketService.startListen(createdMachine.id.toString());
+          this.Listeners[createdMachine.id] = true;
+        }
+       }
+       return createdMachine;
     }
 
     @Get()
@@ -34,41 +49,13 @@ export class MachineController {
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     public getConfiguration(@Param('id') id: string): Promise<Machine>{
-        return this.machineService.getConfiguration(id);
+        return this.machineService.getById(id);
     }
 
-    @Get('listen/:id')
-    @UseGuards(JwtAuthGuard)
-    async healthcheck(@Res() res: Response, @Param('id') id: string){
-    
-      const machine = await this.machineService.getConfiguration(id);
-      if(!machine){
-        res.status(400)
-        .send("Machine does not exist");
-        return;
-      }
-      
-      this.logger.debug(this.Listeners)
-      if(!this.Listeners[id]){
-        this.socketService.startListen(id.toString());
-        this.Listeners[id] = true;
-      }
-     
-      else{
-        this.logger.log(`${id} is already registered`);
-      }
-     
-      res.status(200).send({
-        success: true
-      })
-      
-    }
-  
-   
     @Get('deployment/:id')
     async deployment(@Res() res: Response,@Param('id') id: string): Promise<void>{
       const _path: string = path.join(__dirname,'..','..','daemon-deploy.sh');
-      const machine = await this.machineService.getConfiguration(id);
+      const machine = await this.machineService.getById(id);
       if(!machine){
         res.status(400)
         .send("Machine does not exist");
@@ -76,6 +63,7 @@ export class MachineController {
       }
       const file  = await this.read(_path);
       const URL = process.env.SOCKET_SERVER_URL;
+      console.log(URL)
       const updatedfile = file.replace(/{Daemon_GUID}/g,id.toString()).replace(/{SOCKET_SERVER_URL}/g,URL);
       
       res.setHeader('Content-type', "application/octet-stream");

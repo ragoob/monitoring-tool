@@ -1,29 +1,18 @@
-import { Menu } from "../models/menu.model";
-
-export const MENU_CONFIG = {
-    paddingAtStart: true,
-    classname: 'my-custom-class',
-    listBackgroundColor: '#2a3042',
-    fontColor: '#a6b0cf',
-    backgroundColor: '#2a3042',
-    selectedListFontColor: '#fff',
-    useDividers: false,
-  };
-
-export const MENU_HOME:Menu = {
-  label: 'Home',
-  faIcon: '',
-  link : '/',
+import { NavItem } from '../models/nav-menu.model';
+export const MENU_HOME:NavItem = {
+  displayName: 'Home',
+  iconName: 'home',
+  route : '/',
 }
-export const MENU_MANAGEMENT: Menu[] = [
+export const MENU_MANAGEMENT: NavItem[] = [
   {
-    label: 'Management',
-    faIcon: '',
-    link : undefined,
-    items: [{
-      label : 'Users',
-      faIcon : '',
-      link : `/management/users`
+    displayName: 'Management',
+    iconName: 'admin_panel_settings',
+    route : undefined,
+    children: [{
+      displayName : 'Users',
+      iconName : '',
+      route : `/management/users`
     }]
   }
 ]

@@ -1,0 +1,27 @@
+
+
+:host {
+  display: block;
+  outline: none;
+
+  .mat-list-item.active {
+    color:#fff!important;
+  }
+  &:hover,
+  &:focus {
+    >.mat-list-item:not(.expanded) {
+      color:#fff!important;
+    }
+  }
+}
+
+
+.mat-list-item {
+  padding: 8px 0;
+
+  .routeIcon {
+    margin-right: 10px;
+  }
+}
+
+

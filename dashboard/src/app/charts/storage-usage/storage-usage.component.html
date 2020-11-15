@@ -1,11 +1,6 @@
-<div style="display: block;">
-  <canvas baseChart
-    [data]="pieChartData"
-    [labels]="pieChartLabels"
-    [chartType]="pieChartType"
-    [options]="pieChartOptions"
-    [plugins]="pieChartPlugins"
-    [colors]="pieChartColors"
-    [legend]="pieChartLegend">
-  </canvas>
-</div>
+<apx-chart #chart
+[series]="chartOptions.series"
+[chart]="chartOptions.chart"
+[labels]="chartOptions.labels"
+[responsive]="chartOptions.responsive"
+></apx-chart>

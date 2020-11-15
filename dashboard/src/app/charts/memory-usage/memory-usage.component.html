@@ -1,13 +1,12 @@
-<!-- <app-loader [loading]="loading"></app-loader> -->
 
-<div style="display: block;">
-  <canvas baseChart width="400" height="400"
-    [datasets]="lineChartData"
-    [labels]="lineChartLabels"
-    [options]="lineChartOptions"
-    [colors]="lineChartColors"
-    [legend]="lineChartLegend"
-    [chartType]="lineChartType"
-    [plugins]="lineChartPlugins">
-  </canvas>
-</div>
+<apx-chart #chart
+[series]="chartOptions.series"
+[chart]="chartOptions.chart"
+[xaxis]="chartOptions.xaxis"
+[yaxis]="chartOptions.yaxis"
+[dataLabels]="chartOptions.dataLabels"
+[grid]="chartOptions.grid"
+[stroke]="chartOptions.stroke"
+[title]="chartOptions.title"
+[fill]="chartOptions.fill"
+></apx-chart>

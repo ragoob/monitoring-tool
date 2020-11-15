@@ -26,9 +26,9 @@ export class UtilService{
       const result = this.parseStdout(stdout);
       if(result){
         return {
-          size: this.getNumber(result[0].Size),
-          free: this.getNumber(result[0].Avail),
-          used: this.getNumber(result[0].Used),
+          size: result[0].Size.endsWith('M') ?  this.getNumber(result[0].Size) / 1000 :  this.getNumber(result[0].Size),
+          free:  result[0].Avail.endsWith('M') ? this.getNumber(result[0].Avail) / 1000 : this.getNumber(result[0].Avail),
+          used:  result[0].Used.endsWith('M') ?  this.getNumber(result[0].Used) / 1000 :  this.getNumber(result[0].Used),
           dateTime: new Date()
         }
       }

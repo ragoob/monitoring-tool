@@ -30,9 +30,8 @@ export class SocketService {
   }
 
   public getSocket(){
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-  const socket =   io(process.env.SOCKET_SERVER,{
+  const socket =   io.connect("http://192.168.1.7:3000",{
     reconnection: true,
     transports: ['websocket'],
     upgrade: false,
@@ -46,7 +45,6 @@ export class SocketService {
 
 
   public emitEvent(event: string, data: any): any {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
         const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
          this.getSocket().emit(machineEvent,data);

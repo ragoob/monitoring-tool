@@ -1,0 +1,11 @@
+<div class="card {{cssClass}}">
+    <div class="card-header" *ngIf="hasHeader">
+        <h4 *ngIf="title" class="card-title">{{title}}</h4>
+      
+    </div>
+    <div class="card-body">
+        <h4  *ngIf="!hasHeader && title" class="card-title">{{title}}</h4>
+      <ng-content></ng-content>
+      
+    </div>
+  </div>

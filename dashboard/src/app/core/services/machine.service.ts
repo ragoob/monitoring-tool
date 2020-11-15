@@ -26,8 +26,4 @@ export class MachineService {
     .toPromise();
   }
 
-  public listen(id: string): Promise<any>{
-   return this.http.get(`${this.baseUrl}/machine/listen/${id}`)
-    .toPromise();
-  }
 }

@@ -1,9 +1,34 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { distinct, first, share } from 'rxjs/operators';
 import { SocketService } from '../../core/services/socket-io.service';
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexYAxis,
+  ApexMarkers,
+  ApexLegend,
+  ApexFill
+} from "ng-apexcharts";
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  dataLabels: ApexDataLabels;
+  grid: ApexGrid;
+  stroke: ApexStroke;
+  title: ApexTitleSubtitle;
+  yaxis: ApexYAxis,
+  markers: ApexMarkers,
+  legend: ApexLegend,
+  fill: ApexFill
+};
 
 @Component({
   selector: 'app-cpu-temperature',
@@ -11,38 +36,11 @@ import { SocketService } from '../../core/services/socket-io.service';
   styleUrls: ['./cpu-temperature.component.scss']
 })
 export class CpuTemperatureComponent implements OnInit, OnDestroy{
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
+
   @Input('daemonId') daemonId : string;
   private sortedList: any[] = [];
-  public lineChartData: ChartDataSets[] = [
-    { data: [], label: 'Cpu temperature',fill:true },
-  ];
-  public lineChartLabels: Label[] = [];
-  public lineChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false
-  };
-  public lineChartColors: Color[] = [
-    {
-            backgroundColor: 'rgba(85, 110, 230, 0.2)',
-            borderColor: '#dc3545',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: '#dc3545',
-            pointBackgroundColor: '#fff',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#dc3545',
-            pointHoverBorderColor: '#fff',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-    },
-  ];
-  public lineChartLegend = true;
-  public lineChartType: ChartType = 'line';
-  public lineChartPlugins = [];
   private subscribers: Subscription[] = [];
   constructor(private socketService: SocketService) { }
   ngOnDestroy(): void {
@@ -51,6 +49,7 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
 
 
   ngOnInit() {
+    this.fillChartOPtions();
     this.subscribers.push(
       this.socketService.getDeamontemperature(this.daemonId)
       .pipe(distinct())
@@ -61,16 +60,91 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
         this.sortedList = this.sortedList.sort((a, b) => a.dateTime - b.dateTime )
          .slice(Math.max(this.sortedList.length - 20, 0))
          .sort((a, b) => a.dateTime - b.dateTime );
-        this.lineChartData[0].data = this.sortedList.map(d=> d.temperature);
-        this.lineChartLabels = this.sortedList.map(label=> label.dateTime.toLocaleTimeString('it-IT'));
-        if(data.temperature  && this.sortedList.length > 0){
-          const avg =   this.sortedList.map(d=> d.temperature).reduce((a, b) => a + b) / this.sortedList.length;
+        
+         this.chart.updateSeries([{
+          data: this.sortedList.map((item: {temperature:number,dateTime:any})=>{
+            return {
+              x: item.dateTime.toLocaleTimeString('it-IT'),
+              y: item.temperature
+            }
+          }),
+          color: "rgb(255, 119, 80)"
+        }])
 
-          this.lineChartData[0].label = `(Avg temp ${Math.round(avg)} C)` ;
-        }
       })
     )
  
+  }
+
+  private fillChartOPtions(){
+    this.chartOptions = {
+      series: [
+        {
+          name: "Memory usage",
+          data: []
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "area",
+        zoom: {
+          enabled: false
+        },
+        stacked: false,
+        animations: {
+          enabled: true,
+          easing: 'linear',
+          dynamicAnimation: {
+            speed: 1000
+          }
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        lineCap: 'square',
+         width : 2
+      },
+      title: {
+        text: "",
+        align: "left"
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], 
+          opacity: 0.5
+        }
+      },
+     
+      
+      xaxis: {
+        type: "category"
+      },
+
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          inverseColors: false,
+          opacityFrom: 0.5,
+          opacityTo: 0,
+          stops: [0, 90, 100]
+        },
+      },
+      markers: {
+        size: 0
+      },
+    
+      yaxis: {
+       
+      },
+      legend: {
+        show: false
+      },
+      
+    };
   }
 
 }

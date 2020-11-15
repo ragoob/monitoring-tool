@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../../shared/notification/notification.component';
 import { Guid } from "guid-typescript";
 import { AuthService } from '../../core/services/auth.service';
-import { MENU_CONFIG } from '../../core/config/constants';
 
 @Component({
   selector: 'app-nav',
@@ -17,7 +16,6 @@ import { MENU_CONFIG } from '../../core/config/constants';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  public config = MENU_CONFIG
   durationInSeconds = 5;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
