@@ -37,6 +37,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
       series: [],
       chart: {
         width: '100%',
+        height: '100%',
         type: "pie",
         animations: {
           enabled: true,
@@ -72,8 +73,10 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
     this.subscribers.push(
       this.socketService.getDisk(this.daemonId)
       .subscribe((disk: {size:number,used: number,free: number,dateTime:any})=> {
-        
-        this.chart.updateSeries([disk.used,disk.free],true)
+        if(disk && disk.size && disk.free){
+          this.chart.updateSeries([disk.used, disk.free], true);
+        }
+      
        
       })
     )

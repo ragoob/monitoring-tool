@@ -45,6 +45,7 @@ export class ContainersComponent implements OnInit {
       
       chart: {
         width: '100%',
+        height: '100%',
         type: "pie",
         animations: {
           enabled: true,
@@ -71,6 +72,7 @@ export class ContainersComponent implements OnInit {
           options: {
             chart: {
               width: 200
+            
           
             },
             legend: {
