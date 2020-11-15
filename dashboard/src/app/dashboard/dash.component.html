@@ -21,7 +21,7 @@
           <app-card>
             <app-temp-card [daemonId]="daemonId"></app-temp-card>
           </app-card>
-          
+        </div>
       <div class="col col-lg-2 col-md-12 col-sm-12">
         <app-card>
 
@@ -39,7 +39,7 @@
       </div>
     
      
-    </div>
+  
   
  
     <div class="row mb-2">
@@ -59,7 +59,7 @@
     
     <div class="row mb-2">
       <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card  [cssClass]="'max-h-350 min-h-350'" [hasHeader]="true" [title]="'Disk usage'">
+        <app-card  [cssClass]="'h-400'" [hasHeader]="true" [title]="'Disk usage'">
           <app-storage-usage  [daemonId]="daemonId"></app-storage-usage>
         </app-card>
        
@@ -67,14 +67,14 @@
 
    
       <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card  [cssClass]="'max-h-350 min-h-350'" [hasHeader]="true" [title]="'Conatiners count'">
+        <app-card  [cssClass]="'h-400'" [hasHeader]="true" [title]="'Conatiners count'">
           <app-containers [daemonId]="daemonId"></app-containers>
         </app-card>
        
       </div>
 
       <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [cssClass]="'max-h-350 min-h-350'" [hasHeader]="true" [title]="'Cpu usage real-time'">
+        <app-card [cssClass]="'h-400'" [hasHeader]="true" [title]="'Cpu usage real-time'">
           <app-cpu-usage [daemonId]="daemonId"></app-cpu-usage>
         </app-card>
        
