@@ -99,9 +99,11 @@ export class ContainersComponent implements OnInit {
           ]
 
           this.chart.updateSeries([chartData[0],chartData[1],chartData[2]],true)
-          this.spinner.hide('ContainersComponent');
+        
 
         }
+
+        this.spinner.hide('ContainersComponent');
        
        
       })
