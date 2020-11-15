@@ -37,7 +37,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
       series: [],
       chart: {
         width: '100%',
-        height: '100%',
+        height: '85%',
         type: "pie",
         animations: {
           enabled: true,
