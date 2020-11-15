@@ -26,7 +26,7 @@ export class TempCardComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.spinner.show(TempCardComponent.name);
+    this.spinner.show('TempCardComponent');
     this.matIconRegistry.addSvgIcon(
       "thermometer",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/mdi-thermometer.svg")
@@ -58,7 +58,7 @@ export class TempCardComponent implements OnInit {
            this.status = "success"
          }
 
-        this.spinner.hide(TempCardComponent.name);
+        this.spinner.hide('TempCardComponent');
 
 
       })

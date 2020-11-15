@@ -29,7 +29,7 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.spinner.show(MemoryCardComponent.name);
+    this.spinner.show('MemoryCardComponent');
     this.matIconRegistry.addSvgIcon(
       "ram-memory",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/ram-memory.svg")
@@ -60,7 +60,7 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
           this.status= "success"
          }
 
-        this.spinner.hide(MemoryCardComponent.name);
+        this.spinner.hide('MemoryCardComponent');
 
        
       })

@@ -52,7 +52,7 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
 
 
   ngOnInit() {
-    this.spinner.show(CpuTemperatureComponent.name);
+    this.spinner.show('CpuTemperatureComponent');
     this.fillChartOPtions();
     this.subscribers.push(
       this.socketService.getDeamontemperature(this.daemonId)
@@ -75,7 +75,7 @@ export class CpuTemperatureComponent implements OnInit, OnDestroy{
           color: "rgb(255, 119, 80)"
         }])
 
-        this.spinner.hide(CpuTemperatureComponent.name);
+        this.spinner.hide('CpuTemperatureComponent');
 
 
       })

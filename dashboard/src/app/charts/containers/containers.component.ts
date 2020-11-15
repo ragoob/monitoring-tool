@@ -43,7 +43,7 @@ export class ContainersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show(ContainersComponent.name);
+    this.spinner.show('ContainersComponent');
     this.chartOptions = {
       series: [0, 0,0],
       
@@ -99,7 +99,7 @@ export class ContainersComponent implements OnInit {
           ]
 
           this.chart.updateSeries([chartData[0],chartData[1],chartData[2]],true)
-          this.spinner.hide(ContainersComponent.name);
+          this.spinner.hide('ContainersComponent');
 
         }
        

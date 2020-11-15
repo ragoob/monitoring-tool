@@ -43,7 +43,7 @@ export class ContainersMetricsComponent implements OnInit {
  
 
   ngOnInit() {
-    this.spinner.show(ContainersMetricsComponent.name);
+    this.spinner.show('ContainersMetricsComponent');
     this.loadOptions();
     this.subscribers.push(
       this.socketService.getContainerUsage(this.daemonId)
@@ -63,7 +63,7 @@ export class ContainersMetricsComponent implements OnInit {
          
 
         }
-        this.spinner.hide(ContainersMetricsComponent.name);
+        this.spinner.hide('ContainersMetricsComponent');
       
       })
     )

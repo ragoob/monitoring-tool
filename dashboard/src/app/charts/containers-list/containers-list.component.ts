@@ -30,12 +30,12 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public ngOnInit(): void {
-    this.spinner.show(ContainersListComponent.name);
+    this.spinner.show('ContainersListComponent');
     this.subscribers.push(
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data: Containers[])=>{
         this.containers = data;
-        this.spinner.hide(ContainersListComponent.name);
+        this.spinner.hide('ContainersListComponent');
 
       })
     )

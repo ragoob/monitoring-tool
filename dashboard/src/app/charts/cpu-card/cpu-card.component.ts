@@ -25,7 +25,7 @@ export class CpuCardComponent implements OnInit , OnDestroy{
   }
 
   ngOnInit(): void {
-    this.spinner.show(CpuCardComponent.name);
+    this.spinner.show('CpuCardComponent');
     this.subscribers.push(
       this.socketService.getDeamonCpuUsage(this.daemonId)
       .subscribe((data: {used: number,dateTime: any})=>{
@@ -51,7 +51,7 @@ export class CpuCardComponent implements OnInit , OnDestroy{
            this.status = "success"
          }
 
-        this.spinner.hide(CpuCardComponent.name);
+        this.spinner.hide('CpuCardComponent');
 
       })
     )

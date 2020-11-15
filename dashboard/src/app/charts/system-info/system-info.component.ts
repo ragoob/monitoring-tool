@@ -25,13 +25,13 @@ export class SystemInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.spinner.show(SystemInfoComponent.name);
+    this.spinner.show('SystemInfoComponent');
     this.subscribers.push(
       this.socketService.getInfo(this.daemonId)
       .subscribe((data:Engine)=> {
         
         this.info = data;
-        this.spinner.hide(SystemInfoComponent.name);
+        this.spinner.hide('SystemInfoComponent');
       })
     );
 

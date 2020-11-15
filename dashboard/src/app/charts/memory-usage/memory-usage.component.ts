@@ -53,7 +53,7 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
   ngOnInit() {
-    this.spinner.show(MemoryUsageComponent.name);
+    this.spinner.show('MemoryUsageComponent');
     this.fillChartOPtions();
     this.loading = true;
     this.subscribers.push(
@@ -75,7 +75,7 @@ export class MemoryUsageComponent implements OnInit, OnDestroy {
            color: "#4e37b2"
          }])
        
-        this.spinner.hide(MemoryUsageComponent.name);
+        this.spinner.hide('MemoryUsageComponent');
 
       })
     )

@@ -15,6 +15,7 @@ import {
   ApexFill
 } from "ng-apexcharts";
 import { Subscription } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -44,11 +45,15 @@ export class CpuUsageComponent implements OnInit {
   private sortedList: any[] = [];
   private subscribers: Subscription[] = [];
   public loading: boolean;
-  constructor(private socketService: SocketService) { }
+  constructor(private socketService: SocketService,
+    private spinner: NgxSpinnerService
+    
+    ) { }
   ngOnDestroy(): void {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
   ngOnInit() {
+    this.spinner.show('CpuUsageComponent')
     this.fillChartOPtions();
     this.loading = true;
     this.subscribers.push(
@@ -69,7 +74,9 @@ export class CpuUsageComponent implements OnInit {
              }
            }),
            color: "rgb(220, 53, 69)"
-         }])
+         }]);
+
+        this.spinner.hide('CpuUsageComponent')
        
       })
     )

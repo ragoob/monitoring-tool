@@ -37,7 +37,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
   }
 
   ngOnInit() {
-    this.spinner.show(StorageUsageComponent.name);
+    this.spinner.show('StorageUsageComponent');
     this.chartOptions = {
       series: [0,0],
       chart: {
@@ -80,7 +80,7 @@ export class StorageUsageComponent implements OnInit , OnDestroy {
       .subscribe((disk: {size:number,used: number,free: number,dateTime:any})=> {
         if(disk && disk.size && disk.free){
           this.chart.updateSeries([disk.used, disk.free], true);
-          this.spinner.hide(StorageUsageComponent.name);
+          this.spinner.hide('StorageUsageComponent');
 
         }
       

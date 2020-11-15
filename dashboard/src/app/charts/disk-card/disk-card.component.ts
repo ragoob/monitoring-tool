@@ -27,7 +27,7 @@ export class DiskCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show(DiskCardComponent.name);
+    this.spinner.show('DiskCardComponent');
     this.subscribers.push(
       this.socketService.getDisk(this.daemonId)
       .subscribe((data: {size:number,used: number,free: number,dateTime:any})=> {
@@ -48,7 +48,7 @@ export class DiskCardComponent implements OnInit {
          this.status= "success"
         }
 
-        this.spinner.hide(DiskCardComponent.name);
+        this.spinner.hide('DiskCardComponent');
 
        
       })
