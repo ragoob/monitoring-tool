@@ -112,7 +112,15 @@ export class TasksService implements OnModuleInit {
       this.serviceFactory.runImage(data);
     });
 
-    
+    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.ASK_CONTAINER_LOGS}`,  (data) => {
+      this.serviceFactory.containerLogs(data)
+      .then(logs=> {
+        this.socketService.emitEvent(`${Events.CONTAINER_LOGS}`, {
+          containerId: data,
+          logs: logs
+        });
+      });
+   });
 
   }
 

@@ -84,6 +84,12 @@ public  runImage(data: any): Promise<any>  {
  
 }
 
+public  containerLogs(containerId: string): Promise<string>  {
+    return   this.continerService.logs(containerId);
+   
+ 
+}
+
 
 
 }

@@ -94,6 +94,17 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
           this.io.emit(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`,data);
          });
 
+         socket.on(`ui-${deamonId}-${Events.ASK_CONTAINER_LOGS}`, (data: any) => {  
+        
+         this.io.emit(`${deamonId}-${Events.ASK_CONTAINER_LOGS}`,data);
+        });
+
+        socket.on(`${deamonId}-${Events.CONTAINER_LOGS}`, (data: any) => {   
+          this.io.emit(`ui-${deamonId}-${Events.CONTAINER_LOGS}`,data);
+         });
+
+         //
+
       })
 
   
