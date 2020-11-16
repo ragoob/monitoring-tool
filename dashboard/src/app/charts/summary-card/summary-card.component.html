@@ -3,27 +3,72 @@
 
   <app-card [hasHeader]="true" [title]="machine.name">
     <ng-container *ngIf="loaded && data">
-       <div class="mt-4">
-        <div class="iq-icon-box pi-bg-primary">
-            <mat-icon svgIcon="ram-memory"></mat-icon> <h3 style="float: left;" class="text-primary"> {{data.memory}}%</h3>
+      <ul class="m-0 p-0">
+        <li class="d-flex mb-4 align-items-center justify-content-between">
+          <div class="col-sm-9 p-0">
+            <div class="d-flex align-items-center">
+              <div class="iq-icon-box pi-bg-{{memoryStatus}} summary-icon">
+                <mat-icon svgIcon="ram-memory"></mat-icon>
+              </div>
+              <div class="media-support-info ml-3  pi-text-{{memoryStatus}}">
+                <h5>Memory usage</h5>
+                <p class="mb-0">
+                   {{data.memory}}%
+                </p>
+              </div>
+            </div>
           </div>
-       </div>
-       
-       <div class="mt-4">
-        <div class="iq-icon-box pi-bg-primary">
-            <span class="material-icons">
-                memory
-              </span> <h3 style="float: left;" class="text-primary"> {{data.cpu}}%</h3>
+          <div class="col-sm-3 p-0">
+              <mat-progress-bar class="pi-bg-{{memoryStatus}}" mode="determinate" value="{{data.memory}}"></mat-progress-bar>
           </div>
-       </div>
+        </li>
+          <li class="d-flex mb-4 align-items-center justify-content-between">
+            <div class="col-sm-9 p-0">
+              <div class="d-flex align-items-center">
+                <div class="iq-icon-box pi-bg-{{cpuStatus}} summary-icon">
+                <span class="material-icons">
+                  memory
+                </span>
+                </div>
+                <div class="media-support-info ml-3 pi-text-{{cpuStatus}}">
+                  <h5>CPU usage</h5>
+                  <p class="mb-0">
+                    {{data.cpu}}%
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 p-0">
+              <mat-progress-bar class="pi-bg-{{cpuStatus}}" mode="determinate" value="{{data.cpu}}"></mat-progress-bar>
+            </div>
+          </li>
 
-       <div class="mt-4">
-        <div class="iq-icon-box pi-bg-primary">
-            <span class="material-icons">
-                sd_storage
-              </span> <h3 style="float: left;" class="text-primary"> {{data.disk}}%</h3>
-          </div>
-       </div>
+            <li class="d-flex mb-4 align-items-center justify-content-between">
+              <div class="col-sm-9 p-0">
+                <div class="d-flex align-items-center">
+                  <div class="iq-icon-box pi-bg-{{diskStatus}} summary-icon">
+                  <span class="material-icons">
+                    sd_storage
+                  </span>
+                  </div>
+                  <div class="media-support-info ml-3  pi-text-{{diskStatus}}">
+                    <h5>Disk usage</h5>
+                    <p class="mb-0">
+                      {{data.disk}}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 p-0">
+                <mat-progress-bar class="pi-bg-{{diskStatus}}" mode="determinate" value="{{data.disk}}"></mat-progress-bar>
+              </div>
+            </li>
+      </ul>
+    
+       
+     
+
+     
 
       </ng-container>
   </app-card>

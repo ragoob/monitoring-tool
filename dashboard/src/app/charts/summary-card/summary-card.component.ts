@@ -1,9 +1,12 @@
+import { Summary } from '@angular/compiler';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { Machine } from '../../core/models/machine.model';
 import { SocketService } from '../../core/services/socket-io.service';
-export interface summary{
+export interface MachineSummary{
   cpu: number,
   memory: number,
   disk: number,
@@ -18,18 +21,32 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
   @Input('machine') machine: Machine;
   public loaded: boolean = false;
   private subscribers: Subscription[] = [];
-  public data: summary;
+  public data: MachineSummary;
+  public memoryStatus: string = "success";
+  public cpuStatus: string = "success";
+  public diskStatus: string ="success";
   constructor( private socketService: SocketService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    ) { }
 
   ngOnInit(): void {
-    this.spinner.show('DiskCardComponent-' + this.machine.id);
+    this.matIconRegistry.addSvgIcon(
+      "ram-memory",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/ram-memory.svg")
+    );
+    this.spinner.show('SummaryCardComponent-' + this.machine.id);
     this.subscribers.push(
       this.socketService.getSummary(this.machine.id)
-      .subscribe((res: summary)=> {
+        .subscribe((res: MachineSummary)=> {
         this.data = res;
 
-        this.spinner.hide('DiskCardComponent-'  + this.machine.id);
+          this.spinner.hide('SummaryCardComponent-'  + this.machine.id);
+          this.setCpuStatus(res);
+          this.setDiskStatus(res);
+          this.setMemoryStatus(res);
+
         this.loaded = true;
        
       })
@@ -40,4 +57,39 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
 
+  private setCpuStatus(data: MachineSummary): void{
+    if (data.cpu > 50 && data.cpu < 70) {
+      this.cpuStatus = "warning"
+    }
+    else if (data.cpu > 70) {
+      this.cpuStatus = "danger"
+    }
+    else {
+      this.cpuStatus = "success"
+    }
+  }
+
+  private setMemoryStatus(data: MachineSummary): void {
+    if (data.memory > 50 && data.memory < 70) {
+      this.memoryStatus = "warning"
+    }
+    else if (data.memory > 70) {
+      this.memoryStatus = "danger"
+    }
+    else {
+      this.memoryStatus = "success"
+    }
+  }
+
+  private setDiskStatus(data: MachineSummary): void {
+    if (data.disk > 50 && data.disk < 70) {
+      this.diskStatus = "warning"
+    }
+    else if (data.disk > 70) {
+      this.diskStatus = "danger"
+    }
+    else {
+      this.diskStatus = "success"
+    }
+  }
 }

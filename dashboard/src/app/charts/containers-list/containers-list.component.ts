@@ -22,8 +22,7 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   subscribers: Subscription[] = [];
   constructor(private socketService: SocketService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private spinner: NgxSpinnerService
+    public dialog: MatDialog
     
     ) { }
   public ngOnDestroy(): void {
@@ -31,12 +30,10 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public ngOnInit(): void {
-    this.spinner.show('ContainersListComponent');
     this.subscribers.push(
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data: Containers[])=>{
         this.containers = data;
-        this.spinner.hide('ContainersListComponent');
 
       })
     )
