@@ -12,9 +12,12 @@ import { SocketService } from '../../core/services/socket-io.service';
 })
 export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewInit  {
   @ViewChild("logs") logsElement: ElementRef;
-
+  public logsArgs: string = '--tail=100'
   public subscribers: Subscription[] = [];
   public logs: string;
+  public lastRows: number = 0;
+  public lastTime: number = 0;
+  public showErrorOnly: boolean;
   constructor(
     private dialogRef: MatDialogRef<ContainerDetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,15 +36,16 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
     this.subscribers.push(
       this.socketService.getContainerlogs(this.data.daemonId)
         .subscribe((result: any) => {
+          console.log(result)
           if (result.containerId == this.data.containerId) {
-            this.spinner.hide('ContainerDetailsComponent');
+           
             this.logs = result.logs;
-            const html = this.logs.replace(/\n/g, '<br/>');
+            const html =  '<pre class="code-container"><code>' + this.logs.replace(/\n/g, '<br/>') + '</code></pre>';
             this.logsElement.nativeElement.innerHTML = html;
 
           }
 
-
+          this.spinner.hide('ContainerDetailsComponent');
 
         })
     );
@@ -49,9 +53,35 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    this.socketService.emit(`ui-${this.data.daemonId}-${Events.ASK_CONTAINER_LOGS}`, this.data.containerId);
+    this.socketService.emit(`ui-${this.data.daemonId}-${Events.ASK_CONTAINER_LOGS}`,{
+      containerId: this.data.containerId,
+      args: this.logsArgs
+    });
     
 
+  }
+
+  public filter(){
+    let args: string = "";
+    if(this.lastRows && this.lastRows > 0){
+     
+      args = `${args} --tail=${this.lastRows} `;
+    }
+    if(this.lastTime && this.lastTime > 0){
+      args = `${args} --since=${this.lastTime}m `;
+    }
+
+    if(this.showErrorOnly){
+      args = !this.lastRows || this.lastRows === 0 ?  `${args} --tail=100 1>/dev/null ` : `${args}  1>/dev/null `;
+    }
+
+    console.log('args' , args);
+    this.socketService.emit(`ui-${this.data.daemonId}-${Events.ASK_CONTAINER_LOGS}`,{
+      containerId: this.data.containerId,
+      args: args.length > 0 ? args: this.logsArgs
+    });
+
+    this.spinner.show('ContainerDetailsComponent')
   }
 
   public close(){

@@ -160,6 +160,19 @@ export class UtilService{
 
   }
 
+  public parseSummary(str: string): any{
+    if(str && str.length > 0){
+      const values = str.split(',');
+      return {
+        cpu: this.getNumber(values[0]),
+        memory: this.getNumber(values[1]),
+        disk: this.getNumber(values[2]),
+        // temp: this.getNumber(values[3]),
+        dateTime: new Date()
+      }
+    }
+  }
+
   getNumber(str: string): number{
     const floatRegex =  /[+-]?([0-9]*[.])?[0-9]+/;
     return  str.match(floatRegex).map(function(v) { return parseFloat(v); })[0];

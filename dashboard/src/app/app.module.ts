@@ -65,7 +65,14 @@ import { TempCardComponent } from './charts/temp-card/temp-card.component';
 import { CpuUsageComponent } from './charts/cpu-usage/cpu-usage.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ContainerDetailsComponent } from './charts/container-details/container-details.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { SummaryCardComponent } from './charts/summary-card/summary-card.component';
 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -93,7 +100,8 @@ import { ContainerDetailsComponent } from './charts/container-details/container-
     CpuCardComponent,
     TempCardComponent,
     CpuUsageComponent,
-    ContainerDetailsComponent
+    ContainerDetailsComponent,
+    SummaryCardComponent
   ],
   imports: [
     CommonModule,
@@ -129,7 +137,8 @@ import { ContainerDetailsComponent } from './charts/container-details/container-
     FlexLayoutModule,
     NgApexchartsModule,
     MatProgressBarModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    PerfectScrollbarModule
     
   ],
   providers: [
@@ -140,6 +149,10 @@ import { ContainerDetailsComponent } from './charts/container-details/container-
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    },
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }
   
   ],

@@ -109,11 +109,13 @@ export class ContainersListComponent implements OnInit , OnDestroy{
 
   public details(model: Containers){
     const dialogRef = this.dialog.open(ContainerDetailsComponent, {
-      width: '80%',
-      //height: '80%',
+                    autoFocus: false,
+                    panelClass: 'trend-dialog',
+                    width: '80%', height: '680px',
       data: {
         daemonId: this.daemonId,
-        containerId: model.id
+        containerId: model.id,
+        containerName: model.name
       }
     });
   }

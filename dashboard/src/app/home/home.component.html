@@ -1,0 +1,8 @@
+<div class="row">
+    <ng-container *ngIf="list">
+        <div class="col col-lg-3" *ngFor="let item of list">
+            <app-summary-card   [machine]="item"></app-summary-card>
+
+        </div>
+    </ng-container>
+</div>

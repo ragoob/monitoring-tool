@@ -1,12 +1,77 @@
 <ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="ContainerDetailsComponent"
-  [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
-<div  style="height: 700px;">
+[fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
+<app-card [hasHeader]="true" [closable]="true" (close)="close()" [cssClass]="'card-no-border'" [title]="'Container logs (' + data.containerName + ')'">
 
+ <div class="row mb-1">
+  <div class="col col-lg-12">
+    <span class="hint">Default filter (last 100 lines)</span>
+    
+    <div class="form-inline">
+      <label for="rowCount" class="mr-sm-2">Filter by rows count</label>
+      <select id="rowCount" class="form-control mb-2 mr-sm-2" [(ngModel)]="lastRows">
+        <option value="0">
+          choose
+        </option>
+        <option value="10">
+          Last (10) rows
+        </option>
+        <option value="20">
+          Last (20) rows
+        </option>
+        <option value="50">
+          Last (50) rows
+        </option>
+        <option value="100">
+          Last (100) rows
+        </option>
+      </select>
 
-    <div #logs>
-     
+      <label for="Time" class="mr-sm-2">Filter by Time:</label>
+      <select class="form-control mb-2 mr-sm-2" id="time" [(ngModel)]="lastTime">
+        <option value="0">
+          choose
+        </option>
+        <option value="30">
+          Last 30 minutes
+        </option>
+        <option value="60">
+          Last 1 hour
+        </option>
+        <option value="120">
+          Last 2 hours
+        </option>
+        <option value="180">
+          Last 3 hours
+        </option>
+        <option value="240">
+          Last 4 hours
+        </option>
+        <option value="300">
+          Last 5 hours
+        </option>
+      </select>
+
+      <div class="form-check mb-2 mr-sm-2">
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="showErrorOnly">  Show errors only
+        </label>
+      </div>
+      <button type="button" class="btn btn-primary mb-2" (click)="filter()">Apply Filter</button>
     </div>
- 
-</div>
 
-<button type="button" class="btn btn-primary" (click)="close()">Close</button>
+  </div>
+ </div>
+<div class="row mb-2">
+<div class="col-lg-12">
+  <perfect-scrollbar style="max-height: 400px;">
+  
+    <div class="card-code" #logs></div>
+  
+    
+  </perfect-scrollbar>
+
+</div>
+</div>
+</app-card>
+
+

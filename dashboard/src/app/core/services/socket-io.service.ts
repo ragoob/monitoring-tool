@@ -84,6 +84,14 @@ export class SocketService{
         return event$;
       }
 
+      public getSummary(daemonId: string): Observable<any>{
+        const socket = this.getSocketInstance();
+
+        const event$ = socket.observable(`ui-${daemonId}-${Events.SUMMARY}`);
+        return event$;
+      }
+
+
   public getContainerlogs(daemonId: string): Observable<any> {
     const socket = this.getSocketInstance();
 

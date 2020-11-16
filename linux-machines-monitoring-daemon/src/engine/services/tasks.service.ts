@@ -32,6 +32,16 @@ export class TasksService implements OnModuleInit {
     }
       , 5 * 1000);
 
+      setInterval( () => {
+        this.serviceFactory.summary()
+        .then(summary=> {
+         this.socketService.emitEvent(`${Events.SUMMARY}`, summary);
+        })
+ 
+      
+     }
+       , 5 * 1000);
+
     setInterval( () => {
       this.serviceFactory.memoryUsage()
       .then(memory=> {
@@ -113,11 +123,12 @@ export class TasksService implements OnModuleInit {
     });
 
     this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.ASK_CONTAINER_LOGS}`,  (data) => {
-      this.serviceFactory.containerLogs(data)
-      .then(logs=> {
+      this.serviceFactory.containerLogs(data.containerId,data.args)
+      .then(value=> {
+        console.log('result',value.length)
         this.socketService.emitEvent(`${Events.CONTAINER_LOGS}`, {
-          containerId: data,
-          logs: logs
+          containerId: data.containerId,
+          logs: value
         });
       });
    });

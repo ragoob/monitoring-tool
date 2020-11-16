@@ -41,18 +41,22 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
         socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {   
           this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`,data);
          });
+
+         socket.on(`${deamonId}-${Events.SUMMARY}`, (data: any) => {   
+           this.logger.debug('summary ', JSON.stringify(data))
+          this.io.emit(`ui-${deamonId}-${Events.SUMMARY}`,data);
+         });
+
          
          socket.on(`${deamonId}-${Events.TEMPERATURE}`, (data: any) => {   
           this.io.emit(`ui-${deamonId}-${Events.TEMPERATURE}`,data);
          });
 
          socket.on(`${deamonId}-${Events.MEMORY_USAGE}`, (data: any) => {   
-          console.log(`${new Date().toLocaleTimeString('it-IT')} ${Events.MEMORY_USAGE}` , data)       
           this.io.emit(`ui-${deamonId}-${Events.MEMORY_USAGE}`,data);
          });
 
          socket.on(`${deamonId}-${Events.CPU_USAGE}`, (data: any) => {   
-          console.log(`${new Date().toLocaleTimeString('it-IT')} ${Events.CPU_USAGE}` , data)       
           this.io.emit(`ui-${deamonId}-${Events.CPU_USAGE}`,data);
          });
 
@@ -95,15 +99,15 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
          });
 
          socket.on(`ui-${deamonId}-${Events.ASK_CONTAINER_LOGS}`, (data: any) => {  
-        
+         this.logger.debug(`asking logs about ${data}`)
          this.io.emit(`${deamonId}-${Events.ASK_CONTAINER_LOGS}`,data);
         });
 
-        socket.on(`${deamonId}-${Events.CONTAINER_LOGS}`, (data: any) => {   
+        socket.on(`${deamonId}-${Events.CONTAINER_LOGS}`, (data: any) => { 
           this.io.emit(`ui-${deamonId}-${Events.CONTAINER_LOGS}`,data);
          });
 
-         //
+         
 
       })
 

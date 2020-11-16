@@ -84,12 +84,17 @@ public  runImage(data: any): Promise<any>  {
  
 }
 
-public  containerLogs(containerId: string): Promise<string>  {
-    return   this.continerService.logs(containerId);
+public  containerLogs(containerId: string, args: any): Promise<string>  {
+    return   this.continerService.logs(containerId,args);
    
  
 }
 
+public  summary(): Promise<string>  {
+    return   this.engine.getSummary();
+   
+ 
+}
 
 
 }

@@ -1,0 +1,29 @@
+<ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="SummaryCardComponent-{{machine.id}}"
+  [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
+
+  <app-card [hasHeader]="true" [title]="machine.name">
+    <ng-container *ngIf="loaded && data">
+       <div class="mt-4">
+        <div class="iq-icon-box pi-bg-primary">
+            <mat-icon svgIcon="ram-memory"></mat-icon> <h3 style="float: left;" class="text-primary"> {{data.memory}}%</h3>
+          </div>
+       </div>
+       
+       <div class="mt-4">
+        <div class="iq-icon-box pi-bg-primary">
+            <span class="material-icons">
+                memory
+              </span> <h3 style="float: left;" class="text-primary"> {{data.cpu}}%</h3>
+          </div>
+       </div>
+
+       <div class="mt-4">
+        <div class="iq-icon-box pi-bg-primary">
+            <span class="material-icons">
+                sd_storage
+              </span> <h3 style="float: left;" class="text-primary"> {{data.disk}}%</h3>
+          </div>
+       </div>
+
+      </ng-container>
+  </app-card>

@@ -262,10 +262,53 @@ h5 {
     animation:spin 1s linear infinite;
 }
 
+.mb-5{
+  margin: 5px;
+}
+
+.card-no-border{
+  box-shadow:none !important;
+  border-radius: none !important;
+  border: none !important;
+  width: 100% !important;
+}
+
+.card-no-border.card-header{
+  box-shadow:none !important;
+  border-radius: none !important;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+.trend-dialog .mat-dialog-container{
+  overflow-y: hidden !important;
+}
+::ng-deep .mat-dialog-container {
+  overflow-y: hidden !important;
+}
+
+.card-code{
+  background-color: #2a3042 !important;
+}
+
+.card-code code{
+  color: #fff !important;
+}
+
+.code-container{
+   margin: 10px;
+ 
+}
+
+.close-btn{
+   cursor: pointer;
+   float: right;
+}
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
 

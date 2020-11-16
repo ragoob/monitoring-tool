@@ -6,7 +6,8 @@ import { MemoryUsage } from "../models/memory-usage.model";
 import { Thermal } from "../models/thermal.model";
 import { DiskUsage } from "../models/disk-usage.model";
 import { CPU_USAGE, DISK_USAGE, DOCKER_INFO, MEMORY_USAGE } from "../../core/commands";
-
+import * as fs from 'fs';
+import * as path from 'path'
 @Injectable()
 export class EngineService{
 
@@ -101,6 +102,43 @@ public getCpuUsage(): Promise<any>{
              });
          });
      });
+}
+
+public getSummary(): Promise<any>{
+    const _path: string = path.join(__dirname,'..','..','summary.sh');
+    return    new Promise((resolve, reject) => {
+        this.read(_path)
+        .then((res: string)=> {
+            process.exec(res,(error: process.ExecException,stdout: string, stderr: string)=> {
+                if (error) {
+                    return reject(error);
+                }
+    
+                console.log('summary', stdout)
+                resolve(this.util.parseSummary(stdout));
+            });
+
+        })
+        
+     });
+    
+
+}
+
+private async read(path: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+  fs.readFile(
+    path,
+    (error: NodeJS.ErrnoException | null, data: Buffer) => {
+      
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data.toString());
+      }
+    },
+  );
+});
 }
 
  

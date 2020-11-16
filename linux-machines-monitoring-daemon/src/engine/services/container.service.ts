@@ -142,10 +142,12 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
 
 
 // show container logs
-  public logs(containerId: string): Promise<string>{
-    const command: string = `${CONTAINER_LOGS} ${containerId}`;
+  public logs(containerId: string,args: any): Promise<string>{
+    let command: string = args ? `${CONTAINER_LOGS} ${args} ${containerId}` : `${CONTAINER_LOGS} ${containerId}`;
+   console.log('log command', command)
     return  new Promise((resolve, reject) => {
       process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
+      
            if (error) {
             return reject(error);
            }
@@ -164,6 +166,8 @@ public createContainer(options: CreateContainerOptions) : Promise<DockerCommandR
           if (error) {
            return resolve(new ContainerMetrics());
           }
+
+         
          
           if(stdout && stdout.length > 0){
            resolve(this.util.parseContainerMetrics(stdout));

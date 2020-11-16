@@ -1,5 +1,8 @@
 <div class="card {{cssClass}}">
     <div class="card-header" *ngIf="hasHeader">
+      <span class="material-icons close-btn" *ngIf="closable" (click)="close()">
+        close
+        </span>
         <h4 *ngIf="title" class="card-title">{{title}}</h4>
       
     </div>
