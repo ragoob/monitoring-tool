@@ -25,6 +25,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
   public memoryStatus: string = "success";
   public cpuStatus: string = "success";
   public diskStatus: string ="success";
+  public title: string;
   constructor( private socketService: SocketService,
     private spinner: NgxSpinnerService,
     private matIconRegistry: MatIconRegistry,
@@ -32,22 +33,24 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     ) { }
 
   ngOnInit(): void {
+    this.title = this.machine.name;
     this.matIconRegistry.addSvgIcon(
       "ram-memory",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/ram-memory.svg")
     );
     this.spinner.show('SummaryCardComponent-' + this.machine.id);
+    this.spinnerHideTimeout();
     this.subscribers.push(
       this.socketService.getSummary(this.machine.id)
         .subscribe((res: MachineSummary)=> {
         this.data = res;
-
+           
           this.spinner.hide('SummaryCardComponent-'  + this.machine.id);
           this.setCpuStatus(res);
           this.setDiskStatus(res);
           this.setMemoryStatus(res);
-
-        this.loaded = true;
+          this.loaded = true;
+         
        
       })
     )
@@ -91,5 +94,17 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     else {
       this.diskStatus = "success"
     }
+  }
+
+  private spinnerHideTimeout(){
+    setTimeout(() => {
+      this.spinner.hide('SummaryCardComponent-' + this.machine.id);
+      if(!this.loaded){
+        this.title = `${this.title} disconnected`
+      }
+      else{
+        this.title = `${this.title} connected`
+      }
+    }, 60 * 1000);
   }
 }

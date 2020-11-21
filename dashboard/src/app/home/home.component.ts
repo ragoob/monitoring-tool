@@ -13,11 +13,11 @@ export class HomeComponent implements OnInit {
   constructor(private machineService: MachineService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.show();
+    this.spinner.show('HomeComponent');
     this.machineService.getMachines()
     .then(d=> {
       this.list = d;
-      this.spinner.hide();
+      this.spinner.hide('HomeComponent');
     })
   }
 

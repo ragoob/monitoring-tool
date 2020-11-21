@@ -45,7 +45,7 @@ WantedBy=multi-user.target
 EOF'
 
  sudo systemctl daemon-reload
-  sudo systemctl enable linux-machines-monitoring-daemon
+  sudo systemctl disable linux-machines-monitoring-daemon
   sudo systemctl start linux-machines-monitoring-daemon
 
 

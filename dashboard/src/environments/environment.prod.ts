@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  socketServer: 'https://monitoring-gatway.mohammedragab.com',
-  gateWay: 'https://monitoring-gatway.mohammedragab.com'
+  socketServer: 'https://pi-mon-gateway.aptar.mobi',
+  gateWay: 'https://pi-mon-gateway.aptar.mobi'
 };
