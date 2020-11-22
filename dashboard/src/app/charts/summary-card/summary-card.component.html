@@ -1,7 +1,13 @@
 <ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="SummaryCardComponent-{{machine.id}}"
   [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
 
-  <app-card [hasHeader]="true" [title]="title" [cssClass]="'card-summary'">
+  <app-card [hasActions]="true" [hasHeader]="true" [title]="title" [cssClass]="'card-summary'">
+    <ng-template #actionTemplate>
+      <button (click)="goToDetails()" title="Go to machine details" mat-button class="pull-right card-action-button">
+        <mat-icon>arrow_right_alt</mat-icon>
+      </button>
+    </ng-template>
+    
     <ng-container *ngIf="loaded && data">
       <ul class="m-0 p-0">
         <li class="d-flex mb-4 align-items-center justify-content-between">

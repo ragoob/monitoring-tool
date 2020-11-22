@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-card',
@@ -10,10 +11,13 @@ export class CardComponent implements OnInit {
   @Input('hasHeader') hasHeader: boolean;
   @Input('cssClass') cssClass: string = "";
   @Input('closable') closable: boolean;
+  @Input('hasActions') hasActions: boolean;
   @Output('close') closeEvent: EventEmitter<any> = new EventEmitter<any>();
-  constructor() { }
+  @ContentChild('actionTemplate',{static: true}) actionTemplate: TemplateRef<any>; 
+  constructor(){}
 
   ngOnInit(): void {
+    
   }
 
   public close(){

@@ -18,6 +18,8 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
   }
   
   private logger: Logger = new Logger(SocketService.name);
+  private daemons: string[] = [];
+
   @WebSocketServer() io: Server;
   
   handleConnection(client: any, ...args: any[]) {
@@ -38,96 +40,91 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
 
        this.io.on('connection',(socket)=> {
         
-        socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`,data);
-         });
-
-         socket.on(`${deamonId}-${Events.SUMMARY}`, (data: any) => {   
-           this.logger.debug('summary ', JSON.stringify(data))
-          this.io.emit(`ui-${deamonId}-${Events.SUMMARY}`,data);
-         });
-
-         
-         socket.on(`${deamonId}-${Events.TEMPERATURE}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.TEMPERATURE}`,data);
-         });
-
-         socket.on(`${deamonId}-${Events.MEMORY_USAGE}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.MEMORY_USAGE}`,data);
-         });
-
-         socket.on(`${deamonId}-${Events.CPU_USAGE}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.CPU_USAGE}`,data);
-         });
-
-         socket.on(`${deamonId}-${Events.DISK_USAGE}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.DISK_USAGE}`,data);
-         });
+        this.socketListen(deamonId,socket);
        
-         socket.on(`${deamonId}-${Events.CONTAINERS_METRICS}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.CONTAINERS_METRICS}`,data);
-         });
-
-         socket.on(`${deamonId}-${Events.CONTAINERS_LIST}`, (data: any) => {   
-          this.io.emit(`ui-${deamonId}-${Events.CONTAINERS_LIST}`,data);
-         });
-
-
-         socket.on(`${deamonId}-${Events.DOCKER_ENGINE_INFO}`, (data: any) => {   
-           this.io.emit(`ui-${deamonId}-${Events.DOCKER_ENGINE_INFO}`,data);
-         });
-
-         socket.on(`ui-${deamonId}-${Events.CONTAINER_START}`, (data: any) => {   
-          this.io.emit(`${deamonId}-${Events.CONTAINER_START}`,data);
-         });
-
-         socket.on(`ui-${deamonId}-${Events.CONTAINER_RESTART}`, (data: any) => {   
-          this.io.emit(`${deamonId}-${Events.CONTAINER_RESTART}`,data);
-         });
-
-         socket.on(`ui-${deamonId}-${Events.CONTAINER_STOP}`, (data: any) => {   
-          this.io.emit(`${deamonId}-${Events.CONTAINER_STOP}`,data);
-         });
-
-         socket.on(`ui-${deamonId}-${Events.CONTAINER_DELETE}`, (data: any) => {   
-          this.io.emit(`${deamonId}-${Events.CONTAINER_DELETE}`,data);
-         });
-         
-         socket.on(`ui-${deamonId}-${Events.DOCKER_RUN_IMAGE}`, (data: any) => {  
-           this.logger.debug("DOCKER_RUN_IMAGE" ,data)
-          this.io.emit(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`,data);
-         });
-
-         socket.on(`ui-${deamonId}-${Events.ASK_CONTAINER_LOGS}`, (data: any) => {  
-         this.logger.debug(`asking logs about ${data}`)
-         this.io.emit(`${deamonId}-${Events.ASK_CONTAINER_LOGS}`,data);
-        });
-
-        socket.on(`${deamonId}-${Events.CONTAINER_LOGS}`, (data: any) => { 
-          this.io.emit(`ui-${deamonId}-${Events.CONTAINER_LOGS}`,data);
-         });
-
-         
-
       })
 
   
      
     }
 
-     private  removeListeners(deamonId: string){
-      this.io.sockets.removeAllListeners(`${deamonId}-${Events.HEALTH_CHECK}`);
-      this.io.sockets.removeAllListeners(`${deamonId}-${Events.TEMPERATURE}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.MEMORY_USAGE}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DISK_USAGE}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DOCKER_ENGINE_INFO}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.HEALTH_CHECK}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_START}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_RESTART}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_STOP}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_DELETE}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.CONTAINER_DETAILS}`);
-       this.io.sockets.removeAllListeners(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`);
+    private socketListen(deamonId: string ,socket: SocketIO.Socket){
+      this.daemons.push(deamonId);
+      socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`,data);
+       });
 
+       socket.on(`${deamonId}-${Events.SUMMARY}`, (data: any) => {   
+         this.logger.debug('summary ', JSON.stringify(data))
+        this.io.emit(`ui-${deamonId}-${Events.SUMMARY}`,data);
+       });
+
+       
+       socket.on(`${deamonId}-${Events.TEMPERATURE}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.TEMPERATURE}`,data);
+       });
+
+       socket.on(`${deamonId}-${Events.MEMORY_USAGE}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.MEMORY_USAGE}`,data);
+       });
+
+       socket.on(`${deamonId}-${Events.CPU_USAGE}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.CPU_USAGE}`,data);
+       });
+
+       socket.on(`${deamonId}-${Events.DISK_USAGE}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.DISK_USAGE}`,data);
+       });
+     
+       socket.on(`${deamonId}-${Events.CONTAINERS_METRICS}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.CONTAINERS_METRICS}`,data);
+       });
+
+       socket.on(`${deamonId}-${Events.CONTAINERS_LIST}`, (data: any) => {   
+        this.io.emit(`ui-${deamonId}-${Events.CONTAINERS_LIST}`,data);
+       });
+
+
+       socket.on(`${deamonId}-${Events.DOCKER_ENGINE_INFO}`, (data: any) => {   
+         this.io.emit(`ui-${deamonId}-${Events.DOCKER_ENGINE_INFO}`,data);
+       });
+
+       socket.on(`ui-${deamonId}-${Events.CONTAINER_START}`, (data: any) => {   
+        this.io.emit(`${deamonId}-${Events.CONTAINER_START}`,data);
+       });
+
+       socket.on(`ui-${deamonId}-${Events.CONTAINER_RESTART}`, (data: any) => {   
+        this.io.emit(`${deamonId}-${Events.CONTAINER_RESTART}`,data);
+       });
+
+       socket.on(`ui-${deamonId}-${Events.CONTAINER_STOP}`, (data: any) => {   
+        this.io.emit(`${deamonId}-${Events.CONTAINER_STOP}`,data);
+       });
+
+       socket.on(`ui-${deamonId}-${Events.CONTAINER_DELETE}`, (data: any) => {   
+        this.io.emit(`${deamonId}-${Events.CONTAINER_DELETE}`,data);
+       });
+       
+       socket.on(`ui-${deamonId}-${Events.DOCKER_RUN_IMAGE}`, (data: any) => {  
+         this.logger.debug("DOCKER_RUN_IMAGE" ,data)
+        this.io.emit(`${deamonId}-${Events.DOCKER_RUN_IMAGE}`,data);
+       });
+
+       socket.on(`ui-${deamonId}-${Events.ASK_CONTAINER_LOGS}`, (data: any) => {  
+       this.logger.debug(`asking logs about ${data}`)
+       this.io.emit(`${deamonId}-${Events.ASK_CONTAINER_LOGS}`,data);
+      });
+
+      socket.on(`${deamonId}-${Events.CONTAINER_LOGS}`, (data: any) => { 
+        this.io.emit(`ui-${deamonId}-${Events.CONTAINER_LOGS}`,data);
+       });
     }
+  
+     public  removeListeners(deamonId: string){
+          delete this.daemons[deamonId];
+          this.io.sockets.removeAllListeners();
+          this.daemons.forEach(d=> {
+            this.startListen(d);
+          })
+     }
 }

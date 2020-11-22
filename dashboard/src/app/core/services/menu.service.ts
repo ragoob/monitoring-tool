@@ -30,6 +30,7 @@ export class MenuService {
      .filter(c=> user.isAdmin || (user.allowedMachines && user.allowedMachines.includes(c.id)))
      .map((item: Machine)=>{
        return {
+         id: item.id,
         displayName: item.name,
         iconName: "",
         route: `/dashboard/${item.id}`

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, OnModuleInit, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, OnModuleInit, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Machine } from '../models/machine.entity';
 import {Response} from 'express'
 import * as fs from 'fs';
@@ -12,7 +12,7 @@ import { JwtAuthGuard } from '../../authentication/services/jwt.auth.guard';
 export class MachineController implements OnModuleInit {
     private logger: Logger = new Logger();
 
-    private Listeners: Map<string,boolean> = new Map<string,boolean>();
+    private listeners: Map<string,boolean> = new Map<string,boolean>();
 
     constructor(private machineService: MachineService,
         private socketService: SocketService){
@@ -23,7 +23,7 @@ export class MachineController implements OnModuleInit {
    const machines = await this.machineService.getAll();
    machines.forEach(machine=> {
     this.socketService.startListen(machine.id.toString());
-    this.Listeners[machine.id] = true;
+    this.listeners[machine.id] = true;
    });
   }
 
@@ -31,13 +31,36 @@ export class MachineController implements OnModuleInit {
     @UseGuards(JwtAuthGuard)
     public async saveConfigurations(@Body() machine: Machine): Promise<Machine>{
        const createdMachine =  await this.machineService.saveConfiguration(machine);
+       
        if(createdMachine){
-        if(!this.Listeners[createdMachine.id]){
+        if(!this.listeners[createdMachine.id]){
           this.socketService.startListen(createdMachine.id.toString());
-          this.Listeners[createdMachine.id] = true;
+          this.listeners[createdMachine.id] = true;
         }
        }
        return createdMachine;
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    public async delete(@Res() res: Response ,@Param('id') id: string){
+  
+      try {
+        await this.machineService.delete(id);
+        this.listeners.delete(id);
+        this.socketService.removeListeners(id);
+        this.logger.debug(`Stop and delete daemon ${id}`)
+      } catch (error) {
+        this.logger.debug(error);
+      }
+  
+      res.status(200)
+      .send({
+        success: true
+      });
+    
+      
+       
     }
 
     @Get()

@@ -1,4 +1,5 @@
-
+<ngx-spinner bdColor="rgb(214 211 211 / 11%)" color="rgba(0, 0, 0, 0.8)" name="NewEngineComponent"
+[fullScreen]="false" type="ball-clip-rotate-multiple" size="medium"></ngx-spinner>
 
 <div class="row">
 
@@ -8,12 +9,6 @@
       <input [ngClass]="{'is-invalid': machineForm.controls['name'].invalid && (machineForm.controls['name'].dirty || machineForm.controls['name'].touched) && formSubmitted}" type="text" class="form-control" formControlName="name"   placeholder="Enter name for machine">
       
     </div>
-
-    <div class="input-group">
-      <input type="text" class="form-control" #commandelement   [ngModelOptions]="{standalone: true}" [(ngModel)]="command" >
-      <span class="input-group-addon btn btn-primary" (click)="copy()">Copy</span>
-  </div>
-
 
   </form>
  

@@ -33,6 +33,7 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
   ngAfterViewInit() {
 
     this.spinner.show('ContainerDetailsComponent');
+    this.hideSpinnerTimeOut();
     this.subscribers.push(
       this.socketService.getContainerlogs(this.data.daemonId)
         .subscribe((result: any) => {
@@ -45,6 +46,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
 
           }
 
+          else{
+            this.logs = '';
+          }
           this.spinner.hide('ContainerDetailsComponent');
 
         })
@@ -81,12 +85,19 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
       args: args.length > 0 ? args: this.logsArgs
     });
 
-    this.spinner.show('ContainerDetailsComponent')
+    this.spinner.show('ContainerDetailsComponent');
+    this.hideSpinnerTimeOut();
   }
 
   public close(){
     this.dialogRef.close({
     });
+  }
+
+  private hideSpinnerTimeOut(){
+    setTimeout(()=> {
+       this.spinner.hide('ContainerDetailsComponent');
+    },30 * 1000)
   }
 
 }

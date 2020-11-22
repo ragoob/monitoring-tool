@@ -12,7 +12,7 @@ export class AuthController implements OnModuleInit{
        
         const defaults: User = new User();
             defaults.isAdmin = true;
-            defaults.email = process.env.DEFAULT_ADMIN;
+            defaults.email = process.env.DEFAULT_ADMIN.toLocaleLowerCase();
             defaults.password = process.env.DEFAULT_PASSWORD;
            this.authService.findByEmail(defaults.email)
            .then((user: User)=> {
@@ -25,6 +25,7 @@ export class AuthController implements OnModuleInit{
 
     @Post('token')
      signIn(@Body(ValidationPipe) model: LoginModel): Promise<{}> {
+         model.email = model.email.toLocaleLowerCase();
         return this.authService.token(model);
     }
 }

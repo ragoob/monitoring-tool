@@ -24,13 +24,13 @@ export class UserManagementController {
 
     @Post()
     public create(@Body() user: User): Promise<void>{
-
+        user.email = user.email.toLocaleLowerCase();
         return this.userService.create(user);
     }
 
     @Put()
     public update(@Body() user: User): Promise<void>{
-
+        user.email = user.email.toLocaleLowerCase();
         return this.userService.update(user);
     }
 

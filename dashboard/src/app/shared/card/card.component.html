@@ -1,11 +1,19 @@
 <div class="card {{cssClass}}">
     <div class="card-header" *ngIf="hasHeader">
-      <span class="material-icons close-btn" *ngIf="closable" (click)="close()">
+      <ng-container *ngIf="hasActions">
+        <ng-container [ngTemplateOutlet]="actionTemplate"></ng-container>
+        
+          
+       </ng-container>
+       
+      <span class="material-icons close-btn pull-right" *ngIf="closable" (click)="close()">
         close
         </span>
-        <h4 *ngIf="title" class="card-title">{{title}}</h4>
+        <h4 *ngIf="title" class="card-title pull-left">{{title}}</h4>
+     
       
     </div>
+
     <div class="card-body">
         <h4  *ngIf="!hasHeader && title" class="card-title">{{title}}</h4>
       <ng-content></ng-content>

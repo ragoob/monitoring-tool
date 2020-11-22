@@ -73,10 +73,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .deamon-status{
     height: 25px;
     width: 25px;
-   // background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
   }
+
+  
   
   .connected{
     background-color:green !important;
@@ -302,12 +303,30 @@ h5 {
 
 .close-btn{
    cursor: pointer;
-   float: right;
+   margin-top: 10px;
+
 }
 
 .card-summary{
     min-height: 350px !important;
 }
+.pull-left{
+  float: left;
+}
+
+.pull-right{
+  float: right;
+}
+
+.card-action-button{
+  margin-top: 10px !important;
+}
+
+.mat-menu-content {
+  padding: 10px;
+}
+
+
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

@@ -22,8 +22,13 @@ sudo mkdir /usr/bin/linux-machines-monitoring-daemon
 sudo cp -a build/dist  /usr/bin/linux-machines-monitoring-daemon/dist
 sudo rm -rf $APP_DIR/monitoring-tool
 ## create systemd service ####
+sudo systemctl stop linux-machines-monitoring-daemon
+sudo systemctl disable linux-machines-monitoring-daemon
 sudo rm -rf /lib/systemd/system/linux-machines-monitoring-daemon.service
 sudo touch  /lib/systemd/system/linux-machines-monitoring-daemon.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+
 sudo  bash -c  'cat > /lib/systemd/system/linux-machines-monitoring-daemon.service << EOF
 [Unit]
 Description=montoring tool agent to send data to dashboard

@@ -40,9 +40,6 @@ export class NavComponent implements OnInit {
     const dialogRef = this.dialog.open(NewEngineComponent,{
       width: '700px',
       height: '200px',
-      data: {
-        GUID: Guid.create().toString()
-      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

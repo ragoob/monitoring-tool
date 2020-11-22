@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { MachineConfiguration } from "./machine-config.model";
 
 @Entity('machines')
 export class Machine{
- @PrimaryColumn()
+@PrimaryGeneratedColumn("uuid") 
  id: string;
  @Column()
  name: string;

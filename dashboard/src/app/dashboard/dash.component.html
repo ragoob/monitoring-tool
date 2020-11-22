@@ -1,118 +1,146 @@
-<ngx-spinner [fullScreen]="false" bdColor="#ff000000" size="medium"  name="DashComponent"
-  template="<img class='image-spinner' src='../assets/images/raspberry-pi.svg' />">
 
-</ngx-spinner>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
   <app-page-title [pageTitle]="title">
-  
-  </app-page-title>
-
-  <div class="page-body" *ngIf="connected">
-    <div class="row mb-2">
-      <div class="col col-lg-4 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'System information'">
-          <app-system-info [daemonId]="daemonId"></app-system-info>
-  
-        </app-card>
-      </div>
-
-        <div class="col col-lg-2 col-md-12 col-sm-12">
-          <app-card>
-            <app-cpu-card [daemonId]="daemonId"></app-cpu-card>
-          </app-card>
-        </div>
-        <div class="col col-lg-2 col-md-12 col-sm-12">
-          <app-card>
-            <app-temp-card [daemonId]="daemonId"></app-temp-card>
-          </app-card>
-        </div>
-      <div class="col col-lg-2 col-md-12 col-sm-12">
-        <app-card>
-
-         <app-memory-card [daemonId]="daemonId"></app-memory-card>
-        </app-card>
-      </div>
-      <div class="col col-lg-2 col-md-12 col-sm-12">
-        <app-card>
-          <app-disk-card [daemonId]="daemonId"></app-disk-card>
-        
-          
-        </app-card>
-      </div>
+  <span [title]="connected ? 'Daemon is connected' : 'Daemon is not connected at the moment'" *ngIf="connected || disconnected" class="deamon-status {{connected ? 'connected' : 'disconnected'}} ml-2"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" style="max-width: none;">
     
-      </div>
-    
-    
- 
-    <div class="row mb-2">
-      <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'Cpu tempurature real-time'">
-          <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
-        </app-card>
-  
-      
-      </div>
-      <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'Memory usage real-time'">
-          <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
-        </app-card>
-      </div>
-    </div>
-    
-    <div class="row mb-2">
-      <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card   [hasHeader]="true" [title]="'Disk usage'">
-          <app-storage-usage  [daemonId]="daemonId"></app-storage-usage>
-        </app-card>
-       
-      </div>
+    <button (click)="copyScript()" mat-menu-item>
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy script</span>
+    </button>
+    <button (click)="editEngine()" mat-menu-item>
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button (click)="deleteMachine()" mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
 
-   
-      <div class="col col-lg-3 col-md-12 col-sm-12">
-        <app-card   [hasHeader]="true" [title]="'Conatiners count'">
-          <app-containers [daemonId]="daemonId"></app-containers>
-        </app-card>
-       
-      </div>
-
-      <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'Cpu usage real-time'">
-          <app-cpu-usage [daemonId]="daemonId"></app-cpu-usage>
-        </app-card>
-       
-      </div>
-
-     
-    </div>
-  
-    <div class="row mb-2">
-      <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'Conatiners memory usage'">
-          <app-containers-metrics [daemonId]="daemonId"></app-containers-metrics>
-  
-        </app-card>
-      </div>
-  
-      <div class="col col-lg-6 col-md-12 col-sm-12">
-        <app-card [hasHeader]="true" [title]="'Conatiners cpu usage'">
-          <app-container-metrics-cpu [daemonId]="daemonId"></app-container-metrics-cpu>
-  
-        </app-card>
-  
-     
-      </div>
-  
-    </div>
     
-   
-    <div class="row mb-2">
-     <div class="col-lg-12 col-md-12 col-sm-12">
-      <app-card [hasHeader]="true" [title]="' Containers List'">
-        <app-containers-list [daemonId]="daemonId"></app-containers-list>
+  </mat-menu>  
+</app-page-title>
+
+  <div class="page-body" >
+    <ngx-spinner bdOpacity=0.9  [fullScreen]="false" bdColor="#ff000000" size="medium"  name="DashComponent"
+    template="<img class='image-spinner' src='../assets/images/raspberry-pi.svg' />">
+  
+  
+  </ngx-spinner>
+<ng-container *ngIf="connected">
+  <div class="row mb-2">
+    <div class="col col-lg-4 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'System information'">
+        <app-system-info [daemonId]="daemonId"></app-system-info>
+
       </app-card>
-     </div>
+    </div>
+
+      <div class="col col-lg-2 col-md-12 col-sm-12">
+        <app-card>
+          <app-cpu-card [daemonId]="daemonId"></app-cpu-card>
+        </app-card>
+      </div>
+      <div class="col col-lg-2 col-md-12 col-sm-12">
+        <app-card>
+          <app-temp-card [daemonId]="daemonId"></app-temp-card>
+        </app-card>
+      </div>
+    <div class="col col-lg-2 col-md-12 col-sm-12">
+      <app-card>
+
+       <app-memory-card [daemonId]="daemonId"></app-memory-card>
+      </app-card>
+    </div>
+    <div class="col col-lg-2 col-md-12 col-sm-12">
+      <app-card>
+        <app-disk-card [daemonId]="daemonId"></app-disk-card>
+      
+        
+      </app-card>
+    </div>
   
     </div>
+  
+  
+
+  <div class="row mb-2">
+    <div class="col col-lg-6 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'Cpu tempurature real-time'">
+        <app-cpu-temperature [daemonId]="daemonId"></app-cpu-temperature>
+      </app-card>
+
+    
+    </div>
+    <div class="col col-lg-6 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'Memory usage real-time'">
+        <app-memory-usage [daemonId]="daemonId"></app-memory-usage>
+      </app-card>
+    </div>
+  </div>
+  
+  <div class="row mb-2">
+    <div class="col col-lg-3 col-md-12 col-sm-12">
+      <app-card   [hasHeader]="true" [title]="'Disk usage'">
+        <app-storage-usage  [daemonId]="daemonId"></app-storage-usage>
+      </app-card>
+     
+    </div>
+
+ 
+    <div class="col col-lg-3 col-md-12 col-sm-12">
+      <app-card   [hasHeader]="true" [title]="'Conatiners count'">
+        <app-containers [daemonId]="daemonId"></app-containers>
+      </app-card>
+     
+    </div>
+
+    <div class="col col-lg-6 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'Cpu usage real-time'">
+        <app-cpu-usage [daemonId]="daemonId"></app-cpu-usage>
+      </app-card>
+     
+    </div>
+
    
+  </div>
+
+  <div class="row mb-2">
+    <div class="col col-lg-6 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'Conatiners memory usage'">
+        <app-containers-metrics [daemonId]="daemonId"></app-containers-metrics>
+
+      </app-card>
+    </div>
+
+    <div class="col col-lg-6 col-md-12 col-sm-12">
+      <app-card [hasHeader]="true" [title]="'Conatiners cpu usage'">
+        <app-container-metrics-cpu [daemonId]="daemonId"></app-container-metrics-cpu>
+
+      </app-card>
+
+   
+    </div>
+
+  </div>
+  
+ 
+  <div class="row mb-2">
+   <div class="col-lg-12 col-md-12 col-sm-12">
+    <app-card [hasHeader]="true" [title]="' Containers List'">
+      <app-containers-list [daemonId]="daemonId"></app-containers-list>
+    </app-card>
+   </div>
+
+  </div>
+ 
+</ng-container>
+
+    
   
   </div>
   

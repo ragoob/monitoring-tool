@@ -2,6 +2,7 @@ import { Summary } from '@angular/compiler';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { Machine } from '../../core/models/machine.model';
@@ -30,6 +31,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     private spinner: NgxSpinnerService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -60,6 +62,10 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     this.subscribers.forEach(s=> s.unsubscribe());
   }
 
+  public goToDetails(){
+    this.router.navigate(['dashboard',this.machine.id])
+
+  }
   private setCpuStatus(data: MachineSummary): void{
     if (data.cpu > 50 && data.cpu < 70) {
       this.cpuStatus = "warning"
@@ -105,6 +111,8 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
       else{
         this.title = `${this.title} connected`
       }
-    }, 60 * 1000);
+    }, 10 * 1000);
   }
+
+
 }

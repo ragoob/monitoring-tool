@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoaderService } from '../../core/services/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationComponent } from '../notification/notification.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-new-engine',
@@ -18,7 +19,6 @@ import { NotificationComponent } from '../notification/notification.component';
 export class NewEngineComponent implements OnInit {
    menu: any;
    machineForm: FormGroup;
-  public command: string;
   public formSubmitted: boolean;
   @ViewChild("commandelement", {read: ElementRef}) commandText: ElementRef;
   durationInSeconds: number;
@@ -29,19 +29,17 @@ export class NewEngineComponent implements OnInit {
     private dialogRef:MatDialogRef<NewEngineComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private loader: LoaderService,
-    private snackBar: MatSnackBar
-    
+    private snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService
     ) { }
 
   ngOnInit(): void {
    
     this.machineForm = this.fb.group({
-      id: [Guid.create().toString()],
-      name:['',Validators.required]
+      id: this.data && this.data.id ? [this.data.id]: [],
+      name:this.data && this.data.name ? [this.data.name,Validators.required] : ['',Validators.required]
     });
-   const deploymentFile: string = `${environment.gateWay}/machine/deployment/${this.machineForm.controls['id'].value}`
-    this.command = `curl ${ deploymentFile} | sh`
+  
   }
 
   public addNew(){
@@ -51,23 +49,28 @@ export class NewEngineComponent implements OnInit {
       return;
     }
 
-    //this.loader.loading$.next(true);
+    this.spinner.show('NewEngineComponent');
     this.machineService.saveMachine(this.machineForm.value)
     .then(d=> {
       const menu = this.menuService.menuItems$.value;
-      console.log(menu[1])
+      if(this.data && this.data.actiontype === 'edit'){
+        menu[1].children.find(c=> c.id == d.id).displayName = d.name;
+      }
+     else{
       menu[1].children.push({
-        displayName:this.machineForm.controls["name"].value,
-        route: `/dashboard/${this.machineForm.controls["id"].value}`,
+        displayName:d.name,
+        route: `/dashboard/${d.id.toString()}`,
         iconName : ''
       });
+     }
       this.menuService.menuItems$.next(menu);
-     // this.loader.loading$.next(false);
+      this.spinner.hide('NewEngineComponent');
       this.dialogRef.close({
-        result: true
+        result: true,
+        data: d
       });
     }).catch(reason=> {
-      this.loader.loading$.next(false);
+      this.spinner.hide('NewEngineComponent');
       this.snackBar.openFromComponent(NotificationComponent, {
         duration: this.durationInSeconds * 1000,
         data: {
