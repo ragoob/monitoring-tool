@@ -45,21 +45,12 @@ export class MachineController implements OnModuleInit {
     @UseGuards(JwtAuthGuard)
     public async delete(@Res() res: Response ,@Param('id') id: string){
   
-      try {
-        await this.machineService.delete(id);
-        this.listeners.delete(id);
-        this.socketService.removeListeners(id);
-        this.logger.debug(`Stop and delete daemon ${id}`)
-      } catch (error) {
-        this.logger.debug(error);
-      }
-  
-      res.status(200)
+      await this.machineService.delete(id);
+      this.socketService.removeListeners(id);
+      return res.status(200)
       .send({
         success: true
       });
-    
-      
        
     }
 

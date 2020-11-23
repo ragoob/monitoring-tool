@@ -121,10 +121,14 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
     }
   
      public  removeListeners(deamonId: string){
+        try {
           delete this.daemons[deamonId];
           this.io.sockets.removeAllListeners();
           this.daemons.forEach(d=> {
             this.startListen(d);
-          })
+          });
+        } catch (error) {
+          this.logger.debug(error);
+        }
      }
 }
