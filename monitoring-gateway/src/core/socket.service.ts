@@ -32,11 +32,7 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
     startListen(deamonId: string){
       
      
-      try {
-        this.removeListeners(deamonId);
-      } catch (error) {
-         console.log(`error in removing listeners ${error}`)
-      }
+     
 
        this.io.on('connection',(socket)=> {
         
