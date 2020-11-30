@@ -46,7 +46,7 @@ export class MachineController implements OnModuleInit {
     public async delete(@Res() res: Response ,@Param('id') id: string){
   
       await this.machineService.delete(id);
-      this.socketService.removeListeners(id);
+   //   this.socketService.removeListeners(id);
       return res.status(200)
       .send({
         success: true
