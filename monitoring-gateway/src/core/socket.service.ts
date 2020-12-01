@@ -30,13 +30,18 @@ export class SocketService implements OnGatewayConnection , OnModuleInit  {
     }
 
     startListen(deamonId: string){
-      
-     
-     
-
        this.io.on('connection',(socket)=> {
         
-        this.socketListen(deamonId,socket);
+        //this.socketListen(deamonId,socket);
+         socket.on(`${deamonId}-${Events.HEALTH_CHECK}`, (data: any) => {
+           this.io.emit(`ui-${deamonId}-${Events.HEALTH_CHECK}`, data);
+         });
+
+         socket.on(`${deamonId}-${Events.SUMMARY}`, (data: any) => {
+           //this.logger.debug('summary ', JSON.stringify(data))
+           this.io.emit(`ui-${deamonId}-${Events.SUMMARY}`, data);
+         });
+
        
       })
 
