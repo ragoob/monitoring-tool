@@ -64,10 +64,10 @@ export class MachineController  {
       return;
     }
 
-    private  read(path: string): Promise<string> {
+    private  read(filePath: string): Promise<string> {
           return new Promise<string>((resolve, reject) => {
         fs.readFile(
-          path,
+          filePath,
           (error: NodeJS.ErrnoException | null, data: Buffer) => {
             
             if (error) {
