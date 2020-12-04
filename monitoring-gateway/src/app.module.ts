@@ -11,7 +11,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
      ignoreEnvFile: process.env.NODE_ENV == 'production'
      }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mssql',
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
       username: process.env.DB_USER,

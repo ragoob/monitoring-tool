@@ -13,7 +13,7 @@ export  class User{
     passwordSalt: string;
     @Column({default:false})
     isAdmin: boolean;
-    @Column({type: "jsonb",nullable:true})
+    @Column({type: 'nvarchar',nullable:true})
     allowedMachines?: string[]
 
      validatePassword(password: string): Promise<boolean> {

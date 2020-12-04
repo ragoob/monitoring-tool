@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { MachineConfiguration } from "./machine-config.model";
 
 @Entity('machines')
@@ -7,6 +7,6 @@ export class Machine{
  id: string;
  @Column()
  name: string;
- @Column({type: "jsonb",nullable:true})
+ @Column({type: 'nvarchar',nullable:true})
  config?: MachineConfiguration
 }

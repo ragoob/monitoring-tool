@@ -24,7 +24,7 @@ export class MachineController  {
 
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
-    public  delete(@Res() res: Response ,@Param('id') id: string): Promise<DeleteResult>{
+    public  delete(@Param('id') id: string): Promise<DeleteResult>{
       return this.machineService.delete(id);
     }
 
