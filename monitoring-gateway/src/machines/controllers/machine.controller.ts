@@ -1,57 +1,31 @@
-import { Body, Controller, Delete, Get, Logger, OnModuleInit, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Machine } from '../models/machine.entity';
 import {Response} from 'express'
 import * as fs from 'fs';
 import * as path from 'path'
 import { MachineService } from '../services/machine.service';
-import { SocketService } from '../../core/socket.service';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../../authentication/services/jwt.auth.guard';
+import { DeleteResult } from 'typeorm';
+
 @Controller('machine')
-
-export class MachineController implements OnModuleInit {
-    private logger: Logger = new Logger();
-
-    private listeners: Map<string,boolean> = new Map<string,boolean>();
-
-    constructor(private machineService: MachineService,
-        private socketService: SocketService){
+export class MachineController  {
+    constructor(private machineService: MachineService){
 
     }
-  async onModuleInit() {
-    this.logger.debug(`Start listen to sockets`)
-   const machines = await this.machineService.getAll();
-   machines.forEach(machine=> {
-    this.socketService.startListen(machine.id.toString());
-    this.listeners[machine.id] = true;
-   });
-  }
+
 
     @Post()
     @UseGuards(JwtAuthGuard)
-    public async saveConfigurations(@Body() machine: Machine): Promise<Machine>{
-       const createdMachine =  await this.machineService.saveConfiguration(machine);
+    public  saveConfigurations(@Body() machine: Machine): Promise<Machine>{
+      return this.machineService.saveConfiguration(machine);
        
-       if(createdMachine){
-        if(!this.listeners[createdMachine.id]){
-          this.socketService.startListen(createdMachine.id.toString());
-          this.listeners[createdMachine.id] = true;
-        }
-       }
-       return createdMachine;
+      
     }
 
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
-    public async delete(@Res() res: Response ,@Param('id') id: string){
-  
-      await this.machineService.delete(id);
-   //   this.socketService.removeListeners(id);
-      return res.status(200)
-      .send({
-        success: true
-      });
-       
+    public  delete(@Res() res: Response ,@Param('id') id: string): Promise<DeleteResult>{
+      return this.machineService.delete(id);
     }
 
     @Get()
@@ -67,33 +41,30 @@ export class MachineController implements OnModuleInit {
     }
 
     @Get('deployment/:id')
-    async deployment(@Res() res: Response,@Param('id') id: string): Promise<void>{
-      const _path: string = path.join(__dirname,'..','..','daemon-deploy.sh');
-      const machine = await this.machineService.getById(id);
-      if(!machine){
-        res.status(400)
-        .send("Machine does not exist");
-        return;
-      }
-      const file  = await this.read(_path);
-      const URL = process.env.SOCKET_SERVER_URL;
-      console.log(URL)
-      const updatedfile = file.replace(/{Daemon_GUID}/g,id.toString()).replace(/{SOCKET_SERVER_URL}/g,URL);
-      
-      res.setHeader('Content-type', "application/octet-stream");
-     res.setHeader('Content-disposition', `attachment; filename=dep-${id.toString()}.sh`);
-     res.send(updatedfile); 
+     deployment(@Res() res: Response,@Param('id') id: string): Promise<Response<any>>{
+      const filePath: string = path.join(__dirname,'..','..','daemon-deploy.sh');
+      return new Promise <Response<any>>((resolve,rejects)=>{
+        this.read(filePath)
+          .then(file=> {
+            const URL = process.env.SOCKET_SERVER_URL;
+            const updatedfile = file.replace(/{Daemon_GUID}/g, id).replace(/{SOCKET_SERVER_URL}/g, URL);
+            res.setHeader('Content-type', "application/octet-stream");
+            res.setHeader('Content-disposition', `attachment; filename=dep-${id.toString()}.sh`);
+            resolve(res.send(updatedfile)); 
+        });
+      });
+
     }
   
   
     @Get('deamonBuild/download')
-    async download(@Res() res: Response){
+     download(@Res() res: Response){
       const _path: string = path.join(__dirname,'..','..','build.tar.gz');
-      this.logger.debug('build path is ',_path)
        res.download(_path);
+      return;
     }
 
-    private async read(path: string): Promise<string> {
+    private  read(path: string): Promise<string> {
           return new Promise<string>((resolve, reject) => {
         fs.readFile(
           path,
