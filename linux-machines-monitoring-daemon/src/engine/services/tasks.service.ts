@@ -103,26 +103,26 @@ export class TasksService implements OnModuleInit {
 
 
   private registerToDockerCommandEvents(): void {
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_START}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.CONTAINER_START}`,  (data) => {
        this.serviceFactory.startContainer(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_STOP}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.CONTAINER_STOP}`,  (data) => {
        this.serviceFactory.stopContainer(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_RESTART}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.CONTAINER_RESTART}`,  (data) => {
        this.serviceFactory.restartContainer(data);
     });
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.CONTAINER_DELETE}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.CONTAINER_DELETE}`,  (data) => {
        this.serviceFactory.deleteContainer(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.DOCKER_RUN_IMAGE}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.DOCKER_RUN_IMAGE}`,  (data) => {
       this.serviceFactory.runImage(data);
     });
 
-    this.socketService.getSocket().on(`${process.env.MACHINE_ID}-${Events.ASK_CONTAINER_LOGS}`,  (data) => {
+    this.socketService.socket.on(`${process.env.MACHINE_ID}-${Events.ASK_CONTAINER_LOGS}`,  (data) => {
       this.serviceFactory.containerLogs(data.containerId,data.args)
       .then(value=> {
         console.log('result',value.length)

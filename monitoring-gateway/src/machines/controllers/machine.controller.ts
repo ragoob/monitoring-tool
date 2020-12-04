@@ -46,8 +46,10 @@ export class MachineController  {
       return new Promise <Response<any>>((resolve,rejects)=>{
         this.read(filePath)
           .then(file=> {
-            const URL = process.env.SOCKET_SERVER_URL;
-            const updatedfile = file.replace(/{Daemon_GUID}/g, id).replace(/{SOCKET_SERVER_URL}/g, URL);
+          
+            const updatedfile = file.replace(/{Daemon_GUID}/g, id).replace(/{SOCKET_SERVER_URL}/g,  process.env.SOCKET_SERVER_URL)
+            .replace(/{SERVER_URL}/g,process.env.SERVER_URL);
+           
             res.setHeader('Content-type', "application/octet-stream");
             res.setHeader('Content-disposition', `attachment; filename=dep-${id.toString()}.sh`);
             resolve(res.send(updatedfile)); 
@@ -59,8 +61,8 @@ export class MachineController  {
   
     @Get('deamonBuild/download')
      download(@Res() res: Response){
-      const _path: string = path.join(__dirname,'..','..','build.tar.gz');
-       res.download(_path);
+      const filePath: string = path.join(__dirname,'..','..','build.tar.gz');
+       res.download(filePath);
       return;
     }
 

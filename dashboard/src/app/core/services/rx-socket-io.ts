@@ -9,6 +9,7 @@ export class RxSocket<DT> {
     this.socket = socketIO(url, options);
   }
 
+  
   public disconnect(): void {
     this.socket.disconnect();
   }
@@ -41,11 +42,11 @@ export class RxSocket<DT> {
         this.socket.on(event, (data: T) => {
           incoming.next(data);
         });
-        return () => { this.onEventSubjectUnsubscribe(event); };
+        return () => { this.onEventSubjectUnsubscribe(); };
       });
   }
 
-  private onEventSubjectUnsubscribe(event: string): void {
+  private onEventSubjectUnsubscribe(): void {
    this.disconnect();
   }
 

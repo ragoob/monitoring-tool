@@ -46,7 +46,6 @@ export class SocketService {
 
   public getDeamonMemoryUsage(daemonId: string): Observable<any> {
     const socket = this.getSocketInstance();
-
     const event$ = socket.observable(`ui-${Events.MEMORY_USAGE}`);
     return event$.pipe(
       filter((data: any) => data.machineId == daemonId),

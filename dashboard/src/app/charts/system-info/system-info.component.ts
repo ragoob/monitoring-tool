@@ -28,10 +28,11 @@ export class SystemInfoComponent implements OnInit, OnDestroy {
     this.spinner.show('SystemInfoComponent');
     this.subscribers.push(
       this.socketService.getInfo(this.daemonId)
-      .subscribe((data:Engine)=> {
-        
+      .pipe(first())
+      .
+      subscribe((data:Engine)=> {
         this.info = data;
-        this.spinner.hide('SystemInfoComponent');
+        this.spinner.hide('SystemInfoComponent');     
       })
     );
 

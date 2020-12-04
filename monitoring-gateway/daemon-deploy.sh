@@ -15,7 +15,7 @@ sudo rm -rf $APP_DIR/monitoring-tool
 mkdir  $APP_DIR/monitoring-tool
 set -x
 cd  $APP_DIR/monitoring-tool
-curl -k -L {SOCKET_SERVER_URL}/machine/deamonBuild/download | tar zx
+curl -k -L {SERVER_URL}/machine/deamonBuild/download | tar zx
 
 sudo rm -rf /usr/bin/linux-machines-monitoring-daemon
 sudo mkdir /usr/bin/linux-machines-monitoring-daemon

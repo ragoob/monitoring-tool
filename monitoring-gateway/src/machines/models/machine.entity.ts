@@ -7,6 +7,6 @@ export class Machine{
  id: string;
  @Column()
  name: string;
- @Column({type: 'nvarchar',nullable:true})
+ @Column({type: 'jsonb',nullable:true})
  config?: MachineConfiguration
 }
