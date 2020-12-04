@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { Containers } from '../../core/models/containers.model';
 import { Events } from '../../core/models/events';
@@ -25,6 +24,7 @@ export class ContainersListComponent implements OnInit , OnDestroy{
     public dialog: MatDialog
     
     ) { }
+
   public ngOnDestroy(): void {
    this.subscribers.forEach(s=> s.unsubscribe());
   }
@@ -34,16 +34,13 @@ export class ContainersListComponent implements OnInit , OnDestroy{
       this.socketService.getContainerList(this.daemonId)
       .subscribe((data: Containers[])=>{
         this.containers = data;
-
       })
     )
-    
   }
 
   public new(){
     const dialogRef = this.dialog.open(RunImageComponent,{
       width: '80%',
-      //height: '80%',
      data: {
        daemonId: this.daemonId
      }
@@ -75,37 +72,27 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public restart(model: Containers){
-
     this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_RESTART}`,model.id);
     this.notification('Container restart command sent to daemon');
-   
-
-  
   }
 
   public start(model: Containers){
     this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_START}`,model.id);
     this.notification('Container start command sent to daemon');
-
-
   }
 
   public Stop(model: Containers){
-   
     this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_STOP}`,model.id);
     this.notification('Container stop command sent to daemon');
-
-
   }
 
   public delete(model: Containers){
     this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_DELETE}`,model.id);
     this.notification('Container delete command sent to daemon');
-
   }
 
   public details(model: Containers){
-    const dialogRef = this.dialog.open(ContainerDetailsComponent, {
+    this.dialog.open(ContainerDetailsComponent, {
                     autoFocus: false,
                     panelClass: 'trend-dialog',
                     width: '80%', height: '680px',

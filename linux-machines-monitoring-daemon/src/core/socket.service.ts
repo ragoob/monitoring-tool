@@ -1,15 +1,14 @@
 
-import { Injectable } from '@nestjs/common';
-import { exception } from 'console';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as io from 'socket.io-client';
 @Injectable()
-export class SocketService {
-  sockets: SocketIOClient.Socket[] = [];
+export class SocketService implements OnModuleInit {
   constructor() {
-  
-
-   this.getSocket().on('connect_error', (err) => {
-     console.log(`connect_error`, err);
+   
+  }
+  onModuleInit() {
+    this.getSocket().on('connect_error', (err) => {
+      console.log(`connect_error`, err);
     });
 
     this.getSocket().on('connect_timeout', (timeout) => {
@@ -21,12 +20,9 @@ export class SocketService {
 
     });
 
-   
-
     this.getSocket().on('disconnect', (reason) => {
       console.log(`disconnect`, reason);
     });
-    
   }
 
   public getSocket(){
@@ -46,8 +42,10 @@ export class SocketService {
 
   public emitEvent(event: string, data: any): any {
 
-        const machineEvent: string = `${process.env.MACHINE_ID}-${event}`
-         this.getSocket().emit(machineEvent,data);
+    this.getSocket().emit(event, {
+      machineId: process.env.MACHINE_ID,
+      data: data
+    });
       
   }
 
