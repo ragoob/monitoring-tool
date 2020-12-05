@@ -1,5 +1,4 @@
 import { HttpService, Injectable, OnModuleInit } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { BehaviorSubject } from 'rxjs';
 import { Events } from '../../core/events';
 import { SocketService } from '../../core/socket.service';
@@ -21,11 +20,6 @@ export class TasksService implements OnModuleInit {
     .toPromise()
     .then(response=> {
       if(response.data && response.data.id){
-        this.stopTasks$
-        .subscribe(d=> {
-          this.stopTasks();
-        });
-    
         this.socketService.socket.on('shutdown',(data)=> {
           if(data.daemonId == process.env.MACHINE_ID){
            this.socketService.socket.disconnect();
