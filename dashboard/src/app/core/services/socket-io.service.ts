@@ -5,6 +5,7 @@ import { Events } from '../models/events';
 import { RxSocket } from './rx-socket-io';
 import * as socketIO from 'socket.io-client';
 import { filter, map } from 'rxjs/operators';
+import { env } from 'process';
 
 @Injectable()
 export class SocketService {
@@ -14,8 +15,10 @@ export class SocketService {
 
 
   public emit(event, data) {
-    const socket = socketIO(environment.socketServer);
-    socket.emit(event, data);
+    event = 'ui-' + event;
+    const socket =  this.getSocketInstance();
+    socket.subject(event)
+    .next(data);
   }
 
   public getDeamonAlive(daemonId: string): Observable<string> {

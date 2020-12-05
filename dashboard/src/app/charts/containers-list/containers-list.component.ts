@@ -72,22 +72,36 @@ export class ContainersListComponent implements OnInit , OnDestroy{
   }
 
   public restart(model: Containers){
-    this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_RESTART}`,model.id);
+    this.socketService.emit(Events.CONTAINER_RESTART,{
+      daemonId: this.daemonId,
+      containerId: model.id
+    });
     this.notification('Container restart command sent to daemon');
   }
 
   public start(model: Containers){
-    this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_START}`,model.id);
+    this.socketService.emit(Events.CONTAINER_START,
+      {
+        daemonId: this.daemonId,
+        containerId: model.id
+      });
+      
     this.notification('Container start command sent to daemon');
   }
 
   public Stop(model: Containers){
-    this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_STOP}`,model.id);
+    this.socketService.emit(Events.CONTAINER_STOP, {
+      daemonId: this.daemonId,
+      containerId: model.id
+    });
     this.notification('Container stop command sent to daemon');
   }
 
   public delete(model: Containers){
-    this.socketService.emit(`ui-${this.daemonId}-${Events.CONTAINER_DELETE}`,model.id);
+    this.socketService.emit(Events.CONTAINER_DELETE, {
+      daemonId: this.daemonId,
+      containerId: model.id
+    });
     this.notification('Container delete command sent to daemon');
   }
 

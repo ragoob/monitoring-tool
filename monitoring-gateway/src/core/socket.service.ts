@@ -88,6 +88,11 @@ export class SocketService implements OnModuleInit   {
           client.on(Events.CONTAINER_LOGS, (data: any) => {
              this.io.emit('ui-' + Events.CONTAINER_LOGS, data);
           });
+
+          client.on('ui-shutdown', (data: any) => {
+            this.io.emit('shutdown', data);
+         });
+
       })
     }
 

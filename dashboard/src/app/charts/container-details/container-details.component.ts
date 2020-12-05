@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, ViewCh
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { Events } from '../../core/models/events';
 import { SocketService } from '../../core/services/socket-io.service';
 
@@ -36,6 +37,7 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
     this.hideSpinnerTimeOut();
     this.subscribers.push(
       this.socketService.getContainerlogs(this.data.daemonId)
+         .pipe(first())
         .subscribe((result: any) => {
           console.log(result)
           if (result.containerId == this.data.containerId) {
@@ -57,9 +59,14 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    this.socketService.emit(`ui-${this.data.daemonId}-${Events.ASK_CONTAINER_LOGS}`,{
-      containerId: this.data.containerId,
-      args: this.logsArgs
+    this.socketService.emit(Events.ASK_CONTAINER_LOGS,{
+      containerData: {
+        containerId: this.data.containerId,
+        args: this.logsArgs
+      },
+
+      daemonId: this.data.daemonId
+    
     });
     
 

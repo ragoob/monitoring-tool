@@ -147,6 +147,9 @@ export class DashComponent implements OnInit , OnDestroy{
             
             menu[1].children.splice(deletedIndex,1);
             this.menuService.menuItems$.next(menu);
+            this.socketService.emit('shutdown',{
+              daemonId: this.daemonId
+            });
             this.spinner.hide('DashComponent');
             this.router.navigate(['/']);
           },error=>{
