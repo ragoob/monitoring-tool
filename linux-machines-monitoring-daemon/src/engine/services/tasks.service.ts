@@ -26,9 +26,13 @@ export class TasksService implements OnModuleInit {
     .toPromise()
     .then(response=> {
       if(response.data && response.data.id){
-        this.socketService.socket.connect();
-        this.registerToDockerCommandEvents();
-        this.startIntervals();
+        console.log('Socket is connected ? ' , this.socketService.socket.connected);
+        this.socketService.socket.on('connect', () => {
+          this.registerToDockerCommandEvents();
+          this.startIntervals();
+
+        });
+        
         
       }
 

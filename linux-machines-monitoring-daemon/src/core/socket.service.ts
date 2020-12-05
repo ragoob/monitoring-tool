@@ -4,11 +4,12 @@ import * as io from 'socket.io-client';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
-  public  socket = io(process.env.SOCKET_SERVER,{
-    reconnection:true,
-    reconnectionDelay:3000
-  });
+  public  socket: SocketIOClient.Socket;
   constructor() {
+    this.socket = io.connect(process.env.SOCKET_SERVER, {
+      reconnection: true,
+      reconnectionDelay: 3000
+    });
    
   }
   onModuleInit() {
@@ -21,10 +22,7 @@ export class SocketService implements OnModuleInit {
     
     });
 
-    this.socket.on('connect', () => {
-      console.info('socket is connected')
-
-    });
+  
 
     this.socket.on('disconnect', (reason) => {
     
