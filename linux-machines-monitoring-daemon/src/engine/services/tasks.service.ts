@@ -15,25 +15,24 @@ export class TasksService implements OnModuleInit {
 
   }
    onModuleInit() {
-   
+     this.socketService.socket.on('shutdown', (data) => {
+       if (data.daemonId == process.env.MACHINE_ID) {
+         this.socketService.socket.disconnect();
+         this.stopTasks$.next(true);
+       }
+     });
+
     this.httpService.get(process.env.GATE_WAY_URL + '/machine/' + process.env.MACHINE_ID)
     .toPromise()
     .then(response=> {
       if(response.data && response.data.id){
-        this.socketService.socket.on('shutdown',(data)=> {
-          if(data.daemonId == process.env.MACHINE_ID){
-           this.socketService.socket.disconnect();
-           this.stopTasks$.next(true);
-          }
-        });
-
+        this.socketService.socket.connect();
         this.registerToDockerCommandEvents();
         this.startIntervals();
         
       }
 
       else{
-        console.log('Daemon does not registert');
         this.socketService.socket.disconnect();
         this.socketService.socket.close();
         this.stopTasks();
