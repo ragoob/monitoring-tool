@@ -45,13 +45,14 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     this.subscribers.push(
       this.socketService.getSummary(this.machine.id)
         .subscribe((res: MachineSummary)=> {
-        this.data = res;
-           
+         this.data = res;
           this.spinner.hide('SummaryCardComponent-'  + this.machine.id);
           this.setCpuStatus(res);
           this.setDiskStatus(res);
           this.setMemoryStatus(res);
           this.loaded = true;
+          this.title = `${this.title} connected`
+
          
        
       })
@@ -67,7 +68,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
 
   }
   private setCpuStatus(data: MachineSummary): void{
-    if (data.cpu > 50 && data.cpu < 70) {
+    if (data.cpu > 50 && data.cpu <= 70) {
       this.cpuStatus = "warning"
     }
     else if (data.cpu > 70) {
@@ -79,7 +80,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
   }
 
   private setMemoryStatus(data: MachineSummary): void {
-    if (data.memory > 50 && data.memory < 70) {
+    if (data.memory > 50 && data.memory <= 70) {
       this.memoryStatus = "warning"
     }
     else if (data.memory > 70) {
@@ -91,7 +92,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
   }
 
   private setDiskStatus(data: MachineSummary): void {
-    if (data.disk > 50 && data.disk < 70) {
+    if (data.disk > 50 && data.disk <= 70) {
       this.diskStatus = "warning"
     }
     else if (data.disk > 70) {
@@ -111,7 +112,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
       else{
         this.title = `${this.title} connected`
       }
-    }, 10 * 1000);
+    }, 20 * 1000);
   }
 
 

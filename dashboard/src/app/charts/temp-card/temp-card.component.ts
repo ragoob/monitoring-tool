@@ -49,10 +49,10 @@ export class TempCardComponent implements OnInit {
          this.avg = Math.round((sum / this.sortedList.length));
          this.temperature = Math.round(data.temperature);
 
-         if(this.temperature > 50 && this.temperature < 60){
+         if(this.temperature > 50 && this.temperature <= 65){
            this.status = "warning"
          }
-         else if(this.temperature > 60){
+         else if(this.temperature > 65){
            this.status  ="danger"
          }
          else{
