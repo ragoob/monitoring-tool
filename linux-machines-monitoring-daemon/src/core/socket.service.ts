@@ -8,7 +8,11 @@ export class SocketService implements OnModuleInit {
   constructor() {
     this.socket = io.connect(process.env.SOCKET_SERVER, {
       reconnection: true,
-      reconnectionDelay: 3000
+      reconnectionDelay: 3000,
+      transports: ['websocket'],
+      upgrade: false,
+      timeout: 300000,
+      rejectUnauthorized: false
     });
    
   }
