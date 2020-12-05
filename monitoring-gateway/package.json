@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "copy": "cp daemon-deploy.sh dist && cp build.tar.gz dist",
-    "build": "nest build",
+    "build": "nest build && copy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "set NODE_ENV=dev && nest start --watch",
