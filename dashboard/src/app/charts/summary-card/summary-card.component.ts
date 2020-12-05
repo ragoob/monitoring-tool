@@ -102,12 +102,6 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
   private spinnerHideTimeout(){
     setTimeout(() => {
       this.spinner.hide('SummaryCardComponent-' + this.machine.id);
-      if(!this.loaded){
-        this.title = `${this.machine.name}`
-      }
-      else{
-        this.title = `${this.machine.name}`
-      }
     }, 20 * 1000);
   }
 
