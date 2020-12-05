@@ -51,7 +51,7 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
           this.setDiskStatus(res);
           this.setMemoryStatus(res);
           this.loaded = true;
-          this.title = `${this.title} connected`
+          this.title = `${this.machine.name} connected`
 
          
        
@@ -107,10 +107,10 @@ export class SummaryCardComponent implements OnInit , OnDestroy {
     setTimeout(() => {
       this.spinner.hide('SummaryCardComponent-' + this.machine.id);
       if(!this.loaded){
-        this.title = `${this.title} disconnected`
+        this.title = `${this.machine.name} disconnected`
       }
       else{
-        this.title = `${this.title} connected`
+        this.title = `${this.machine.name} connected`
       }
     }, 20 * 1000);
   }
