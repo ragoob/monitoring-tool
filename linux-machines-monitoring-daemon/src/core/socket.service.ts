@@ -15,16 +15,20 @@ export class SocketService implements OnModuleInit {
   onModuleInit() {
     this.socket.on('connect_error', (err) => {
     
-   
+      console.log('error during socket connection', err);
+      this.socket.open();
+      this.socket.connect();
     });
 
     this.socket.on('connect_timeout', (timeout) => {
+      console.log('socket connection timeout');
     
     });
 
   
 
     this.socket.on('disconnect', (reason) => {
+      console.log('connection closed with reason  ', reason);
     
     });
   }
