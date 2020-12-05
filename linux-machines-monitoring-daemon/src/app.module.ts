@@ -7,7 +7,6 @@ import { EngineModule } from './engine/engine.module';
     ConfigModule.forRoot({
      // ignoreEnvFile: process.env.NODE_ENV == 'production'
     }),
-    
     EngineModule
   ],
   controllers: [],

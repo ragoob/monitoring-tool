@@ -35,7 +35,6 @@ export class MachineController  {
     }
 
     @Get(':id')
-    @UseGuards(JwtAuthGuard)
     public getConfiguration(@Param('id') id: string): Promise<Machine>{
         return this.machineService.getById(id);
     }

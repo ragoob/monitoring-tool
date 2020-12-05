@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { HttpService, Injectable, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { BehaviorSubject } from 'rxjs';
 import { Events } from '../../core/events';
@@ -10,23 +10,94 @@ export class TasksService implements OnModuleInit {
 
   public stopTasks$: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   private intervals: NodeJS.Timeout[] = [];
-  constructor(private serviceFactory: ServiceFactory, private socketService: SocketService) {
+  constructor(private serviceFactory: ServiceFactory, 
+    private socketService: SocketService, 
+    private httpService: HttpService ) {
 
   }
    onModuleInit() {
-    this.stopTasks$
-    .subscribe(d=> {
-      this.stopTasks();
+   
+    this.httpService.get(process.env.GATE_WAY_URL + '/machine/' + process.env.MACHINE_ID)
+    .toPromise()
+    .then(response=> {
+      if(response.data && response.data.id){
+        this.stopTasks$
+        .subscribe(d=> {
+          this.stopTasks();
+        });
+    
+        this.socketService.socket.on('shutdown',(data)=> {
+          if(data.daemonId == process.env.MACHINE_ID){
+           this.socketService.socket.disconnect();
+           this.stopTasks$.next(true);
+          }
+        });
+
+        this.registerToDockerCommandEvents();
+        this.startIntervals();
+        
+      }
+
+      else{
+        console.log('Daemon does not registert');
+        this.socketService.socket.disconnect();
+        this.socketService.socket.close();
+        this.stopTasks();
+      }
+    });
+    
+  }
+  private registerToDockerCommandEvents(): void {
+    this.socketService.socket.on(Events.CONTAINER_START,  (data) => {
+       if(data.deamonId == process.env.MACHINE_ID){
+        this.serviceFactory.startContainer(data.containerId);
+       }
+      
     });
 
-    this.registerToDockerCommandEvents();
-    this.socketService.socket.on('shutdown',(data)=> {
+    this.socketService.socket.on(Events.CONTAINER_STOP,  (data) => {
       if(data.daemonId == process.env.MACHINE_ID){
-       this.socketService.socket.disconnect();
-       this.stopTasks$.next(true);
+        this.serviceFactory.stopContainer(data.containerId);
       }
-    })
+       
+    });
 
+    this.socketService.socket.on(Events.CONTAINER_RESTART,  (data) => {
+      if(data.daemonId == process.env.MACHINE_ID){
+        this.serviceFactory.restartContainer(data.containerId);
+      }
+      
+    });
+    this.socketService.socket.on(Events.CONTAINER_DELETE,  (data) => {
+      if(data.daemonId == process.env.MACHINE_ID){
+        this.serviceFactory.deleteContainer(data.containerId);
+      }
+     
+    });
+
+    this.socketService.socket.on(Events.DOCKER_RUN_IMAGE,  (data) => {
+      if(data.daemonId == process.env.MACHINE_ID){
+      this.serviceFactory.runImage(data.containerId);
+    }
+    });
+
+    this.socketService.socket.on(Events.ASK_CONTAINER_LOGS,  (data) => {
+      if(data.daemonId == process.env.MACHINE_ID){
+      this.serviceFactory.containerLogs(data.containerData.containerId,data.containerData.args)
+      .then(value=> {
+        this.socketService.emitEvent(`${Events.CONTAINER_LOGS}`, {
+          machineId: process.env.MACHINE_ID,
+          containerId: data.containerId,
+          logs: value
+        });
+      });
+
+    }
+   });
+
+  }
+
+  private startIntervals(): void{
     this.intervals.push(
       setInterval( () => {
         this.serviceFactory.dockerInfo()
@@ -119,58 +190,7 @@ export class TasksService implements OnModuleInit {
       })
     }
       , 5 * 1000));
-      
   }
-  private registerToDockerCommandEvents(): void {
-    this.socketService.socket.on(Events.CONTAINER_START,  (data) => {
-       if(data.deamonId == process.env.MACHINE_ID){
-        this.serviceFactory.startContainer(data.containerId);
-       }
-      
-    });
-
-    this.socketService.socket.on(Events.CONTAINER_STOP,  (data) => {
-      if(data.daemonId == process.env.MACHINE_ID){
-        this.serviceFactory.stopContainer(data.containerId);
-      }
-       
-    });
-
-    this.socketService.socket.on(Events.CONTAINER_RESTART,  (data) => {
-      if(data.daemonId == process.env.MACHINE_ID){
-        this.serviceFactory.restartContainer(data.containerId);
-      }
-      
-    });
-    this.socketService.socket.on(Events.CONTAINER_DELETE,  (data) => {
-      if(data.daemonId == process.env.MACHINE_ID){
-        this.serviceFactory.deleteContainer(data.containerId);
-      }
-     
-    });
-
-    this.socketService.socket.on(Events.DOCKER_RUN_IMAGE,  (data) => {
-      if(data.daemonId == process.env.MACHINE_ID){
-      this.serviceFactory.runImage(data.containerId);
-    }
-    });
-
-    this.socketService.socket.on(Events.ASK_CONTAINER_LOGS,  (data) => {
-      if(data.daemonId == process.env.MACHINE_ID){
-      this.serviceFactory.containerLogs(data.containerData.containerId,data.containerData.args)
-      .then(value=> {
-        this.socketService.emitEvent(`${Events.CONTAINER_LOGS}`, {
-          machineId: process.env.MACHINE_ID,
-          containerId: data.containerId,
-          logs: value
-        });
-      });
-
-    }
-   });
-
-  }
-
   private stopTasks(): void{
     this.intervals.forEach((interval: NodeJS.Timeout)=> {
       clearInterval(interval);

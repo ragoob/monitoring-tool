@@ -12,6 +12,7 @@ export class RxSocket<DT> {
   
   public disconnect(): void {
     this.socket.disconnect();
+    this.socket.close();
   }
 
   public connect(): void {
