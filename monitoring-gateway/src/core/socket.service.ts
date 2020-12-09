@@ -12,6 +12,7 @@ export class SocketService implements OnModuleInit   {
   joined: socket.Socket[] = [];
    onModuleInit() {
      this.startListen();
+     
    }
     emit(event: string, data: any) {
         this.io.emit(event, data);
