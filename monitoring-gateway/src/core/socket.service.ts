@@ -21,9 +21,6 @@ export class SocketService implements OnModuleInit   {
     startListen(){
       
        this.io.on('connection',(client)=> {
-         
-          this.joined.push(client);
-          console.log('the connected sockets ' + this.joined.filter(d=> d.connected).length)
           client.on(Events.HEALTH_CHECK, (data: any) => {
              this.io.emit('ui-' + Events.HEALTH_CHECK, data);
           });

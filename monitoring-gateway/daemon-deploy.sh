@@ -52,6 +52,7 @@ EOF'
 
  sudo systemctl daemon-reload
   sudo systemctl disable linux-machines-monitoring-daemon
+   sudo systemctl enable linux-machines-monitoring-daemon
   sudo systemctl start linux-machines-monitoring-daemon
 
 

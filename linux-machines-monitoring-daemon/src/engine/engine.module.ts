@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { UtilService } from '../core/util.service';
 import { ContainerService } from './services/container.service';
 import { EngineService } from './services/engine.service';
@@ -8,7 +8,7 @@ import { SocketService } from '../core/socket.service';
 import { ServiceFactory } from './services/service-factory.service';
 
 @Module({
-    imports: [ScheduleModule.forRoot()],
+    imports: [ScheduleModule.forRoot(),HttpModule],
     providers: [UtilService,ContainerService,EngineService,SocketService,ServiceFactory,TasksService],
     controllers: [],
     

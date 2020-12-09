@@ -50,11 +50,11 @@ export class MemoryCardComponent implements OnInit, OnDestroy {
          this.avg = Math.round((((sum / this.sortedList.length)) / data.total) * 100)
          this.usage = data.used;
          this.usagePerc = Math.round((data.used / data.total) * 100)
-         if(this.usagePerc  > 60 && this.usagePerc < 90){
+         if(this.usagePerc  > 60 && this.usagePerc <= 80){
            this.status = "warning";
          }
 
-         else if(this.usagePerc >=90){
+         else if(this.usagePerc > 80){
           this.status = "danger";
          }
          else{

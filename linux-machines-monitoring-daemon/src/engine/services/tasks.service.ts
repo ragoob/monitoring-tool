@@ -1,5 +1,4 @@
 import { HttpService, Injectable, OnModuleInit } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { BehaviorSubject } from 'rxjs';
 import { Events } from '../../core/events';
 import { SocketService } from '../../core/socket.service';
@@ -16,30 +15,26 @@ export class TasksService implements OnModuleInit {
 
   }
    onModuleInit() {
-   
+     this.socketService.socket.on('shutdown', (data) => {
+       if (data.daemonId == process.env.MACHINE_ID) {
+         this.socketService.socket.disconnect();
+         this.stopTasks$.next(true);
+       }
+     });
+
     this.httpService.get(process.env.GATE_WAY_URL + '/machine/' + process.env.MACHINE_ID)
     .toPromise()
     .then(response=> {
       if(response.data && response.data.id){
-        this.stopTasks$
-        .subscribe(d=> {
-          this.stopTasks();
-        });
-    
-        this.socketService.socket.on('shutdown',(data)=> {
-          if(data.daemonId == process.env.MACHINE_ID){
-           this.socketService.socket.disconnect();
-           this.stopTasks$.next(true);
-          }
-        });
-
+        console.log('Socket is connected ? ' , this.socketService.socket.connected);
+        this.stopTasks();
         this.registerToDockerCommandEvents();
         this.startIntervals();
+        
         
       }
 
       else{
-        console.log('Daemon does not registert');
         this.socketService.socket.disconnect();
         this.socketService.socket.close();
         this.stopTasks();

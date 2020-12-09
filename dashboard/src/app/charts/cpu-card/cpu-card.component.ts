@@ -42,7 +42,7 @@ export class CpuCardComponent implements OnInit , OnDestroy{
          this.avg = Math.round((sum / this.sortedList.length));
          this.used = Math.round(data.used);
 
-         if(this.used > 50 && this.used < 70){
+         if(this.used > 50 && this.used <= 70){
            this.status = "warning"
          }
          else if(this.used > 70){
