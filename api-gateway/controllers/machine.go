@@ -5,6 +5,7 @@ import (
 	machinerepository "api-gateway/repository/machine"
 	"api-gateway/utils"
 	"database/sql"
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -60,5 +61,89 @@ func (c MachineController) GetMachine(db *sql.DB) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		utils.SendSuccess(w, machine)
 
+	}
+}
+
+//AddMachine Handler
+func (c MachineController) AddMachine(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var machine models.Machine
+		var machineID string
+		var error models.Error
+
+		json.NewDecoder(r.Body).Decode(&machine)
+
+		if machine.Name == "" {
+			error.Message = "Enter missing fields."
+			utils.SendError(w, http.StatusBadRequest, error) //400
+			return
+		}
+
+		machineRepo := machinerepository.MachineRepository{}
+		machineID, err := machineRepo.AddMachine(db, machine)
+
+		if err != nil {
+			error.Message = "Server error"
+			utils.SendError(w, http.StatusInternalServerError, error) //500
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		utils.SendSuccess(w, machineID)
+	}
+}
+
+//EditMachine Handler
+func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var machine models.Machine
+		var rowAffected int64
+		var error models.Error
+
+		json.NewDecoder(r.Body).Decode(&machine)
+
+		if machine.Name == "" || machine.ID == "" {
+			error.Message = "Enter missing fields."
+			utils.SendError(w, http.StatusBadRequest, error) //400
+			return
+		}
+
+		machineRepo := machinerepository.MachineRepository{}
+		rowAffected, err := machineRepo.UpdateMachine(db, machine)
+
+		if err != nil {
+			error.Message = "Server error"
+			utils.SendError(w, http.StatusInternalServerError, error) //500
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		utils.SendSuccess(w, rowAffected)
+	}
+}
+
+//RemoveMachine Handler ..
+func (c MachineController) RemoveMachine(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var error models.Error
+		params := mux.Vars(r)
+		machineRepo := machinerepository.MachineRepository{}
+
+		rowsDeleted, err := machineRepo.RemoveMachine(db, params["id"])
+
+		if err != nil {
+			error.Message = "Server error."
+			utils.SendError(w, http.StatusInternalServerError, error) //500
+			return
+		}
+
+		if rowsDeleted == 0 {
+			error.Message = "Not Found"
+			utils.SendError(w, http.StatusNotFound, error) //404
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		utils.SendSuccess(w, rowsDeleted)
 	}
 }

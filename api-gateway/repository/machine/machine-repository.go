@@ -69,7 +69,7 @@ func (m MachineRepository) UpdateMachine(db *sql.DB, machine models.Machine) (in
 }
 
 //RemoveMachine ..
-func (m MachineRepository) RemoveMachine(db *sql.DB, id int) (int64, error) {
+func (m MachineRepository) RemoveMachine(db *sql.DB, id string) (int64, error) {
 	result, err := db.Exec("delete from machines where id = $1", id)
 
 	if err != nil {
