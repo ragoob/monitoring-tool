@@ -6,7 +6,8 @@ require (
 	github.com/googollee/go-socket.io v1.4.4
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-	github.com/gorilla/websocket v1.4.2
+	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/graarh/golang-socketio v0.0.0-20170510162725-2c44953b9b5f
 	github.com/lib/pq v1.9.0
 	github.com/subosito/gotenv v1.2.0
 )

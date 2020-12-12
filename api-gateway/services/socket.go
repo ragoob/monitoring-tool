@@ -3,8 +3,9 @@ package services
 import (
 	"fmt"
 
-	socketio "github.com/googollee/go-socket.io"
 	"github.com/gorilla/mux"
+	gosocketio "github.com/graarh/golang-socketio"
+	"github.com/graarh/golang-socketio/transport"
 )
 
 //SocketService handler
@@ -12,20 +13,23 @@ type SocketService struct{}
 
 //Handle connection ...
 func (s SocketService) Handle(router *mux.Router) {
-
-	server, err := socketio.NewServer(nil)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	server.OnConnect("/", func(s socketio.Conn) error {
-		fmt.Println("connected:", s.ID())
-		s.SetContext("")
-
-		return nil
+	server := gosocketio.NewServer(transport.GetDefaultWebsocketTransport())
+	server.On(gosocketio.OnConnection, func(c *gosocketio.Channel) {
+		fmt.Println(c.Id() + " is Connected")
 	})
 
-	go server.Serve()
-	//defer server.Close()
+	server.On("SUMMARY", func(c *gosocketio.Channel, msg string) {
+
+		fmt.Println(msg)
+
+	})
+
+	server.On("TEMPERATURE", func(c *gosocketio.Channel, msg string) {
+
+		fmt.Println(msg)
+
+	})
+
 	router.Handle("/socket.io/", server)
+
 }

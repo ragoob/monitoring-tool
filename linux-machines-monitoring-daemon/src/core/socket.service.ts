@@ -19,6 +19,7 @@ export class SocketService implements OnModuleInit {
   onModuleInit() {
     this.socket.on('connect',()=>{
       console.log('socket is connected to server')
+      this.socket.emit('ping',"{message: 'hello from client'}")
     })
     this.socket.on('connect_error', (err) => {
     
@@ -43,10 +44,10 @@ export class SocketService implements OnModuleInit {
 
   public emitEvent(event: string, data: any): any {
 
-    this.socket.emit(event, {
+    this.socket.emit(event, JSON.stringify({
       machineId: process.env.MACHINE_ID,
       data: data
-    });
+    }));
       
   }
 
