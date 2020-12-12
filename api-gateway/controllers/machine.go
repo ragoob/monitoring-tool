@@ -28,6 +28,11 @@ func (c MachineController) GetMachines(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var machine models.Machine
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 
 		machines = []models.Machine{}
 		machineRepo := machinerepository.MachineRepository{}
@@ -71,6 +76,12 @@ func (c MachineController) AddMachine(db *sql.DB) http.HandlerFunc {
 		var machineID string
 		var error models.Error
 
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
+
 		json.NewDecoder(r.Body).Decode(&machine)
 
 		if machine.Name == "" {
@@ -99,7 +110,11 @@ func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
 		var machine models.Machine
 		var rowAffected int64
 		var error models.Error
-
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 		json.NewDecoder(r.Body).Decode(&machine)
 
 		if machine.Name == "" || machine.ID == "" {
@@ -126,6 +141,11 @@ func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
 func (c MachineController) RemoveMachine(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 		params := mux.Vars(r)
 		machineRepo := machinerepository.MachineRepository{}
 

@@ -74,7 +74,7 @@ export class EngineService{
      });
 }
 
-public healthCheck(): Promise<string>{
+public healthCheck(): Promise<any>{
     const command = `echo I am $MACHINE_ID a live`;
     return    new Promise((resolve, reject) => {
         process.exec(command,(error: process.ExecException,stdout: string, stderr: string)=> {
@@ -82,7 +82,9 @@ public healthCheck(): Promise<string>{
                  return reject(error);
              }
  
-             resolve(stdout);
+             resolve({
+                 message: stdout
+             });
          });
      });
 }

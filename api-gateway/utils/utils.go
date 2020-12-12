@@ -6,7 +6,12 @@ import (
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
+	"strings"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 //SendError in response
@@ -23,14 +28,16 @@ func SendSuccess(w http.ResponseWriter, data interface{}) {
 // GenerateRandomSalt 16 bytes randomly and securely using the
 // Cryptographically secure pseudorandom number generator (CSPRNG)
 // in the crypto.rand package
-func GenerateRandomSalt(saltSize int) ([]byte, error) {
-	b := make([]byte, saltSize)
-	_, err := rand.Read(b)
+func GenerateRandomSalt(saltSize int) []byte {
+	var salt = make([]byte, saltSize)
+
+	_, err := rand.Read(salt[:])
+
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	return b, nil
+	return salt
 }
 
 //HashPassword Combine password and salt then hash them using the SHA-512
@@ -64,4 +71,42 @@ func DoPasswordsMatch(hashedPassword, currPassword string,
 	var currPasswordHash = HashPassword(currPassword, salt)
 
 	return hashedPassword == currPasswordHash
+}
+
+//ExtractToken ...
+func extractToken(r *http.Request) string {
+	bearToken := r.Header.Get("Authorization")
+	//normally Authorization the_token_xxx
+	strArr := strings.Split(bearToken, " ")
+	if len(strArr) == 2 {
+		return strArr[1]
+	}
+	return ""
+}
+
+//VerifyToken ..
+func verifyToken(r *http.Request) (*jwt.Token, error) {
+	tokenString := extractToken(r)
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("ACCESS_SECRET")), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
+}
+
+//IsAuthorized ..
+func IsAuthorized(r *http.Request) bool {
+	token, err := verifyToken(r)
+	if err != nil {
+		return false
+	}
+	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
+		return false
+	}
+	return true
 }

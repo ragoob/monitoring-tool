@@ -40,6 +40,15 @@ func (u UserRepository) GetUser(db *sql.DB, id int) (models.User, error) {
 	return user, err
 }
 
+//GetUserByEmail by id
+func (u UserRepository) GetUserByEmail(db *sql.DB, email string) (models.User, error) {
+	var user models.User
+	rows := db.QueryRow(`select id,email,"isAdmin",password, "passwordSalt" from users where email=$1`, email)
+	err := rows.Scan(&user.ID, &user.Email, &user.IsAdmin, &user.Password, &user.PasswordSalt)
+
+	return user, err
+}
+
 //AddUser ..
 func (u UserRepository) AddUser(db *sql.DB, user models.User) (int, error) {
 	err := db.QueryRow(`insert into users (email,"isAdmin",password,"passwordSalt") values($1,$2,$3,$4) RETURNING id;`,

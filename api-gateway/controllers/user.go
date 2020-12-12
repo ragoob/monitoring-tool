@@ -21,8 +21,15 @@ var users []models.User
 //GetUsers Handler
 func (c UserController) GetUsers(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		var user models.User
 		var error models.Error
+
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 
 		users = []models.User{}
 		userRepo := userrepository.UserRepository{}
@@ -45,6 +52,12 @@ func (c UserController) GetUser(db *sql.DB) http.HandlerFunc {
 		params := mux.Vars(r)
 		var user models.User
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
+
 		userRepo := userrepository.UserRepository{}
 		id, _ := strconv.Atoi(params["id"])
 
@@ -67,21 +80,20 @@ func (c UserController) AddUser(db *sql.DB) http.HandlerFunc {
 		var user models.User
 		var userID int
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 		json.NewDecoder(r.Body).Decode(&user)
-
 		if user.Email == "" || user.Password == "" {
 			error.Message = "Enter missing fields."
 			utils.SendError(w, http.StatusBadRequest, error) //400
 			return
 		}
 
-		passwordSalt, salterr := utils.GenerateRandomSalt(16)
-		if salterr != nil {
-			logFatal(salterr)
-			error.Message = "Server error"
-			utils.SendError(w, http.StatusInternalServerError, error) //500
-			return
-		}
+		passwordSalt := utils.GenerateRandomSalt(16)
+
 		hashedPassword := utils.HashPassword(user.Password, passwordSalt)
 
 		user.PasswordSalt = hex.EncodeToString(passwordSalt)
@@ -108,6 +120,11 @@ func (c UserController) EditUser(db *sql.DB) http.HandlerFunc {
 		var user models.User
 		var rowsAffected int64
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
 		json.NewDecoder(r.Body).Decode(&user)
 
 		if user.ID <= 0 || user.Email == "" {
@@ -119,13 +136,8 @@ func (c UserController) EditUser(db *sql.DB) http.HandlerFunc {
 
 		// If password changed re-generate new hash
 		if user.Password != "" {
-			passwordSalt, salterr := utils.GenerateRandomSalt(16)
-			if salterr != nil {
-				logFatal(salterr)
-				error.Message = "Server error"
-				utils.SendError(w, http.StatusInternalServerError, error) //500
-				return
-			}
+			passwordSalt := utils.GenerateRandomSalt(16)
+
 			hashedPassword := utils.HashPassword(user.Password, passwordSalt)
 
 			user.PasswordSalt = hex.EncodeToString(passwordSalt)
@@ -155,6 +167,12 @@ func (c UserController) EditUser(db *sql.DB) http.HandlerFunc {
 func (c UserController) RemoveUser(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var error models.Error
+		if !utils.IsAuthorized(r) {
+			error.Message = "unauthorized access"
+			utils.SendError(w, http.StatusUnauthorized, error)
+			return
+		}
+
 		params := mux.Vars(r)
 		userRepo := userrepository.UserRepository{}
 

@@ -44,10 +44,10 @@ export class SocketService implements OnModuleInit {
 
   public emitEvent(event: string, data: any): any {
 
-    this.socket.emit(event, JSON.stringify({
+    this.socket.emit(event, {
       machineId: process.env.MACHINE_ID,
       data: data
-    }));
+    });
       
   }
 
