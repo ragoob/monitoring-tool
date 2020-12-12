@@ -7,6 +7,8 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 //MachineController ...
@@ -37,6 +39,26 @@ func (c MachineController) GetMachines(db *sql.DB) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		utils.SendSuccess(w, machines)
+
+	}
+}
+
+//GetMachine By id ...
+func (c MachineController) GetMachine(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		var machine models.Machine
+		var error models.Error
+		machineRepo := machinerepository.MachineRepository{}
+		machine, err := machineRepo.GetMachine(db, machine, params["id"])
+		if err != nil {
+			error.Message = "Server error"
+			utils.SendError(w, http.StatusInternalServerError, error)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		utils.SendSuccess(w, machine)
 
 	}
 }

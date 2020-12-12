@@ -17,6 +17,9 @@ export class SocketService implements OnModuleInit {
    
   }
   onModuleInit() {
+    this.socket.on('connect',()=>{
+      console.log('socket is connected to server')
+    })
     this.socket.on('connect_error', (err) => {
     
       console.log('error during socket connection', err);

@@ -29,7 +29,7 @@ func main() {
 	wsService := services.SocketService{}
 
 	router.HandleFunc("/", helloHandler).Methods("GET")
-	router.HandleFunc("/ws", wsService.WsEndPoint())
+	wsService.Handle(router)
 	machineRouter.Handle(router, db)
 	fmt.Println("Server is running at port " + os.Getenv("LISTEN_PORT"))
 	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_PORT"), handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}),

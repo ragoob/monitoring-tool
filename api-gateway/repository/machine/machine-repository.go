@@ -31,7 +31,7 @@ func (m MachineRepository) GetMachines(db *sql.DB, machine models.Machine, machi
 }
 
 //GetMachine by id
-func (m MachineRepository) GetMachine(db *sql.DB, machine models.Machine, id int) (models.Machine, error) {
+func (m MachineRepository) GetMachine(db *sql.DB, machine models.Machine, id string) (models.Machine, error) {
 	rows := db.QueryRow("select id,name from machines where id=$1", id)
 	err := rows.Scan(&machine.ID, &machine.Name)
 

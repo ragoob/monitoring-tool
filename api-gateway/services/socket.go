@@ -1,48 +1,31 @@
 package services
 
 import (
-	"log"
-	"net/http"
+	"fmt"
 
-	"github.com/gorilla/websocket"
+	socketio "github.com/googollee/go-socket.io"
+	"github.com/gorilla/mux"
 )
 
 //SocketService handler
 type SocketService struct{}
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
+//Handle connection ...
+func (s SocketService) Handle(router *mux.Router) {
 
-func reader(conn *websocket.Conn) {
-	for {
-		_, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
-			return
-		}
+	server, err := socketio.NewServer(nil)
 
-		log.Println(string(p))
-
+	if err != nil {
+		fmt.Println(err)
 	}
-}
+	server.OnConnect("/", func(s socketio.Conn) error {
+		fmt.Println("connected:", s.ID())
+		s.SetContext("")
 
-//WsEndPoint ...
-func (s SocketService) WsEndPoint() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true //will handle origin later
-		}
+		return nil
+	})
 
-		ws, err := upgrader.Upgrade(w, r, nil)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		log.Println("Client successfully connected")
-
-		reader(ws)
-	}
+	go server.Serve()
+	//defer server.Close()
+	router.Handle("/socket.io/", server)
 }

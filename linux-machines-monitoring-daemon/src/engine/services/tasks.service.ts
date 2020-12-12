@@ -25,20 +25,20 @@ export class TasksService implements OnModuleInit {
     this.httpService.get(process.env.GATE_WAY_URL + '/machine/' + process.env.MACHINE_ID)
     .toPromise()
     .then(response=> {
-      if(response.data && response.data.id){
-        console.log('Socket is connected ? ' , this.socketService.socket.connected);
-        this.stopTasks();
-        this.registerToDockerCommandEvents();
-        this.startIntervals();
+      // if(response.data && response.data.id){
+      //   console.log('Socket is connected ? ' , this.socketService.socket.connected);
+      //   this.stopTasks();
+      //   this.registerToDockerCommandEvents();
+      //   this.startIntervals();
         
         
-      }
+      // }
 
-      else{
-        this.socketService.socket.disconnect();
-        this.socketService.socket.close();
-        this.stopTasks();
-      }
+      // else{
+      //   this.socketService.socket.disconnect();
+      //   this.socketService.socket.close();
+      //   this.stopTasks();
+      // }
     });
     
   }
