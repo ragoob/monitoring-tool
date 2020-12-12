@@ -52,7 +52,7 @@ func (m MachineRepository) AddMachine(db *sql.DB, machine models.Machine) (strin
 
 //UpdateMachine ..
 func (m MachineRepository) UpdateMachine(db *sql.DB, machine models.Machine) (int64, error) {
-	result, err := db.Exec("update machines set name=$1 where id=$4 RETURNING id",
+	result, err := db.Exec("update machines set name=$1 where id=$2 RETURNING id;",
 		&machine.Name, &machine.ID)
 
 	if err != nil {
