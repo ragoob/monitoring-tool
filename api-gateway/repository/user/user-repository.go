@@ -32,7 +32,8 @@ func (u UserRepository) GetUsers(db *sql.DB, user models.User, users []models.Us
 }
 
 //GetUser by id
-func (u UserRepository) GetUser(db *sql.DB, user models.User, id string) (models.User, error) {
+func (u UserRepository) GetUser(db *sql.DB, id int) (models.User, error) {
+	var user models.User
 	rows := db.QueryRow(`select id,email,"isAdmin",password, "passwordSalt" from users where id=$1`, id)
 	err := rows.Scan(&user.ID, &user.Email, &user.IsAdmin, &user.Password, &user.PasswordSalt)
 
@@ -54,8 +55,8 @@ func (u UserRepository) AddUser(db *sql.DB, user models.User) (int, error) {
 
 //UpdateUser ..
 func (u UserRepository) UpdateUser(db *sql.DB, user models.User) (int64, error) {
-	result, err := db.Exec("update users set email=$1,isAdmin=$2,password=$3,passwordSalt=$4",
-		user.Email, user.IsAdmin, user.Password, user.PasswordSalt)
+	result, err := db.Exec(`update users set email=$1,"isAdmin"=$2,password=$3,"passwordSalt"=$4 where id=$5`,
+		user.Email, user.IsAdmin, user.Password, user.PasswordSalt, user.ID)
 
 	if err != nil {
 		return 0, err
@@ -71,7 +72,7 @@ func (u UserRepository) UpdateUser(db *sql.DB, user models.User) (int64, error) 
 }
 
 //RemoveUser ..
-func (u UserRepository) RemoveUser(db *sql.DB, id string) (int64, error) {
+func (u UserRepository) RemoveUser(db *sql.DB, id int) (int64, error) {
 	result, err := db.Exec("delete from users where id = $1", id)
 
 	if err != nil {

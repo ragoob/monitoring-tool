@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -45,7 +46,9 @@ func (c UserController) GetUser(db *sql.DB) http.HandlerFunc {
 		var user models.User
 		var error models.Error
 		userRepo := userrepository.UserRepository{}
-		user, err := userRepo.GetUser(db, user, params["id"])
+		id, _ := strconv.Atoi(params["id"])
+
+		user, err := userRepo.GetUser(db, id)
 		if err != nil {
 			error.Message = "Server error"
 			utils.SendError(w, http.StatusInternalServerError, error)
@@ -96,5 +99,81 @@ func (c UserController) AddUser(db *sql.DB) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "text/plain")
 		utils.SendSuccess(w, userID)
+	}
+}
+
+//EditUser Handler
+func (c UserController) EditUser(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var user models.User
+		var rowsAffected int64
+		var error models.Error
+		json.NewDecoder(r.Body).Decode(&user)
+
+		if user.ID <= 0 || user.Email == "" {
+			error.Message = "Enter missing fields."
+			utils.SendError(w, http.StatusBadRequest, error) //400
+			return
+		}
+		userRepo := userrepository.UserRepository{}
+
+		// If password changed re-generate new hash
+		if user.Password != "" {
+			passwordSalt, salterr := utils.GenerateRandomSalt(16)
+			if salterr != nil {
+				logFatal(salterr)
+				error.Message = "Server error"
+				utils.SendError(w, http.StatusInternalServerError, error) //500
+				return
+			}
+			hashedPassword := utils.HashPassword(user.Password, passwordSalt)
+
+			user.PasswordSalt = hex.EncodeToString(passwordSalt)
+			user.Password = hashedPassword
+		} else {
+			_user, _ := userRepo.GetUser(db, user.ID)
+
+			user.Password = _user.Password
+			user.PasswordSalt = _user.PasswordSalt
+		}
+
+		rowsAffected, err := userRepo.UpdateUser(db, user)
+
+		if err != nil {
+			logFatal(err)
+			error.Message = "Server error"
+			utils.SendError(w, http.StatusInternalServerError, error) //500
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		utils.SendSuccess(w, rowsAffected)
+	}
+}
+
+//RemoveUser Handler ..
+func (c UserController) RemoveUser(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var error models.Error
+		params := mux.Vars(r)
+		userRepo := userrepository.UserRepository{}
+
+		id, _ := strconv.Atoi(params["id"])
+		rowsDeleted, err := userRepo.RemoveUser(db, id)
+
+		if err != nil {
+			error.Message = "Server error."
+			utils.SendError(w, http.StatusInternalServerError, error) //500
+			return
+		}
+
+		if rowsDeleted == 0 {
+			error.Message = "Not Found"
+			utils.SendError(w, http.StatusNotFound, error) //404
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain")
+		utils.SendSuccess(w, rowsDeleted)
 	}
 }
