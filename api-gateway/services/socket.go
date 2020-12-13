@@ -45,56 +45,57 @@ func (s SocketService) Handle(router *mux.Router) {
 	})
 
 	server.On(HEALTH_CHECK, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
-		c.Emit("ui-"+HEALTH_CHECK, msg)
+		////fmt.Println(msg.Data)
+		c.Emit("ui-HEALTH_CHECK", msg)
+
 	})
 
 	server.On(SUMMARY, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+SUMMARY, msg)
 	})
 
 	server.On(TEMPERATURE, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+TEMPERATURE, msg)
 
 	})
 	server.On(MEMORY_USAGE, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 
 		c.Emit("ui-"+MEMORY_USAGE, msg)
 
 	})
 
 	server.On(CPU_USAGE, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+CPU_USAGE, msg)
 
 	})
 
 	server.On(DISK_USAGE, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+DISK_USAGE, msg)
 
 	})
 
 	server.On(CONTAINERS_METRICS, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+CONTAINERS_METRICS, msg)
 
 	})
 
 	server.On(CONTAINERS_LIST, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+CONTAINERS_LIST, msg)
 	})
 
 	server.On(DOCKER_ENGINE_INFO, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit("ui-"+DOCKER_ENGINE_INFO, msg)
 	})
 	server.On("ui-"+CONTAINER_START, func(c *gosocketio.Channel, msg PayLoad) {
-		fmt.Println(msg.Data)
+		//fmt.Println(msg.Data)
 		c.Emit(DOCKER_ENGINE_INFO, msg)
 
 	})

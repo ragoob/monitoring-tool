@@ -25,7 +25,8 @@ export class SocketService {
     const socket = this.getSocketInstance();
 
     const event$ = socket.observable<string>(`ui-${Events.HEALTH_CHECK}`);
-    return event$.pipe(
+    return event$
+    .pipe(
       filter((data: any) => data.machineId == daemonId),
       map((data: any) => {
         return data.data;
@@ -151,10 +152,14 @@ export class SocketService {
   }
 
   private getSocketInstance() {
-    return new RxSocket(`${environment.socketServer}`, {
-      reconnection: true,
-      transports: ['websocket'],
-    });
+    return new RxSocket(`${environment.socketServer}`, 
+   { reconnection: true,
+    reconnectionDelay: 3000,
+    transports: ['websocket'],
+    upgrade: false,
+    //timeout: 300000,
+    rejectUnauthorized: false
+  });
 
   }
 

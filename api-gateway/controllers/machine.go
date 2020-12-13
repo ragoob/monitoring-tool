@@ -73,7 +73,6 @@ func (c MachineController) GetMachine(db *sql.DB) http.HandlerFunc {
 func (c MachineController) AddMachine(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var machine models.Machine
-		var machineID string
 		var error models.Error
 
 		if !utils.IsAuthorized(r) {
@@ -92,15 +91,16 @@ func (c MachineController) AddMachine(db *sql.DB) http.HandlerFunc {
 
 		machineRepo := machinerepository.MachineRepository{}
 		machineID, err := machineRepo.AddMachine(db, machine)
-
 		if err != nil {
 			error.Message = "Server error"
 			utils.SendError(w, http.StatusInternalServerError, error) //500
 			return
 		}
 
-		w.Header().Set("Content-Type", "text/plain")
-		utils.SendSuccess(w, machineID)
+		machine.ID = machineID
+
+		w.Header().Set("Content-Type", "application/json")
+		utils.SendSuccess(w, machine)
 	}
 }
 
@@ -108,7 +108,7 @@ func (c MachineController) AddMachine(db *sql.DB) http.HandlerFunc {
 func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var machine models.Machine
-		var rowAffected int64
+		//var rowAffected int64
 		var error models.Error
 		if !utils.IsAuthorized(r) {
 			error.Message = "unauthorized access"
@@ -124,7 +124,7 @@ func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
 		}
 
 		machineRepo := machinerepository.MachineRepository{}
-		rowAffected, err := machineRepo.UpdateMachine(db, machine)
+		_, err := machineRepo.UpdateMachine(db, machine)
 
 		if err != nil {
 			error.Message = "Server error"
@@ -132,8 +132,8 @@ func (c MachineController) EditMachine(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "text/plain")
-		utils.SendSuccess(w, rowAffected)
+		w.Header().Set("Content-Type", "application/json")
+		utils.SendSuccess(w, machine)
 	}
 }
 
