@@ -3,10 +3,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Events } from '../../core/events';
 import { SocketService } from '../../core/socket.service';
 import { ServiceFactory } from './service-factory.service';
-
+const interval: number =   1000
 @Injectable()
 export class TasksService implements OnModuleInit {
-
+ 
   public stopTasks$: BehaviorSubject<any> = new BehaviorSubject<any>(false);
   private intervals: NodeJS.Timeout[] = [];
   constructor(private serviceFactory: ServiceFactory, 
@@ -99,7 +99,7 @@ export class TasksService implements OnModuleInit {
         .then(info=> {
          this.socketService.emitEvent(`${Events.DOCKER_ENGINE_INFO}`, info);
         })
-       }, 5 * 1000)
+       }, interval)
     )
    
 
@@ -111,7 +111,7 @@ export class TasksService implements OnModuleInit {
         this.socketService.emitEvent(`${Events.HEALTH_CHECK}`, healthcheck);
        })
     }
-      , 5 * 1000)
+      , interval)
 
     );
 
@@ -122,7 +122,7 @@ export class TasksService implements OnModuleInit {
          this.socketService.emitEvent(`${Events.SUMMARY}`, summary);
         })
      }
-       , 5 * 1000)
+       ,interval)
     );
 
     this.intervals.push(
@@ -132,7 +132,7 @@ export class TasksService implements OnModuleInit {
         this.socketService.emitEvent(`${Events.MEMORY_USAGE}`, memory);
       })
     }
-      , 5 * 1000)
+      , interval)
     );
 
     this.intervals.push(
@@ -142,7 +142,7 @@ export class TasksService implements OnModuleInit {
           this.socketService.emitEvent(`${Events.CPU_USAGE}`, cpu);
         })
       }
-        , 5 * 1000)
+        , interval)
     );
 
 
@@ -153,7 +153,7 @@ export class TasksService implements OnModuleInit {
         this.socketService.emitEvent(`${Events.TEMPERATURE}`, thermal);
        })
     }
-      , 5 * 1000)
+      , interval)
     );
 
     this.intervals.push(
@@ -163,7 +163,7 @@ export class TasksService implements OnModuleInit {
       this.socketService.emitEvent(`${Events.DISK_USAGE}`, disk);
      })
     }
-      , 5 * 1000)
+      , interval)
     );
 
     this.intervals.push(
@@ -173,7 +173,7 @@ export class TasksService implements OnModuleInit {
         this.socketService.emitEvent(`${Events.CONTAINERS_METRICS}`, disk);
       })
     }
-      , 5 * 1000)
+      , interval)
     );
 
     this.intervals.push(
@@ -184,7 +184,7 @@ export class TasksService implements OnModuleInit {
         this.socketService.emitEvent(`${Events.CONTAINERS_LIST}`, disk);
       })
     }
-      , 5 * 1000));
+      , interval));
   }
   private stopTasks(): void{
     this.intervals.forEach((interval: NodeJS.Timeout)=> {

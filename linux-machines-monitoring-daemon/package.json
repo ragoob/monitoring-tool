@@ -32,6 +32,7 @@
     "@nestjs/swagger": "^4.6.1",
     "@nestjs/websockets": "^7.4.4",
     "@types/socket.io-client": "^1.4.34",
+    "@types/websocket": "^1.0.1",
     "child_process": "^1.0.2",
     "node-shell-parser": "^0.2.1",
     "reflect-metadata": "^0.1.13",
@@ -39,7 +40,8 @@
     "rxjs": "^6.5.4",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.1",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "websocket": "^1.0.33"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",

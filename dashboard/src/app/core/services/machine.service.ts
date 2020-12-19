@@ -16,6 +16,11 @@ export class MachineService {
     .toPromise();
   }
 
+  public updateMachine(model: Machine): Promise<Machine>{
+    return this.http.put<Machine>(`${this.baseUrl}/machine`,model)
+    .toPromise();
+  }
+
   public deleteMachine(model: Machine): Promise<any>{
     return this.http.delete<any>(`${this.baseUrl}/machine/${model.id}`)
     .toPromise();

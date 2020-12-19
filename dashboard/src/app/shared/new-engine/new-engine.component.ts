@@ -50,7 +50,7 @@ export class NewEngineComponent implements OnInit {
     }
 
     this.spinner.show('NewEngineComponent');
-    this.machineService.saveMachine(this.machineForm.value)
+   (this.data.id ? this.machineService.updateMachine(this.machineForm.value) : this.machineService.saveMachine(this.machineForm.value))
     .then(d=> {
       const menu = this.menuService.menuItems$.value;
       if(this.data && this.data.actiontype === 'edit'){

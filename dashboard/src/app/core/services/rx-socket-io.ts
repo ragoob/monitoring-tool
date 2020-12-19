@@ -1,12 +1,15 @@
 
 import { Observable, Observer, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import * as socketIO from 'socket.io-client';
+import { Events } from '../models/events';
 
 export class RxSocket<DT> {
   private socket: SocketIOClient.Socket;
 
   constructor(url: string, options?: SocketIOClient.ConnectOpts) {
     this.socket = socketIO(url, options);
+
   }
 
   

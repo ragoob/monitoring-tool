@@ -9,28 +9,32 @@ import { env } from 'process';
 
 @Injectable()
 export class SocketService {
-  constructor() {
 
+  private socket: RxSocket<unknown>
+  constructor() {
+    this.socket = this.getSocketInstance();
   }
 
 
   public emit(event, data) {
     event = 'ui-' + event;
-    const socket =  this.getSocketInstance();
+    const socket = this.getSocketInstance();
     socket.subject(event)
-    .next(data);
+      .next(data);
   }
 
   public getDeamonAlive(daemonId: string): Observable<string> {
+
     const socket = this.getSocketInstance();
 
     const event$ = socket.observable<string>(`ui-${Events.HEALTH_CHECK}`);
-    return event$.pipe(
-      filter((data: any) => data.machineId == daemonId),
-      map((data: any) => {
-        return data.data;
-      })
-    )
+    return event$
+      .pipe(
+        filter((data: any) => data.machineId == daemonId),
+        map((data: any) => {
+          return data.data;
+        })
+      )
   }
 
   public getDeamontemperature(daemonId: string): Observable<any> {
@@ -102,15 +106,17 @@ export class SocketService {
   }
 
   public getInfo(daemonId: string): Observable<any> {
+    console.log('getInfo deamonId ', daemonId)
     const socket = this.getSocketInstance();
 
     const event$ = socket.observable(`ui-${Events.DOCKER_ENGINE_INFO}`);
-    return event$.pipe(
-      filter((data: any) => data.machineId == daemonId),
-      map((data: any) => {
-        return data.data;
-      })
-    )
+    return event$
+      .pipe(
+        filter((data: any) => data.machineId == daemonId),
+        map((data: any) => {
+          return data.data;
+        })
+      )
   }
 
   public getDisk(daemonId: string): Observable<any> {
@@ -151,11 +157,15 @@ export class SocketService {
   }
 
   private getSocketInstance() {
-    return new RxSocket(`${environment.socketServer}`, {
-      reconnection: true,
-      transports: ['websocket'],
-    });
-
+    return new RxSocket(`${environment.socketServer}`,
+        {
+          reconnection: true,
+          reconnectionDelay: 3000,
+          transports: ['websocket'],
+          upgrade: false,
+          timeout: 300000,
+          rejectUnauthorized: false
+        });
   }
 
 }
