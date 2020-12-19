@@ -27,10 +27,9 @@ export class SystemInfoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.spinner.show('SystemInfoComponent');
     this.subscribers.push(
-      this.socketService.getInfo(this.daemonId)
-      .pipe(first())
-      .
+      this.socketService.getInfo(this.daemonId).
       subscribe((data:Engine)=> {
+        console.log('info data ',data)
         this.info = data;
         this.spinner.hide('SystemInfoComponent');     
       })

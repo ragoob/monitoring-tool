@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Events } from '../../core/events';
 import { SocketService } from '../../core/socket.service';
 import { ServiceFactory } from './service-factory.service';
-const interval: number =  1000
+const interval: number =   1000
 @Injectable()
 export class TasksService implements OnModuleInit {
  
